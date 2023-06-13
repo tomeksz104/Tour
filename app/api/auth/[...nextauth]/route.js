@@ -1,4 +1,5 @@
 import NextAuth from "next-auth";
+import { NextResponse } from "next/server";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import User from "@/models/user";
@@ -33,6 +34,14 @@ const handler = NextAuth({
 
         if (!user) {
           throw new Error("No user with a matching email was found.");
+          return new NextResponse(
+            JSON.stringify({
+              error: { email: "No user with a matching email was found" },
+            }),
+            {
+              status: 409,
+            }
+          );
         }
 
         // Use the comparePassword method we defined in our user.js Model file to authenticate

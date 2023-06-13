@@ -103,12 +103,7 @@ function AuthForm() {
             </div>
             <div>
               <label htmlFor="password">Your Password</label>
-              <input
-                type="password"
-                id="password"
-                required
-                ref={passwordInputRef}
-              />
+              <input type="password" id="password" ref={passwordInputRef} />
             </div>
             <div className="my-5">
               <button className="button button-color mr-4">

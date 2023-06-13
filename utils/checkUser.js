@@ -5,6 +5,7 @@ const secret = process.env.NEXTAUTH_SECRET;
 // CHECKING FUNCTIONS
 export const hasToken = async (req) => {
   const token = await getToken({ req, secret });
+  console.log(token);
   if (!token) {
     return false;
   }
