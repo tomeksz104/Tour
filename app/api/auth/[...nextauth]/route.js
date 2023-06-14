@@ -34,14 +34,6 @@ const handler = NextAuth({
 
         if (!user) {
           throw new Error("No user with a matching email was found.");
-          return new NextResponse(
-            JSON.stringify({
-              error: { email: "No user with a matching email was found" },
-            }),
-            {
-              status: 409,
-            }
-          );
         }
 
         // Use the comparePassword method we defined in our user.js Model file to authenticate
@@ -87,7 +79,7 @@ const handler = NextAuth({
   },
   pages: {
     // Here you can define your own custom pages for login, recover password, etc.
-    signIn: "/login", // we are going to use a custom login page (we'll create this in just a second)
+    signIn: "/signin", // we are going to use a custom login page (we'll create this in just a second)
   },
 });
 

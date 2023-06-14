@@ -1,0 +1,82 @@
+.leaflet-touch .leaflet-bar a:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.leaflet-touch .leaflet-bar a:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.65);
+  border-radius: 8px;
+  border: none;
+}
+
+.leaflet-control-zoom-in span,
+.leaflet-control-zoom-out span {
+  color: black;
+}
+
+.leaflet-control-locate-location-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48IS0tISBGb250IEF3ZXNvbWUgUHJvIDYuMS4xIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlIChDb21tZXJjaWFsIExpY2Vuc2UpIENvcHlyaWdodCAyMDIyIEZvbnRpY29ucywgSW5jLiAtLT48cGF0aCBkPSJNMzUyIDI1NkMzNTIgMzA5IDMwOSAzNTIgMjU2IDM1MkMyMDIuMSAzNTIgMTYwIDMwOSAxNjAgMjU2QzE2MCAyMDIuMSAyMDIuMSAxNjAgMjU2IDE2MEMzMDkgMTYwIDM1MiAyMDIuMSAzNTIgMjU2ek0yNTYgMTkyQzIyMC43IDE5MiAxOTIgMjIwLjcgMTkyIDI1NkMxOTIgMjkxLjMgMjIwLjcgMzIwIDI1NiAzMjBDMjkxLjMgMzIwIDMyMCAyOTEuMyAzMjAgMjU2QzMyMCAyMjAuNyAyOTEuMyAxOTIgMjU2IDE5MnpNMjU2IDBDMjY0LjggMCAyNzIgNy4xNjQgMjcyIDE2VjY0LjY2QzM2NS4zIDcyLjM1IDQzOS42IDE0Ni43IDQ0Ny4zIDI0MEg0OTZDNTA0LjggMjQwIDUxMiAyNDcuMiA1MTIgMjU2QzUxMiAyNjQuOCA1MDQuOCAyNzIgNDk2IDI3Mkg0NDcuM0M0MzkuNiAzNjUuMyAzNjUuMyA0MzkuNiAyNzIgNDQ3LjNWNDk2QzI3MiA1MDQuOCAyNjQuOCA1MTIgMjU2IDUxMkMyNDcuMiA1MTIgMjQwIDUwNC44IDI0MCA0OTZWNDQ3LjNDMTQ2LjcgNDM5LjYgNzIuMzUgMzY1LjMgNjQuNjYgMjcySDE2QzcuMTY0IDI3MiAwIDI2NC44IDAgMjU2QzAgMjQ3LjIgNy4xNjQgMjQwIDE2IDI0MEg2NC42NkM3Mi4zNSAxNDYuNyAxNDYuNyA3Mi4zNSAyNDAgNjQuNjZWMTZDMjQwIDcuMTY0IDI0Ny4yIDAgMjU2IDBWMHpNOTYgMjU2Qzk2IDM0NC40IDE2Ny42IDQxNiAyNTYgNDE2QzM0NC40IDQxNiA0MTYgMzQ0LjQgNDE2IDI1NkM0MTYgMTY3LjYgMzQ0LjQgOTYgMjU2IDk2QzE2Ny42IDk2IDk2IDE2Ny42IDk2IDI1NnoiLz48L3N2Zz4=);
+}
+
+.leaflet-control-locate .leaflet-bar-part {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#map {
+  width: 70vw;
+  box-shadow: (0px 0px 20px rgba(0, 0, 0, 0.3));
+}
+
+#controls {
+  position: absolute;
+  padding: 20px;
+  left: 70vw;
+  top: 0;
+  right: 0;
+}
+
+.pin {
+  background-color: #8000ff;
+  border-radius: 20px 20px 0px 20px;
+  position: relative;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pin::after {
+  content: "";
+  width: 80%;
+  height: 80%;
+  background: #9c4fe9;
+  position: absolute;
+  left: 16;
+  top: 16;
+  border-radius: 20px;
+}
+
+.pin.small {
+  width: 16px;
+  height: 16px;
+}
+
+.pin.small::after {
+  width: 8px;
+  height: 8px;
+}
+.leaflet-marker-icon {
+  transform: rotate(45deg);
+}

@@ -6,9 +6,11 @@ import AuthCard from "./AuthCard";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Link from "next/link";
+import { useToast } from "@/hooks/useToast";
 
 function LoginForm() {
   const router = useRouter();
+  const toast = useToast();
   const [error, setError] = useState(false);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
@@ -18,10 +20,10 @@ function LoginForm() {
 
     setError(false);
 
-    if (!emailInputRef.current.value)
-      return setError("The email address cannot be empty");
     if (!passwordInputRef.current.value)
       return setError("The password cannot be empty");
+    if (!emailInputRef.current.value)
+      return setError("The email address cannot be empty");
 
     const response = await signIn("credentials", {
       redirect: false,
@@ -29,14 +31,12 @@ function LoginForm() {
       password: passwordInputRef.current.value,
     });
 
-    if (!response.ok) {
-      const { error } = await response.json();
-
-      setError(error);
-    }
-
     if ("error" in response) {
       setError(response.error);
+    }
+    if (response.ok) {
+      router.replace("/");
+      toast.success("Login successful");
     }
   }
 
@@ -85,28 +85,15 @@ function LoginForm() {
           {error && <p className="text-sm text-red-600">{error}</p>}
         </div>
 
-        {/* Remember Me & Forgot Password */}
-        <div className="mt-8 flex justify-between gap-1 text-sm">
-          <div className="flex items-center gap-2 font-medium">
-            <input
-              id="remember"
-              className="rounded border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              type="checkbox"
-              name="remember"
-            />
-
-            <label htmlFor="remember" className="text-gray-600">
-              Stay logged in
-            </label>
-          </div>
-
-          <a href="#" className="text-sm text-blue-500 hover:underline">
-            Forgot your password?
-          </a>
-        </div>
+        {/* Forgot Password */}
+        <a
+          href="#"
+          className="mt-8 flex justify-end text-sm text-blue-500 hover:underline"
+        >
+          Forgot your password?
+        </a>
 
         {/* Submit button */}
-
         <Button className="mt-8">Login</Button>
 
         <div className="pt-3">

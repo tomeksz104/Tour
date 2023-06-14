@@ -1,0 +1,29 @@
+.mobile-menu {
+  animation: mobile-menu-slide-in 0.4s ease-in-out;
+}
+
+.mobile-menu-dismissed {
+  animation: mobile-menu-slide-out 0.4s ease-in-out forwards;
+}
+
+@keyframes mobile-menu-slide-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes mobile-menu-slide-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}

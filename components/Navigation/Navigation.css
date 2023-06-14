@@ -1,0 +1,8 @@
+.button-bg-gradient {
+  background: linear-gradient(#ffffff, #ffffff) padding-box,
+    conic-gradient(#a16207, #cbd5e1 30%, #cbd5e1 70%, #a16207 100%) border-box;
+}
+.button-bg-gradient:hover {
+  background: linear-gradient(#ffffff, #ffffff) padding-box,
+    conic-gradient(#ca8a04, #cbd5e1 30%, #cbd5e1 70%, #ca8a04 100%) border-box;
+}
