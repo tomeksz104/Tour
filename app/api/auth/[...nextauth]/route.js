@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import User from "@/models/user";
 import dbConnect from "@/utils/dbConnect";
 
-const handler = NextAuth({
+export const authOptions = {
   // Enable JSON Web Tokens since we will not store sessions in our DB
   session: {
     jwt: true,
@@ -43,12 +43,6 @@ const handler = NextAuth({
           throw new Error("Your password is invalid");
         }
 
-        if (credentials.name || credentials.image) {
-          user.name = credentials.name;
-          user.image = credentials.image;
-          await user.save();
-        }
-
         return user;
       },
     }),
@@ -57,30 +51,47 @@ const handler = NextAuth({
   callbacks: {
     // We can pass in additional information from the user document MongoDB returns
     // This could be avatars, role, display name, etc...
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === "update") {
+        return { ...session, ...session.user };
+      }
       if (user) {
         token.user = {
           _id: user._id,
           email: user.email,
           role: user.role,
-          name: user.name,
+          username: user.username,
           image: user.image,
+          facebook: user.facebook,
+          instagram: user.instagram,
+          twitter: user.twitter,
+          youtube: user.youtube,
         };
       }
       return token;
     },
     // If we want to access our extra user info from sessions we have to pass it the token here to get them in sync:
+    // session: async ({ session, token }) => {
+    //   if (token) {
+    //     session.user = token.user;
+    //   }
+    //   return session;
+    // },
     session: async ({ session, token }) => {
       if (token) {
-        session.user = token.user;
+        session.user = {
+          ...session.user,
+          ...token.user,
+        };
       }
       return session;
     },
   },
   pages: {
-    // Here you can define your own custom pages for login, recover password, etc.
-    signIn: "/signin", // we are going to use a custom login page (we'll create this in just a second)
+    signIn: "/signin",
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

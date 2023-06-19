@@ -3,6 +3,7 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import "./UserMenu.css";
+import Link from "next/link";
 
 const UserMenu = ({ user }) => {
   const router = useRouter();
@@ -15,36 +16,36 @@ const UserMenu = ({ user }) => {
   };
 
   return (
-    <div class="relative hidden md:inline-block text-left dropdown z-10">
-      <button class="inline-flex items-center p-2 text-sm text-gray-500 hover:bg-gray-100 focus:bg-gray-100 rounded-lg">
-        <span class="sr-only">User Menu</span>
-        <div class="md:flex md:items-end md:leading-tight">
+    <div className="relative hidden md:inline-block text-left dropdown z-10">
+      <button className="inline-flex items-center p-2 text-sm text-gray-500 hover:bg-gray-100 focus:bg-gray-100 rounded-lg">
+        <span className="sr-only">User Menu</span>
+        <div className="md:flex md:items-end md:leading-tight">
           <span className="text-gray-400">Hello, </span>
-          <span class="font-semibold">
+          <span className="font-semibold">
             {" "}
             {user.name ? user.name : user.email}
           </span>
         </div>
-        <span class="h-8 w-8 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden">
+        <span className="h-8 w-8 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden">
           {user.photoURL ? (
             <img
               src={user.photoURL}
               alt="user profile photo"
-              class="h-full w-full object-cover"
+              className="h-full w-full object-cover"
             />
           ) : (
-            <div class="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-amber-500">
+            <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-amber-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
-                class="w-4 h-4"
+                className="w-4 h-4"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
                 />
               </svg>
@@ -52,52 +53,52 @@ const UserMenu = ({ user }) => {
           )}
         </span>
       </button>
-      <div class="opacity-0 invisible dropdown-menu transition-all duration-300 transform origin-top-right -translate-y-2 scale-95">
+      <div className="opacity-0 invisible dropdown-menu transition-all duration-300 transform origin-top-right -translate-y-2 scale-95">
         <div
-          class="absolute right-0 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none"
+          className="absolute right-0 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none"
           aria-labelledby="headlessui-menu-button-1"
           id="headlessui-menu-items-117"
           role="menu"
         >
-          <a class="flex items-center p-3 mt-0 text-sm text-gray-600 transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+          <a className="flex items-center p-3 mt-0 text-sm text-gray-600 transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
             {user.photoURL ? (
               <img
-                class="flex-shrink-0 object-cover mx-1 rounded-full w-8 h-8"
+                className="flex-shrink-0 object-cover mx-1 rounded-full w-8 h-8"
                 src={user.photoURL}
                 alt="jane avatar"
               />
             ) : (
-              <div class="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500">
+              <div className="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  strokeWidth="1.5"
                   stroke="currentColor"
-                  class="w-5 h-5"
+                  className="w-5 h-5"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
                   />
                 </svg>
               </div>
             )}
 
-            <div class="mx-1">
-              <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-200">
+            <div className="mx-1">
+              <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
                 {user.displayName ? user.displayName : user.email}
               </h1>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 {user.displayName && user.email}
               </p>
             </div>
           </a>
           <div>
-            <a class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+            <a className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
               <svg
-                class="w-5 h-5 mx-1"
+                className="w-5 h-5 mx-1"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -112,11 +113,14 @@ const UserMenu = ({ user }) => {
                 ></path>
               </svg>
 
-              <span class="mx-1">view profile</span>
+              <span className="mx-1">view profile</span>
             </a>
-            <a class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+            <Link
+              href="/user/settings"
+              className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
               <svg
-                class="w-5 h-5 mx-1"
+                className="w-5 h-5 mx-1"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -127,15 +131,15 @@ const UserMenu = ({ user }) => {
                 ></path>
               </svg>
 
-              <span class="mx-1">Settings</span>
-            </a>
+              <span className="mx-1">Settings</span>
+            </Link>
           </div>
           <button
             onClick={handleSignOut}
-            class="flex w-full items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+            className="flex w-full items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             <svg
-              class="w-5 h-5 mx-1"
+              className="w-5 h-5 mx-1"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -145,7 +149,7 @@ const UserMenu = ({ user }) => {
                 fill="currentColor"
               ></path>
             </svg>
-            <span class="mx-1">Sign Out</span>
+            <span className="mx-1">Sign Out</span>
           </button>
         </div>
       </div>

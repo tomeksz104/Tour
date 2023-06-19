@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter your email"],
     minLength: [6, "Your password must be at least 6 characters long"],
-    select: false, //dont send back password after request
+    // select: false,
   },
   role: {
     type: String,
@@ -22,10 +22,22 @@ const userSchema = new mongoose.Schema({
       values: ["user", "admin"],
     },
   },
-  name: {
+  username: {
     type: String,
   },
-  image: {
+  avatar: {
+    type: String,
+  },
+  facebook: {
+    type: String,
+  },
+  twitter: {
+    type: String,
+  },
+  instagram: {
+    type: String,
+  },
+  youtube: {
     type: String,
   },
   createdAt: {

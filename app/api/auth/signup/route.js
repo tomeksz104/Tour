@@ -20,7 +20,6 @@ export const POST = async (request) => {
   try {
     await dbConnect();
 
-    // Sprawdź, czy użytkownik już istnieje
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {

@@ -11,7 +11,7 @@ const toastTypes = {
       <svg
         aria-hidden="true"
         focusable="false"
-        class="h-4 w-4 fill-current"
+        className="h-4 w-4 fill-current"
         role="img"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
@@ -30,7 +30,7 @@ const toastTypes = {
       <svg
         aria-hidden="true"
         focusable="false"
-        class="h-4 w-4 fill-current"
+        className="h-4 w-4 fill-current"
         role="img"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
@@ -51,7 +51,7 @@ const toastTypes = {
         focusable="false"
         data-prefix="fas"
         data-icon="exclamation-triangle"
-        class="mr-2 h-4 w-4 fill-current"
+        className="mr-2 h-4 w-4 fill-current"
         role="img"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 576 512"
@@ -70,7 +70,7 @@ const toastTypes = {
       <svg
         aria-hidden="true"
         focusable="false"
-        class="h-4 w-4"
+        className="h-4 w-4"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
       >

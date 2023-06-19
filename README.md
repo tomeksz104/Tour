@@ -32,3 +32,18 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Used stack
+
+- NextJs as the React framework
+- Redis for caching
+- Firestore for the database
+- Google Storage for the storage of the thumbnails
+- Firebase Auth for authorization and authentication
+
+## Used tools
+
+- Typescript as the primary used language
+- TailwindCSS for styling
+- eslint, prettier and husky for code format automation
+- [next-firebase-auth](https://github.com/gladly-team/next-firebase-auth) for the authentication and secure cookies management

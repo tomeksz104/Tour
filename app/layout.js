@@ -11,13 +11,15 @@ export const metadata = {
   description: "Find unique places to visit.",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+
+
   return (
     <html lang="en">
       <body className={`${inter.className} m-auto min-h-screen flex flex-col`}>
         <Provider>
           <ToastContextProvider>
-            <Navigation />
+            <Navigation  />
             {children}
           </ToastContextProvider>
         </Provider>

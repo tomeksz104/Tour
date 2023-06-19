@@ -25,19 +25,18 @@ function LoginForm() {
     if (!emailInputRef.current.value)
       return setError("The email address cannot be empty");
 
-    const response = await signIn("credentials", {
+    signIn("credentials", {
       redirect: false,
       email: emailInputRef.current.value,
       password: passwordInputRef.current.value,
+    }).then(({ ok, error }) => {
+      if (error) {
+        setError(error);
+      } else {
+        router.replace("/");
+        toast.success("Login successful");
+      }
     });
-
-    if ("error" in response) {
-      setError(response.error);
-    }
-    if (response.ok) {
-      router.replace("/");
-      toast.success("Login successful");
-    }
   }
 
   return (
