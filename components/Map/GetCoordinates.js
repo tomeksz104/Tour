@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Marker, Popup, useMap } from "react-leaflet";
+
 const svgIcon = L.divIcon({
   html: `<div class="pin w-8 h-8 flex items-center justify-center w-full h-full">
      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-white -rotate-45 ">
@@ -39,8 +40,8 @@ const geticon = (zoom) => {
     className: "rounded-full",
     iconSize: [iconSize, iconSize],
     iconAnchor: [iconSize / 2, iconSize],
-    //labelAnchor: [-6, 0],
-    //popupAnchor: [0, -15],
+    // labelAnchor: [-6, 0],
+    // popupAnchor: [0, -15],
   });
 
   return svgIcon;
@@ -54,7 +55,7 @@ const GetCoordinates = () => {
   useEffect(() => {
     const handleMapZoom = () => {
       const zoom = map.getZoom();
-      console.log(zoom);
+
       const updatedIcon = geticon(zoom);
 
       setMarkerIcon(updatedIcon);

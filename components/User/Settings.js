@@ -12,6 +12,7 @@ import FacebookIcon from "@/public/assets/icons/facebook.svg";
 import InstagramIcon from "@/public/assets/icons/instagram.svg";
 import TwitterIcon from "@/public/assets/icons/twitter.svg";
 import YoutubeIcon from "@/public/assets/icons/youtube.svg";
+import Categories from "../Categories/Categories";
 
 const tabs = ["profile", "socialmedia", "password"];
 
@@ -107,11 +108,10 @@ const Settings = () => {
   return (
     <>
       <div className="w-full sm:max-w-4xl m-auto py-20">
-        <div className="m-auto text-center">
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-white md:text-4xl">
-            Account Settings
-          </h2>
-        </div>
+        <h2 className="text-center text-2xl font-bold text-gray-800 dark:text-white md:text-4xl">
+          Account Settings
+        </h2>
+
         <div className="m-auto mt-12 items-center justify-center space-y-6 lg:flex lg:space-y-0 lg:space-x-6 xl:w-10/12">
           <div className="w-full relative sm:flex">
             <div className="mt-16 pb-20 sm:mt-0 sm:w-5/12 sm:pb-0">

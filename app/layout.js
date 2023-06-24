@@ -12,15 +12,16 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-
-
   return (
     <html lang="en">
-      <body className={`${inter.className} m-auto min-h-screen flex flex-col`}>
+      <body className={`${inter.className}`}>
+        {/* <body className={`${inter.className} m-auto min-h-screen flex flex-col`}> */}
         <Provider>
           <ToastContextProvider>
-            <Navigation  />
-            {children}
+            <div className="h-full flex flex-col">
+              <Navigation />
+              {children}
+            </div>
           </ToastContextProvider>
         </Provider>
       </body>
