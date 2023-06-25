@@ -35,7 +35,7 @@ const PlaceForm = () => {
     };
 
     try {
-      const response = await fetch(`/api/map/place/create`, {
+      const response = await fetch(`/api/place/new`, {
         method: "POST",
         body: JSON.stringify({
           requestBody,
