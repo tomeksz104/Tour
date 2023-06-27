@@ -55,7 +55,7 @@
 }
 
 .pin {
-  background-color: #8000ff;
+  /* background-color: #8000ff; */
   border-radius: 20px 20px 0px 20px;
   position: relative;
   transform: rotate(45deg);
@@ -67,7 +67,7 @@
   content: "";
   width: 80%;
   height: 80%;
-  background: #9c4fe9;
+  /* background: #9c4fe9; */
   position: absolute;
   left: 16;
   top: 16;
@@ -85,4 +85,16 @@
 }
 .leaflet-marker-icon {
   transform: rotate(45deg);
+}
+
+/* Marker Pupup */
+.leaflet-popup-content-wrapper {
+  padding: 0;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+}
+.leaflet-popup-content p {
+  margin: 0;
 }

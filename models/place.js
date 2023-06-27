@@ -15,6 +15,11 @@ const placeSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  image: {
+    type: String,
+    validate: [validator.isURL, "Please enter a valid link"],
+    required: true,
+  },
   category: {
     type: String,
     validate: [
@@ -23,9 +28,10 @@ const placeSchema = new mongoose.Schema({
         message: "Please enter a valid category.",
       },
     ],
+    required: true,
   },
   coordinates: {
-    latitude: {
+    lat: {
       type: Number,
       required: true,
     },
@@ -38,6 +44,9 @@ const placeSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+  },
+  shortDescription: {
+    type: String,
   },
   description: {
     type: String,

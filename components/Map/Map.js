@@ -18,6 +18,7 @@ import "./Map.css";
 import UserLocate from "./UserLocate";
 // import { getCities, db } from "@/firebase/firebase";
 import GetCoordinates from "./GetCoordinates";
+import Places from "./Places";
 
 const Map = () => {
   const [map, setMap] = useState(null);
@@ -65,27 +66,10 @@ const Map = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=S5C6vNCfw7EkBYlmw0xf"
       />
-      {position && (
-        <>
-          <Marker position={position}>
-            <Popup>
-              <span>
-                A pretty CSS3 popup. <br /> Easily customizable.
-              </span>
-            </Popup>
-          </Marker>
-        </>
-      )}
-      {/* <Marker position={[51.9713, 15]} icon={svgIcon}>
-        <Popup>
-          <span>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </span>
-        </Popup>
-      </Marker> */}
       <ZoomControl position="bottomright" />
       <UserLocate />
       <GetCoordinates />
+      <Places />
     </MapContainer>
   );
 };

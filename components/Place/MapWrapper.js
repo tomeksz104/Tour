@@ -8,7 +8,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet-defaulticon-compatibility";
 
-const center = [52.22977, 21.01178];
+const center = [52.10650519075632, 19.281005859375004];
 
 const ShowMarkers = ({ mapContainer, legend, marker }) => {
   return (
@@ -33,7 +33,7 @@ const ShowMarkers = ({ mapContainer, legend, marker }) => {
   );
 };
 
-const MyMarkers = ({ onMarkerPositionChange }) => {
+const MyMarkers = ({ onMarkerPositionChange, coordinates }) => {
   const map = useMap();
   const [marker, setMarker] = useState([]);
   const [legend, setLegend] = useState();
@@ -65,12 +65,16 @@ const MyMarkers = ({ onMarkerPositionChange }) => {
     });
   }, [map]);
 
+  useEffect(() => {
+    setMarker([coordinates.lat, coordinates.lng]);
+  }, [coordinates]);
+
   return marker.length > 0 && legend !== undefined ? (
     <ShowMarkers mapContainer={map} legend={legend} marker={marker} />
   ) : null;
 };
 
-const MapWrapper = ({ onMarkerPositionChange }) => {
+const MapWrapper = ({ onMarkerPositionChange, coordinates }) => {
   const [map, setMap] = useState(null);
 
   useEffect(() => {
@@ -93,7 +97,7 @@ const MapWrapper = ({ onMarkerPositionChange }) => {
       whenCreated={setMap}
       className="mt-12 h-96 rounded-md"
       center={center}
-      zoom={18}
+      zoom={6}
       scrollWheelZoom={true}
     >
       <TileLayer
@@ -101,7 +105,10 @@ const MapWrapper = ({ onMarkerPositionChange }) => {
         url="https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=S5C6vNCfw7EkBYlmw0xf"
       />
 
-      <MyMarkers onMarkerPositionChange={onMarkerPositionChange} />
+      <MyMarkers
+        onMarkerPositionChange={onMarkerPositionChange}
+        coordinates={coordinates}
+      />
     </MapContainer>
   );
 };

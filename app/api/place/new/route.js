@@ -24,14 +24,23 @@ export const POST = async (request, response) => {
   try {
     await dbConnect();
 
-    const { coordinates, category, title, description, googleMapUrl } =
-      requestBody;
+    const {
+      coordinates,
+      image,
+      category,
+      title,
+      shortDescription,
+      description,
+      googleMapUrl,
+    } = requestBody;
 
     const newPlace = new Place({
       userId: session.user._id,
       category,
       coordinates,
+      image,
       title,
+      shortDescription,
       description,
       googleMapUrl,
     });

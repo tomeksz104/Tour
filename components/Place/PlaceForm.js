@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { useToast } from "@/hooks/useToast";
 
 import Input from "../Input";
 import Label from "../Label";
@@ -12,14 +13,15 @@ const MapWrapper = dynamic(() => import("@/components/Place/MapWrapper"), {
   ssr: false,
 });
 
-import { categories_list } from "../Categories/Categories"; // categories aray
-import { useToast } from "@/hooks/useToast";
+import { categories_list } from "../Categories/Categories"; // categories array
 
 const PlaceForm = () => {
   const toast = useToast();
   const [coordinates, setCoordinates] = useState({});
+  const [image, setImage] = useState("");
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
   const [description, setDescription] = useState("");
   const [googleMapUrl, setGoogleMapUrl] = useState("");
 
@@ -28,8 +30,10 @@ const PlaceForm = () => {
 
     const requestBody = {
       coordinates,
+      image,
       category,
       title,
+      shortDescription,
       description,
       googleMapUrl,
     };
@@ -57,7 +61,7 @@ const PlaceForm = () => {
   };
 
   const handleMarkerPositionChange = (lat, lng) => {
-    setCoordinates({ latitude: lat, longitude: lng });
+    setCoordinates({ lat, lng });
   };
 
   return (
@@ -66,11 +70,53 @@ const PlaceForm = () => {
         Add a unique place
       </h2>
 
-      <MapWrapper onMarkerPositionChange={handleMarkerPositionChange} />
+      <MapWrapper
+        onMarkerPositionChange={handleMarkerPositionChange}
+        coordinates={coordinates}
+      />
+
       <form
         onSubmit={handleSubmitForm}
         className="space-y-5 mt-5 m-auto sm:max-w-xl"
       >
+        <div className="flex items-center space-x-3">
+          <div className="w-1/2">
+            <Label htmlFor="latitude">Latitude</Label>
+            <Input
+              id="latitude"
+              type="text"
+              value={coordinates.lat}
+              onChange={(event) =>
+                setCoordinates({ ...coordinates, lat: event.target.value })
+              }
+              placeholder="50.452781171479266"
+            />
+          </div>
+          <div className="w-1/2">
+            <Label htmlFor="longitude">Longitude</Label>
+            <Input
+              id="longitude"
+              type="text"
+              value={coordinates.lng}
+              onChange={(event) =>
+                setCoordinates({ ...coordinates, lng: event.target.value })
+              }
+              placeholder="19.526675280239367"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1">
+          <Label htmlFor="image">Image</Label>
+          <Input
+            id="image"
+            type="text"
+            value={image}
+            onChange={(event) => setImage(event.target.value)}
+            placeholder="https://URL-to-best-photo.com"
+          />
+        </div>
+
         <div className="space-y-1">
           <Label htmlFor="category">Category</Label>
           <select
@@ -80,6 +126,7 @@ const PlaceForm = () => {
             value={category}
             onChange={(event) => setCategory(event.target.value)}
           >
+            <option value="">Select category...</option>
             {categories_list.map((category, index) => (
               <option key={index} value={category.title}>
                 {category.title}
@@ -100,6 +147,19 @@ const PlaceForm = () => {
         </div>
 
         <div className="space-y-1">
+          <Label htmlFor="description">Short Description</Label>
+          <textarea
+            className="outline-none w-full rounded-md border border-gray-200 py-2.5 px-4 text-sm text-gray-600 transition duration-300 focus:ring-1 focus:ring-green-500"
+            id="shortDescription"
+            name="shortDescription"
+            rows="3"
+            value={shortDescription}
+            onChange={(event) => setShortDescription(event.target.value)}
+            placeholder="Short description"
+          ></textarea>
+        </div>
+
+        <div className="space-y-1">
           <Label htmlFor="description">Description</Label>
           <textarea
             className="outline-none w-full rounded-md border border-gray-200 py-2.5 px-4 text-sm text-gray-600 transition duration-300 focus:ring-1 focus:ring-green-500"
@@ -113,9 +173,9 @@ const PlaceForm = () => {
         </div>
 
         <div className="space-y-1">
-          <Label htmlFor="google-maps-url">Google Maps URL</Label>
+          <Label htmlFor="googleMapUrl">Google Maps URL</Label>
           <Input
-            id="google-maps-url"
+            id="googleMapUrl"
             type="text"
             value={googleMapUrl}
             onChange={(event) => setGoogleMapUrl(event.target.value)}
