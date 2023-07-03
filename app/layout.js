@@ -3,6 +3,8 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Navigation from "@/components/Navigation/Navigation";
 import { ToastContextProvider } from "@/contexts/ToastContext";
+import { ConfirmContextProvider } from "@/contexts/ConfirmContext";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,12 +19,15 @@ export default async function RootLayout({ children }) {
       <body className={`${inter.className}`}>
         {/* <body className={`${inter.className} m-auto min-h-screen flex flex-col`}> */}
         <Provider>
-          <ToastContextProvider>
-            <div className="h-full flex flex-col">
-              <Navigation />
-              {children}
-            </div>
-          </ToastContextProvider>
+          <ConfirmContextProvider>
+            <ToastContextProvider>
+              <div className="h-full flex flex-col">
+                <Navigation />
+                {children}
+              </div>
+              <ConfirmDialog />
+            </ToastContextProvider>
+          </ConfirmContextProvider>
         </Provider>
       </body>
     </html>

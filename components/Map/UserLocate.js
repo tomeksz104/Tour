@@ -25,7 +25,7 @@ const UserLocate = () => {
   useEffect(() => {
     locateControl = L.control
       .locate({
-        position: "bottomright",
+        position: "topright",
         strings: {
           title: "Show me where I am, yo!",
         },

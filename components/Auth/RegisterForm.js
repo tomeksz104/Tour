@@ -106,7 +106,7 @@ function RegisterForm() {
         </div>
 
         {/* Submit button */}
-        <Button className="mt-8">Sign up</Button>
+        <Button className="w-full mt-8">Sign up</Button>
 
         <div className="pt-3">
           <span className="text-sm">Already have an account? </span>

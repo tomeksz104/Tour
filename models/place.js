@@ -3,11 +3,10 @@ import validator from "validator";
 
 import { categories_list } from "../components/Categories/Categories";
 
-const validateCategory = function (value) {
-  console.log(categories_list);
-  const categoryTitles = categories_list.map((category) => category.title);
-  return categoryTitles.includes(value);
-};
+// const validateCategory = function (value) {
+//   const categoryTitles = categories_list.map((category) => category.title);
+//   return categoryTitles.includes(value);
+// };
 
 const placeSchema = new mongoose.Schema({
   userId: {
@@ -22,12 +21,12 @@ const placeSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    validate: [
-      {
-        validator: validateCategory,
-        message: "Please enter a valid category.",
-      },
-    ],
+    // validate: [
+    //   {
+    //     validator: validateCategory,
+    //     message: "Please enter a valid category.",
+    //   },
+    // ],
     required: true,
   },
   coordinates: {
@@ -35,7 +34,7 @@ const placeSchema = new mongoose.Schema({
       type: Number,
       required: true,
     },
-    longitude: {
+    lng: {
       type: Number,
       required: true,
     },
@@ -44,9 +43,6 @@ const placeSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-  },
-  shortDescription: {
-    type: String,
   },
   description: {
     type: String,

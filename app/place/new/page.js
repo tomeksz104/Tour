@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 
-import MapWrapper from "@/components/Place/MapWrapper";
+import MapWrapper from "@/components/Place/Map";
 import PlaceForm from "@/components/Place/PlaceForm";
 
 // const MapWrapper = dynamic(() => import("@/components/Place/MapWrapper"), {

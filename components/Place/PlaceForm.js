@@ -1,46 +1,72 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
+import useConfirm from "@/hooks/useConfirm";
 
 import Input from "../Input";
 import Label from "../Label";
 import InputError from "../InputError";
+import Button from "../Button";
 
-const MapWrapper = dynamic(() => import("@/components/Place/MapWrapper"), {
+const MapWrapper = dynamic(() => import("@/components/Place/Map"), {
   loading: () => <p>loading...</p>,
   ssr: false,
 });
 
 import { categories_list } from "../Categories/Categories"; // categories array
 
-const PlaceForm = () => {
+const PlaceForm = ({ place }) => {
+  const router = useRouter();
   const toast = useToast();
+  const { confirm } = useConfirm();
+
+  const placeId = place?._id ?? null;
   const [coordinates, setCoordinates] = useState({});
   const [image, setImage] = useState("");
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
-  const [shortDescription, setShortDescription] = useState("");
   const [description, setDescription] = useState("");
   const [googleMapUrl, setGoogleMapUrl] = useState("");
+  const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const url = placeId ? `/api/place/${placeId}` : "/api/place/new";
+  const method = placeId ? "PATCH" : "POST";
+
+  useEffect(() => {
+    if (place) {
+      const { lat, lng } = place.coordinates;
+
+      setCoordinates({ lat, lng });
+      setImage(place.image ?? "");
+      setCategory(place.category ?? "");
+      setTitle(place.title ?? "");
+      setDescription(place.description ?? "");
+      setGoogleMapUrl(place.googleMapUrl ?? "");
+    }
+  }, [place]);
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
+
+    setError(false);
+    setIsLoading(true);
 
     const requestBody = {
       coordinates,
       image,
       category,
       title,
-      shortDescription,
       description,
       googleMapUrl,
     };
 
     try {
-      const response = await fetch(`/api/place/new`, {
-        method: "POST",
+      const response = await fetch(url, {
+        method: method,
         body: JSON.stringify({
           requestBody,
         }),
@@ -48,44 +74,74 @@ const PlaceForm = () => {
 
       if (response.ok) {
         const message = await response.json();
-        toast.success("Successfully added a pla");
+        toast.success(message);
       } else {
         const { error } = await response.json();
-        console.log(error);
+        setError(error);
       }
     } catch (error) {
-      console.log(error);
+      setError(error);
+    } finally {
+      setIsLoading(false);
     }
-
-    console.log("FORM SUBMITTED");
   };
 
   const handleMarkerPositionChange = (lat, lng) => {
     setCoordinates({ lat, lng });
   };
 
+  const handleDelete = async () => {
+    const isConfirmed = await confirm(
+      "Are you sure you want to remove this attraction?"
+    );
+
+    if (isConfirmed) {
+      console.log("DELETING");
+      setError(false);
+      setIsLoading(true);
+
+      try {
+        const response = await fetch(`/api/place/${placeId}`, {
+          method: "DELETE",
+        });
+
+        if (response.ok) {
+          const message = await response.json();
+          toast.success(message);
+          router.replace("/");
+        } else {
+          const { error } = await response.json();
+          setError(error);
+        }
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
   return (
-    <div className="w-full sm:max-w-4xl m-auto py-20 ">
+    <div className="w-full sm:max-w-3xl m-auto py-20 ">
       <h2 className="mt-5 text-center text-2xl font-bold text-gray-800 dark:text-white md:text-4xl">
-        Add a unique place
+        {placeId ? "Update the place" : "Add a unique place"}
       </h2>
 
       <MapWrapper
         onMarkerPositionChange={handleMarkerPositionChange}
+        onMarkerPositionMove={handleMarkerPositionChange}
         coordinates={coordinates}
+        category={category}
       />
 
-      <form
-        onSubmit={handleSubmitForm}
-        className="space-y-5 mt-5 m-auto sm:max-w-xl"
-      >
+      <form onSubmit={handleSubmitForm} className="space-y-5 mt-5 m-auto ">
         <div className="flex items-center space-x-3">
           <div className="w-1/2">
             <Label htmlFor="latitude">Latitude</Label>
             <Input
               id="latitude"
               type="text"
-              value={coordinates.lat}
+              value={coordinates.lat ?? ""}
               onChange={(event) =>
                 setCoordinates({ ...coordinates, lat: event.target.value })
               }
@@ -97,7 +153,7 @@ const PlaceForm = () => {
             <Input
               id="longitude"
               type="text"
-              value={coordinates.lng}
+              value={coordinates.lng ?? ""}
               onChange={(event) =>
                 setCoordinates({ ...coordinates, lng: event.target.value })
               }
@@ -147,25 +203,12 @@ const PlaceForm = () => {
         </div>
 
         <div className="space-y-1">
-          <Label htmlFor="description">Short Description</Label>
-          <textarea
-            className="outline-none w-full rounded-md border border-gray-200 py-2.5 px-4 text-sm text-gray-600 transition duration-300 focus:ring-1 focus:ring-green-500"
-            id="shortDescription"
-            name="shortDescription"
-            rows="3"
-            value={shortDescription}
-            onChange={(event) => setShortDescription(event.target.value)}
-            placeholder="Short description"
-          ></textarea>
-        </div>
-
-        <div className="space-y-1">
           <Label htmlFor="description">Description</Label>
           <textarea
             className="outline-none w-full rounded-md border border-gray-200 py-2.5 px-4 text-sm text-gray-600 transition duration-300 focus:ring-1 focus:ring-green-500"
             id="description"
             name="description"
-            rows="10"
+            rows="5"
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             placeholder="Description of the place"
@@ -183,14 +226,27 @@ const PlaceForm = () => {
           />
         </div>
 
-        <button
-          type="submit"
-          className="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-green-500 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95"
+        <InputError messages={[error?.global]} className="mt-2" />
+
+        <div
+          className={`flex items-center gap-5 ${placeId ? "float-right" : ""}`}
         >
-          <span className="relative text-base font-semibold text-white dark:text-dark">
-            Update
-          </span>
-        </button>
+          {placeId && (
+            <button
+              onClick={handleDelete}
+              type="button"
+              className="text-red-500 font-bold text-xs uppercase"
+            >
+              Delete
+            </button>
+          )}
+          <Button
+            isLoading={isLoading}
+            className={`${placeId ? "px-10" : "w-full"}`}
+          >
+            {placeId ? "Update" : "Create"}
+          </Button>
+        </div>
       </form>
     </div>
   );

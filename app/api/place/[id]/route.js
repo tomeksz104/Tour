@@ -1,6 +1,11 @@
 import Place from "@/models/place";
 import dbConnect from "@/utils/dbConnect";
 
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { isAdmin } from "@/utils/checkUser";
+import { NextResponse } from "next/server";
+
 export const GET = async (request, { params }) => {
   try {
     await dbConnect();
@@ -15,7 +20,20 @@ export const GET = async (request, { params }) => {
 };
 
 export const PATCH = async (request, { params }) => {
-  const { prompt, tag } = await request.json();
+  const { requestBody } = await request.json();
+
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return new NextResponse(
+      JSON.stringify({
+        error: { global: "You are not logged in" },
+      }),
+      {
+        status: 404,
+      }
+    );
+  }
 
   try {
     await dbConnect();
@@ -24,18 +42,54 @@ export const PATCH = async (request, { params }) => {
     const existingPlace = await Place.findById(params.id);
 
     if (!existingPlace) {
-      return new Response("Place not found", { status: 404 });
+      return new NextResponse(
+        JSON.stringify({
+          error: { global: "Place not found" },
+        }),
+        {
+          status: 404,
+        }
+      );
+    }
+
+    // Check if the user is the author of the attraction or has an admin role
+    const isAdminUser = await isAdmin(request);
+    const userId = session.user._id;
+    const authorId = existingPlace.userId.toString();
+
+    if (!isAdminUser || userId !== authorId) {
+      return new NextResponse(
+        JSON.stringify({
+          error: { global: "You do not have permission to edit this place" },
+        }),
+        {
+          status: 401,
+        }
+      );
     }
 
     // Update the place with new data
-    existingPlace.prompt = prompt;
-    existingPlace.tag = tag;
+    existingPlace.category = requestBody.category;
+    existingPlace.coordinates = requestBody.coordinates;
+    existingPlace.image = requestBody.image;
+    existingPlace.title = requestBody.title;
+    existingPlace.description = requestBody.description;
+    existingPlace.googleMapUrl = requestBody.googleMapUrl;
 
     await existingPlace.save();
 
-    return new Response("Successfully updated the Place", { status: 200 });
+    return new Response(JSON.stringify("Successfully updated the place"), {
+      status: 201,
+    });
   } catch (error) {
-    return new Response("Error Updating Prompt", { status: 500 });
+    return new NextResponse(
+      JSON.stringify({
+        error: { global: "Error updating place" },
+      }),
+      {
+        status: 500,
+      }
+    );
   }
 };
 
@@ -46,8 +100,17 @@ export const DELETE = async (request, { params }) => {
     // Find the place by ID and remove it
     await Place.findByIdAndRemove(params.id);
 
-    return new Response("Place deleted successfully", { status: 200 });
+    return new Response(JSON.stringify("Place deleted successfully"), {
+      status: 201,
+    });
   } catch (error) {
-    return new Response("Error deleting place", { status: 500 });
+    return new NextResponse(
+      JSON.stringify({
+        error: { global: "Error deleting place" },
+      }),
+      {
+        status: 500,
+      }
+    );
   }
 };

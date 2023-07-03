@@ -24,15 +24,8 @@ export const POST = async (request, response) => {
   try {
     await dbConnect();
 
-    const {
-      coordinates,
-      image,
-      category,
-      title,
-      shortDescription,
-      description,
-      googleMapUrl,
-    } = requestBody;
+    const { coordinates, image, category, title, description, googleMapUrl } =
+      requestBody;
 
     const newPlace = new Place({
       userId: session.user._id,
@@ -40,7 +33,6 @@ export const POST = async (request, response) => {
       coordinates,
       image,
       title,
-      shortDescription,
       description,
       googleMapUrl,
     });
@@ -51,6 +43,13 @@ export const POST = async (request, response) => {
       status: 201,
     });
   } catch (error) {
-    return new Response("Error Creating Place", { status: 500 });
+    return new NextResponse(
+      JSON.stringify({
+        error: { global: "Error Creating Place" },
+      }),
+      {
+        status: 500,
+      }
+    );
   }
 };

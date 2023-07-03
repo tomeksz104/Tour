@@ -93,7 +93,7 @@ function LoginForm() {
         </a>
 
         {/* Submit button */}
-        <Button className="mt-8">Login</Button>
+        <Button className="w-full mt-8">Login</Button>
 
         <div className="pt-3">
           <span className="text-sm">Don't have an account? </span>

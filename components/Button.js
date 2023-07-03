@@ -1,14 +1,41 @@
-const Button = ({ type = "submit", className, ...props }) => (
-  //   <button
-  //     type={type}
-  //     className={`${className} inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150`}
-  //     {...props}
-  //   />
+const Button = ({
+  type = "submit",
+  className,
+  children,
+  isLoading = false,
+  ...props
+}) => (
   <button
     type={type}
-    className={`${className} w-full rounded-full bg-sky-500 dark:bg-sky-400 h-11 flex items-center justify-center px-6 py-3 transition hover:bg-sky-600 focus:bg-sky-600 active:bg-sky-800"><span class="text-base font-semibold text-white dark:text-gray-900`}
+    className={`${className} relative flex h-11 float-right items-center justify-center before:absolute before:inset-0 before:rounded-full before:bg-green-500 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95`}
     {...props}
-  />
+  >
+    {isLoading && (
+      <svg
+        class="absolute left-3 animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+    )}
+    <span className="relative px-10 flex items-center text-base font-semibold text-white dark:text-dark">
+      {children}
+    </span>
+  </button>
 );
 
 export default Button;
