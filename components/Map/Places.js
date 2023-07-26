@@ -30,7 +30,7 @@ export const getIcon = (category) => {
   }
 };
 
-const Places = memo(() => {
+const Places = memo((props) => {
   const [places, setPlaces] = useState([]);
   const [markerIcon, setMarkerIcon] = useState(null);
 
@@ -53,12 +53,17 @@ const Places = memo(() => {
   }, []);
 
   return (
-    <div>
+    <>
       {places.map((place, index) => (
         <Marker
           position={[place.coordinates.lat, place.coordinates.lng]}
           icon={getIcon(place.category)}
           key={index}
+          eventHandlers={{
+            click: (e) => {
+              props.onOpenMobileMarker(place);
+            },
+          }}
         >
           <Popup closeButton={false} className="w-64">
             <div class="group rounded-3xl">
@@ -103,7 +108,7 @@ const Places = memo(() => {
           </Popup>
         </Marker>
       ))}
-    </div>
+    </>
   );
 });
 

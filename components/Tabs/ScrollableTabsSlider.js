@@ -1,28 +1,5 @@
 import React, { useState, useRef } from "react";
 
-const tabs = [
-  "All",
-  "Music",
-  "Chess",
-  "Live",
-  "Gaming",
-  "Editing",
-  "Mixing consoles",
-  "Comedy",
-  "Computer Hardware",
-  "News",
-  "Computer Programming",
-  "Video Editing Software",
-  "Sports",
-  "Mixing consoles",
-  "Comedy",
-  "Computer Hardware",
-  "News",
-  "Computer Programming",
-  "Video Editing Software",
-  "Sports",
-];
-
 import { categories_list } from "../Categories/Categories";
 
 const ScrollableTabsSlider = () => {
@@ -82,7 +59,7 @@ const ScrollableTabsSlider = () => {
 
   return (
     <div
-      className="scrollable-tabs-container absolute z-[1] top-0 w-full overflow-hidden backdrop-blur-md bg-white/80"
+      className="scrollable-tabs-container z-[1] top-0 w-full overflow-hidden backdrop-blur-md bg-white/80"
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseDown={handleMouseDown}

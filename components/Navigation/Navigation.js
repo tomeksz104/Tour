@@ -157,7 +157,7 @@ const Navigation = () => {
     //   </nav>
     // </>
     <>
-      <nav className="relative w-full z-10 bg-white shadow-sm">
+      <nav className="relative w-full z-50 bg-white shadow-sm">
         <div className="px-6 md:px-12 lg:px-7">
           <div className="flex flex-wrap items-center justify-between py-6 gap-6 md:py-3 md:gap-0 relative">
             <input

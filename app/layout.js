@@ -21,7 +21,7 @@ export default async function RootLayout({ children }) {
         <Provider>
           <ConfirmContextProvider>
             <ToastContextProvider>
-              <div className="h-full flex flex-col">
+              <div className="flex h-screen flex-col">
                 <Navigation />
                 {children}
               </div>
