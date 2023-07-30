@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ZoomControl } from "react-leaflet";
 
 import Sidebar from "./Sidebar";
@@ -12,35 +12,55 @@ import MobilePlacePopup from "./MobilePlacePopup";
 import "leaflet/dist/leaflet.css";
 import "leaflet-easybutton/src/easy-button.js";
 import "leaflet-easybutton/src/easy-button.css";
+import ScrollableTabsSlider from "./ScrollableTabsSlider";
 
 const Map = () => {
+  const [selectedCategories, setSelectedCategories] = useState(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
+  const [visiblePlaces, setVisiblePlaces] = useState([]);
+  const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
 
   const handleOpenMobileMarker = (place) => {
     setSelectedPlace(place);
   };
 
+  const handleChangeVisiblePlaces = (places) => {
+    setVisiblePlaces(places);
+  };
+
+  const handleChangeCategory = (category) => {
+    setSelectedCategories(category);
+  };
+
+  const handleMarkerHover = (markerId) => {
+    setHoveredMarkerId(markerId);
+  };
+
   return (
-    <div className="relative flex flex-1 h-full overflow-hidden">
-      {/* <div className="h-full"> */}
-      {/* <div className="absolute p-5 rounded overflow-hidden z-10 border border-green-500 bottom-0 left-0 top-auto md:hidden w-full bg-white">
-        {infoText}
-      </div> */}
-      <Sidebar />
-      <MapWrapper
-        center={[51.9713, 16.0]}
-        zoom={7}
-        scrollWheelZoom={true}
-        zoomControl={false}
-        className="absolute top-0 right-0 left-auto h-full "
-      >
-        <ZoomControl position="topright" />
-        <UserLocate />
-        <Places onOpenMobileMarker={handleOpenMobileMarker} />
-      </MapWrapper>
-      <div id="mobile-place-popup"></div>
-      {selectedPlace && <MobilePlacePopup place={selectedPlace} />}
-    </div>
+    <>
+      <ScrollableTabsSlider onChangeCategory={handleChangeCategory} />
+      <div className="relative flex flex-1 h-full overflow-hidden">
+        <Sidebar places={visiblePlaces} onMarkerHover={handleMarkerHover} />
+        <MapWrapper
+          center={[51.9713, 16.0]}
+          zoom={7}
+          scrollWheelZoom={true}
+          zoomControl={false}
+          className="absolute top-0 right-0 left-auto h-full "
+        >
+          <ZoomControl position="topright" />
+          <UserLocate />
+          <Places
+            hoveredMarkerId={hoveredMarkerId}
+            selectedCategories={selectedCategories}
+            onOpenMarker={handleOpenMobileMarker}
+            onChangeVisiblePlaces={handleChangeVisiblePlaces}
+          />
+        </MapWrapper>
+        <div id="mobile-place-popup"></div>
+        {selectedPlace && <MobilePlacePopup place={selectedPlace} />}
+      </div>
+    </>
   );
 };
 

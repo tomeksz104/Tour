@@ -1,42 +1,31 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 
 const mobileMediaQuery = "(min-width: 768px)";
 
-const Sidebar = () => {
+const Sidebar = ({ places, onMarkerHover }) => {
   const [showSidebar, setShowSidebar] = useState(
     window.matchMedia(mobileMediaQuery).matches
   );
+  const [hoverTimeout, setHoverTimeout] = useState(null);
 
   const handleToggleSidebar = () => {
     setShowSidebar((current) => !current);
   };
 
-  const cardContent = (
-    <div class="relative flex flex-row space-x-5 rounded-xl p-3">
-      <div class="w-1/5 bg-white grid place-items-center">
-        <img
-          src="https://images.pexels.com/photos/4381392/pexels-photo-4381392.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500"
-          alt="tailwind logo"
-          class="rounded-xl"
-        />
-      </div>
-      <div class="w-4/5 bg-white flex flex-col space-y-2 p-3">
-        <h3 class="font-black text-gray-800">
-          The Majestic and Wonderful Bahamas
-        </h3>
-        <p class="text-sm text-gray-500 ">
-          The best kept secret of The Bahamas is the country’s sheer size and
-          diversity. With 16 major islands, The Bahamas is an unmatched
-          destination
-        </p>
-      </div>
-    </div>
-  );
+  const handleMouseEnter = (markerId) => {
+    clearTimeout(hoverTimeout);
 
-  const repeatedContent = Array.from({ length: 10 }, (_, index) => (
-    <React.Fragment key={index}>{cardContent}</React.Fragment>
-  ));
+    const timeoutId = setTimeout(() => {
+      onMarkerHover(markerId);
+    }, 1000);
+
+    setHoverTimeout(timeoutId);
+  };
+
+  const handleMouseLeave = () => {
+    clearTimeout(hoverTimeout);
+    onMarkerHover(null);
+  };
 
   //   useEffect(() => {
   //     const handleWindowResize = () => {
@@ -60,7 +49,6 @@ const Sidebar = () => {
     const query = window.matchMedia(mobileMediaQuery);
 
     function handleQueryChange(queryEvent) {
-      /* The matches property will be true if the window width is above the mobile size. */
       setShowSidebar(queryEvent.matches);
     }
 
@@ -102,7 +90,7 @@ const Sidebar = () => {
       >
         <div className="flex items-center justify-between px-5 py-3">
           <div class="flex justify-end text-slate-500 text-xs gap-1">
-            <span class="font-semibold">544</span>
+            <span class="font-semibold">{places.length}</span>
             <span>places on the map</span>
           </div>
           <button
@@ -126,8 +114,36 @@ const Sidebar = () => {
           </button>
         </div>
 
-        <div className="p-3 overflow-y-auto overflow-x-hidden">
-          {repeatedContent}
+        <div className="flex flex-wrap p-1 overflow-y-auto overflow-x-hidden">
+          {places.map((place, index) => (
+            <div
+              className="box-border p-1 flex-[0_0_50%]"
+              onMouseEnter={() => handleMouseEnter(place._id)}
+              onMouseLeave={handleMouseLeave}
+              key={index}
+            >
+              <div className="relative pb-[100%]">
+                <div className="flex flex-col h-full left-0 absolute top-0 w-full">
+                  <a
+                    href="#"
+                    className="rounded-sm text-white overflow-hidden relative flex-[1_1_100%] hover:opacity-90"
+                  >
+                    <img
+                      alt="Babylon Tours Paris"
+                      className="bg-gray-400 block h-full object-cover w-full"
+                      loading="lazy"
+                      src={place.image}
+                    />
+                    <div class="bottom-0 box-border left-0 p-3 absolute w-full bg-gradient-to-b from-transparent to-black/80 to-90%">
+                      <div className="line-clamp-3 hover:underline">
+                        {place.title}
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </>

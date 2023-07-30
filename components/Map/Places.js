@@ -5,7 +5,7 @@ import { Marker, Popup, useMap } from "react-leaflet";
 import { categories_list } from "../Categories/Categories";
 import Link from "next/link";
 
-export const getIcon = (category) => {
+export const getIcon = (category, id, hoveredMarker) => {
   const selectedCategory = categories_list.find(
     (item) => item.title === category
   );
@@ -21,7 +21,10 @@ export const getIcon = (category) => {
       } w-8 h-8 flex items-center justify-center w-full h-full">${renderToString(
         svgIcon
       )}</div>`,
-      className: "rounded-full",
+      className: `rounded-full ${
+        hoveredMarker === id ? "pulsating-marker" : ""
+      }`,
+      style: { zIndex: 499 },
       iconSize: [32, 32],
       iconAnchor: [16, 32],
     });
@@ -32,7 +35,37 @@ export const getIcon = (category) => {
 
 const Places = memo((props) => {
   const [places, setPlaces] = useState([]);
-  const [markerIcon, setMarkerIcon] = useState(null);
+  const [filteredPlaces, setFilteredPlaces] = useState([]);
+  const [hoveredMarker, setHoveredMarker] = useState(null);
+  const map = useMap();
+
+  const getVisibleMarkers = () => {
+    if (map) {
+      const visibleMarkers = [];
+      const visiblePlaces = [];
+
+      map.eachLayer((layer) => {
+        if (
+          layer instanceof L.Marker &&
+          map.getBounds().contains(layer.getLatLng())
+        ) {
+          visibleMarkers.push(layer);
+
+          const place = places.find(
+            (place) =>
+              place.coordinates.lat === layer.getLatLng().lat &&
+              place.coordinates.lng === layer.getLatLng().lng
+          );
+          if (place) {
+            visiblePlaces.push(place);
+          }
+        }
+      });
+      return visiblePlaces;
+    }
+
+    return [];
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +74,7 @@ const Places = memo((props) => {
         if (response.ok) {
           const data = await response.json();
           setPlaces(data);
+          props.onChangeVisiblePlaces(data);
         } else {
           console.error("Failed to fetch placess:", response.status);
         }
@@ -52,16 +86,50 @@ const Places = memo((props) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const handleMoveEnd = () => {
+      const newVisiblePlaces = getVisibleMarkers();
+      props.onChangeVisiblePlaces(newVisiblePlaces);
+    };
+
+    if (map) {
+      map.on("moveend", handleMoveEnd);
+    }
+
+    return () => {
+      if (map) {
+        map.off("moveend", handleMoveEnd);
+      }
+    };
+  }, [places, map]);
+
+  useEffect(() => {
+    if (props.selectedCategories) {
+      const filteredPlaces = places.filter((place) =>
+        props.selectedCategories.includes(place.category)
+      );
+      setFilteredPlaces(filteredPlaces);
+      if (filteredPlaces.length > 0) {
+        props.onChangeVisiblePlaces(filteredPlaces);
+      } else {
+        props.onChangeVisiblePlaces(places);
+      }
+    }
+  }, [props.selectedCategories]);
+
+  let placesToRender = filteredPlaces.length > 0 ? filteredPlaces : places;
+
   return (
     <>
-      {places.map((place, index) => (
+      {placesToRender.map((place, index) => (
         <Marker
           position={[place.coordinates.lat, place.coordinates.lng]}
-          icon={getIcon(place.category)}
+          icon={getIcon(place.category, place._id, props?.hoveredMarkerId)}
           key={index}
+          classNames="pulsating-marker"
           eventHandlers={{
             click: (e) => {
-              props.onOpenMobileMarker(place);
+              props.onOpenMarker(place);
             },
           }}
         >
@@ -89,7 +157,7 @@ const Places = memo((props) => {
                 </Link>
                 <img
                   src={place.image}
-                  alt="art cover"
+                  alt={place.title}
                   loading="lazy"
                   width="1000"
                   height="667"

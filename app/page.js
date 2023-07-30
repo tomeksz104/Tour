@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 
 import Categories from "@/components/Categories/Categories";
-import ScrollableTabsSlider from "@/components/Tabs/ScrollableTabsSlider";
+import ScrollableTabsSlider from "@/components/Map/ScrollableTabsSlider";
 import Sidebar from "@/components/Map/Sidebar";
 
 const Map = dynamic(() => import("@/components/Map/Map"), {
@@ -16,7 +16,6 @@ export default function Home() {
     <>
       {/* <div className="relative h-full"></div> */}
 
-      <ScrollableTabsSlider />
       <Map />
       {/* <Sidebar /> */}
       {/* <div className="absolute h-full  z-10">

@@ -1,18 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import { categories_list } from "../Categories/Categories";
 
-const ScrollableTabsSlider = () => {
+const ScrollableTabsSlider = (props) => {
   const tabsRef = useRef(null);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState([]);
   const [isAtLeftEdge, setIsAtLeftEdge] = useState(true);
   const [isAtRightEdge, setIsAtRightEdge] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
-
-  const handleTabClick = (index) => {
-    setActiveTab(index);
-  };
 
   const handleCheckSides = () => {
     const scrollContainer = tabsRef.current;
@@ -57,6 +53,20 @@ const ScrollableTabsSlider = () => {
     tabsRef.current.classList.remove("dragging");
   };
 
+  const handleTabClick = (category) => {
+    if (activeTab.includes(category)) {
+      setActiveTab((prevActiveTab) =>
+        prevActiveTab.filter((item) => item !== category)
+      );
+    } else {
+      setActiveTab((prevActiveTab) => [...prevActiveTab, category]);
+    }
+  };
+
+  useEffect(() => {
+    props.onChangeCategory(activeTab);
+  }, [activeTab]);
+
   return (
     <div
       className="scrollable-tabs-container z-[1] top-0 w-full overflow-hidden backdrop-blur-md bg-white/80"
@@ -98,9 +108,9 @@ const ScrollableTabsSlider = () => {
               className={`text-xs no-underline inline-block rounded-full select-none whitespace-nowrap px-6 py-1 border ${
                 category.color[0]
               } ${category.color[2]}  ${
-                index === activeTab ? category.color[1] : ""
+                activeTab.includes(category.title) ? category.color[1] : ""
               }`}
-              onClick={() => handleTabClick(index)}
+              onClick={() => handleTabClick(category.title)}
             >
               {category.title}
             </button>
