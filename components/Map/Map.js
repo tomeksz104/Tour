@@ -8,11 +8,12 @@ import MapWrapper from "../MapWrapper/MapWrapper";
 import Places from "./Places";
 import UserLocate from "./UserLocate";
 import MobilePlacePopup from "./MobilePlacePopup";
+import ScrollableTabsSlider from "./ScrollableTabsSlider";
 
 import "leaflet/dist/leaflet.css";
 import "leaflet-easybutton/src/easy-button.js";
 import "leaflet-easybutton/src/easy-button.css";
-import ScrollableTabsSlider from "./ScrollableTabsSlider";
+import Places_org from "./Places_org";
 
 const Map = () => {
   const [selectedCategories, setSelectedCategories] = useState(null);
@@ -43,19 +44,33 @@ const Map = () => {
         <Sidebar places={visiblePlaces} onMarkerHover={handleMarkerHover} />
         <MapWrapper
           center={[51.9713, 16.0]}
-          zoom={7}
+          zoom={7} // 7
           scrollWheelZoom={true}
           zoomControl={false}
           className="absolute top-0 right-0 left-auto h-full "
         >
           <ZoomControl position="topright" />
           <UserLocate />
+          {/* <Places_org
+            hoveredMarkerId={hoveredMarkerId}
+            selectedCategories={selectedCategories}
+            onOpenMarker={handleOpenMobileMarker}
+            onChangeVisiblePlaces={handleChangeVisiblePlaces}
+          /> */}
           <Places
             hoveredMarkerId={hoveredMarkerId}
             selectedCategories={selectedCategories}
             onOpenMarker={handleOpenMobileMarker}
             onChangeVisiblePlaces={handleChangeVisiblePlaces}
+            interactiveMap={true}
           />
+          {/* <Places_org
+            hoveredMarkerId={hoveredMarkerId}
+            selectedCategories={selectedCategories}
+            onOpenMarker={handleOpenMobileMarker}
+            onChangeVisiblePlaces={handleChangeVisiblePlaces}
+          /> */}
+          {/* <Places selectedCategories={selectedCategories} /> */}
         </MapWrapper>
         <div id="mobile-place-popup"></div>
         {selectedPlace && <MobilePlacePopup place={selectedPlace} />}

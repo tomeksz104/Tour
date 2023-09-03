@@ -12,7 +12,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet-defaulticon-compatibility";
 
-const center = [52.10650519075632, 19.281005859375004];
+const coordinatesOfPoland = [52.10650519075632, 19.281005859375004];
 
 const defaultIcon = new Icon.Default();
 
@@ -28,11 +28,11 @@ const ShowMarkers = ({ onMarkerPositionMove, marker, category }) => {
     icon = defaultIcon;
   }
 
-  useEffect(() => {
-    if (marker) {
-      map.flyToBounds([marker]);
-    }
-  }, [map, marker]);
+  // useEffect(() => {
+  //   if (marker) {
+  //     map.flyToBounds([marker]);
+  //   }
+  // }, [map, marker]);
 
   const handleMoveEnd = (e) => {
     if (moveTimeout) {
@@ -134,19 +134,15 @@ const MyMarkers = ({ onMarkerPositionChange, coordinates, category }) => {
   ) : null;
 };
 
-const Map = ({ onMarkerPositionChange, coordinates, category }) => {
-  let zoom = 6;
+const Map = ({ onMarkerPositionChange, coordinates, category, placeId }) => {
+  const zoom = placeId ? 18 : 6;
 
-  useEffect(() => {
-    if (coordinates) {
-      zoom = 18;
-    }
-  }, []);
+  const mapPosition = placeId ? coordinates : coordinatesOfPoland;
 
   return (
     <MapWrapper
       className="mt-12 h-96 rounded-md"
-      center={center}
+      center={mapPosition}
       zoom={zoom}
       scrollWheelZoom={true}
     >
@@ -155,7 +151,7 @@ const Map = ({ onMarkerPositionChange, coordinates, category }) => {
         coordinates={coordinates}
         category={category}
       />
-      <Places />
+      <Places interactiveMap={false} markerToRemove={placeId} />
     </MapWrapper>
   );
 };

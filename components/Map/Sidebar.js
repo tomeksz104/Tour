@@ -118,7 +118,7 @@ const Sidebar = ({ places, onMarkerHover }) => {
           {places.map((place, index) => (
             <div
               className="box-border p-1 flex-[0_0_50%]"
-              onMouseEnter={() => handleMouseEnter(place._id)}
+              onMouseEnter={() => handleMouseEnter(place)}
               onMouseLeave={handleMouseLeave}
               key={index}
             >

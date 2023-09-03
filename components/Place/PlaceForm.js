@@ -11,7 +11,7 @@ import Label from "../Label";
 import InputError from "../InputError";
 import Button from "../Button";
 
-const MapWrapper = dynamic(() => import("@/components/Place/Map"), {
+const Map = dynamic(() => import("@/components/Place/Map"), {
   loading: () => <p>loading...</p>,
   ssr: false,
 });
@@ -127,11 +127,12 @@ const PlaceForm = ({ place }) => {
         {placeId ? "Update the place" : "Add a unique place"}
       </h2>
 
-      <MapWrapper
+      <Map
         onMarkerPositionChange={handleMarkerPositionChange}
         onMarkerPositionMove={handleMarkerPositionChange}
         coordinates={coordinates}
         category={category}
+        placeId={placeId}
       />
 
       <form onSubmit={handleSubmitForm} className="space-y-5 mt-5 m-auto ">
