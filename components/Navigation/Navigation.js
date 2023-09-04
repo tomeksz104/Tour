@@ -264,29 +264,49 @@ const Navigation = () => {
               </div>
 
               {!session?.user && (
-                <div className="w-full gap-y-4 md:w-full md:gap-y-0 md:gap-x-4 flex md:flex-row flex-col justify-end">
-                  <button>
-                    <Link
-                      className="font-medium text-green-600 transition-all duration-150 ease-in-out hover:text-green-500"
-                      href="/signin"
-                    >
-                      Sign in
-                    </Link>
-                  </button>
-                  <button className="ml-6">
-                    <Link
-                      className="inline-flex items-center justify-center rounded-full border border-transparent font-medium px-3 py-1 relative w-full text-green-600 transition-all duration:150 ease-in-out button-bg-gradient before:content-[''] before:pointer-events-none before:absolute before:inset-0 before:rounded-full before:bg-gray-200/10 hover:text-green-500 group"
-                      href="signup"
-                    >
-                      <span className="relative inline-flex items-center">
-                        Sign up
-                        <span className="ml-1 tracking-normal transition-transform duration-150 ease-in-out group-hover:translate-x-0.5">
-                          -&gt;
-                        </span>
-                      </span>
-                    </Link>
-                  </button>
+                <div className="w-full flex justify-end">
+                  <div>
+                    <p className="text-xs">Nie masz konta?</p>
+                    <p className="text-sm">
+                      <Link
+                        className="font-semibold hover:text-green-600 transition-all duration-150 ease-in-out underline"
+                        href="/signin"
+                      >
+                        Zarejestruj się
+                      </Link>
+                      <span className="whitespace-normal"> lub </span>
+                      <Link
+                        className="font-semibold hover:text-green-600 transition-all duration-150 ease-in-out underline"
+                        href="/signin"
+                      >
+                        Zaloguj
+                      </Link>
+                    </p>
+                  </div>
                 </div>
+                // <div className="w-full gap-y-4 md:w-full md:gap-y-0 md:gap-x-4 flex md:flex-row flex-col justify-end">
+                //   <button>
+                //     <Link
+                //       className="font-medium text-green-600 transition-all duration-150 ease-in-out hover:text-green-500"
+                //       href="/signin"
+                //     >
+                //       Sign in
+                //     </Link>
+                //   </button>
+                //   <button className="ml-6">
+                //     <Link
+                //       className="inline-flex items-center justify-center rounded-full border border-transparent font-medium px-3 py-1 relative w-full text-green-600 transition-all duration:150 ease-in-out button-bg-gradient before:content-[''] before:pointer-events-none before:absolute before:inset-0 before:rounded-full before:bg-gray-200/10 hover:text-green-500 group"
+                //       href="signup"
+                //     >
+                //       <span className="relative inline-flex items-center">
+                //         Sign up
+                //         <span className="ml-1 tracking-normal transition-transform duration-150 ease-in-out group-hover:translate-x-0.5">
+                //           -&gt;
+                //         </span>
+                //       </span>
+                //     </Link>
+                //   </button>
+                // </div>
               )}
               {session?.user && <UserMenu user={session?.user} />}
             </div>
