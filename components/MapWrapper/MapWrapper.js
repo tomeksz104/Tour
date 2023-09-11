@@ -1,8 +1,9 @@
 import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
 
 import "./MapWrapper.css";
-
-import { useEffect } from "react";
+import "leaflet/dist/leaflet.css";
+import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+import "leaflet-defaulticon-compatibility";
 
 const customMarker = new L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.5.1/dist/images/marker-icon.png",

@@ -129,6 +129,17 @@ const Places = memo((props) => {
 
     const canvasLayer = document.querySelector(".leaflet-canvas-icon-layer");
     const parentElement = canvasLayer.parentNode; // Dostęp do rodzica
+    const handleMarkerClick = (event) => {
+      // Get the clicked marker
+
+      // You can access information about the marker or do any other actions here
+      // For example, you can access the marker's properties like this:
+      // const place = clickedMarker.getPopup().getContent().place;
+
+      // Example: Log the marker's coordinates
+      console.log(event);
+    };
+    map.on("click", handleMarkerClick);
 
     //const ciLayer = L.canvasIconLayer({}).addTo(map);
 
@@ -266,7 +277,7 @@ const CustomPopupContent = ({ place }) => (
     <div class="relative overflow-hidden rounded-t-xl">
       <Link
         href={`/place/update/${place._id}`}
-        className="absolute top-2 right-2 z-[1] bg-white rounded-full p-1 shadow-sm ransition duration-300 hover:scale-110"
+        className="absolute top-2 right-2 z-[1] bg-white rounded-full p-1 shadow-sm duration-300 hover:scale-110"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -277,8 +288,8 @@ const CustomPopupContent = ({ place }) => (
           className="w-3 h-3 text-blue-500"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
           />
         </svg>
@@ -293,10 +304,14 @@ const CustomPopupContent = ({ place }) => (
       />
     </div>
     <div class="py-2 px-3 relative">
-      <h3 class="text-md font-semibold text-gray-800 dark:text-white">
+      <Link
+        href={`/place/${place._id}`}
+        className="text-md font-semibold hover:underline"
+        style={{ color: "#000000" }}
+      >
         {place.title}
-      </h3>
-      <p class="pt-1 text-gray-600 dark:text-gray-300 hidden md:block">
+      </Link>
+      <p class="pt-1 text-gray-600 hidden md:line-clamp-3">
         {place.description}
       </p>
     </div>

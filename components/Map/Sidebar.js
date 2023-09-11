@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 const mobileMediaQuery = "(min-width: 768px)";
 
@@ -124,8 +125,8 @@ const Sidebar = ({ places, onMarkerHover }) => {
             >
               <div className="relative pb-[100%]">
                 <div className="flex flex-col h-full left-0 absolute top-0 w-full">
-                  <a
-                    href="#"
+                  <Link
+                    href={`/place/${place._id}`}
                     className="rounded-sm text-white overflow-hidden relative flex-[1_1_100%] hover:opacity-90"
                   >
                     <img
@@ -139,7 +140,7 @@ const Sidebar = ({ places, onMarkerHover }) => {
                         {place.title}
                       </div>
                     </div>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

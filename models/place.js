@@ -49,8 +49,14 @@ const placeSchema = new mongoose.Schema({
   },
   googleMapUrl: {
     type: String,
-    validate: [validator.isURL, "Please enter a valid email"],
+    validate: [validator.isURL, "Please enter a valid Google Map URL"],
   },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,

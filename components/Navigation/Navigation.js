@@ -270,7 +270,7 @@ const Navigation = () => {
                     <p className="text-sm">
                       <Link
                         className="font-semibold hover:text-green-600 transition-all duration-150 ease-in-out underline"
-                        href="/signin"
+                        href="/signup"
                       >
                         Zarejestruj się
                       </Link>

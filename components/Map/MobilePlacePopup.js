@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
 
 const MobilePlacePopup = ({ place }) => {
   const infoContainer = useRef(document.createElement("div"));
@@ -20,7 +21,9 @@ const MobilePlacePopup = ({ place }) => {
           <img src={place.image} alt={place.title} class="rounded-sm" />
         </div>
         <div class="w-3/4 bg-white flex flex-col space-y-2 ">
-          <h3 class="font-black text-gray-800">{place.title}</h3>
+          <Link href={`/place/${place._id}`} class="font-black text-gray-800">
+            {place.title}
+          </Link>
           <p class="text-xs text-gray-500 ">{place.description}</p>
         </div>
       </div>
