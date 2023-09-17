@@ -22,5 +22,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/admin", "/protected-page/:path*"],
+  matcher: ["/admin", "/place/new", "/protected-page/:path*"],
 };

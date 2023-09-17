@@ -1,6 +1,10 @@
+import { getCommentsByPlaceId } from "@/actions/getCommentsByPlaceId";
 import { getPlaceById } from "@/actions/getPlaceById";
+
+import CommentCard from "@/components/Comment/CommentCard";
 //import PlaceDetails from "@/components/Place/Details/PlaceDetails";
 import dynamic from "next/dynamic";
+import { Comme } from "next/font/google";
 import Link from "next/link";
 
 const PlaceDetailsMap = dynamic(
@@ -116,6 +120,7 @@ export default async function PlaceDetailsPage({ params }) {
               </h2>
               <p className="text-gray-500">{place.description}</p>
             </div>
+            <CommentCard place={place} />
           </div>
           <div className="col-span-2">
             <PlaceDetailsMap place={place} />

@@ -19,6 +19,18 @@ const placeSchema = new mongoose.Schema({
     validate: [validator.isURL, "Please enter a valid link"],
     required: true,
   },
+  images: [
+    {
+      url: {
+        type: String,
+        validate: [validator.isURL, "Please enter a valid link"],
+      },
+      accepted: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
   category: {
     type: String,
     // validate: [
@@ -51,12 +63,6 @@ const placeSchema = new mongoose.Schema({
     type: String,
     validate: [validator.isURL, "Please enter a valid Google Map URL"],
   },
-  comments: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment",
-    },
-  ],
   createdAt: {
     type: Date,
     default: Date.now,

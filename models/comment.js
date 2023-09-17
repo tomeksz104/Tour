@@ -1,19 +1,24 @@
 import mongoose from "mongoose";
 
 const commentSchema = new mongoose.Schema({
-  text: {
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  content: {
     type: String,
     trim: true,
     required: true,
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-  // each comment can only relates to one blog, so it's not in array
-  place: {
+  placeId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Place",
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 

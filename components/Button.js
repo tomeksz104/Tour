@@ -7,7 +7,7 @@ const Button = ({
 }) => (
   <button
     type={type}
-    className={`${className} relative flex h-11 float-right items-center justify-center before:absolute before:inset-0 before:rounded-full before:bg-green-500 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95`}
+    className={`${className} relative flex h-11 items-center justify-center before:absolute before:inset-0 before:rounded-full before:bg-green-500 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95`}
     {...props}
   >
     {isLoading && (
@@ -32,7 +32,7 @@ const Button = ({
         ></path>
       </svg>
     )}
-    <span className="relative px-10 flex items-center text-base font-semibold text-white dark:text-dark">
+    <span className="relative px-10 flex items-center font-semibold text-white dark:text-dark">
       {children}
     </span>
   </button>

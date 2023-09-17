@@ -56,8 +56,6 @@ const UserMenu = ({ user }) => {
       <div className="opacity-0 invisible dropdown-menu transition-all duration-300 transform origin-top-right -translate-y-2 scale-95">
         <div
           className="absolute right-0 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none"
-          aria-labelledby="headlessui-menu-button-1"
-          id="headlessui-menu-items-117"
           role="menu"
         >
           <a className="flex items-center p-3 mt-0 text-sm text-gray-600 transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">

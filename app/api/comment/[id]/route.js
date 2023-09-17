@@ -1,19 +1,19 @@
-import Place from "@/models/place";
-import dbConnect from "@/utils/dbConnect";
-
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { isAdmin } from "@/utils/checkUser";
 import { NextResponse } from "next/server";
 
+import Comment from "@/models/comment";
+import dbConnect from "@/utils/dbConnect";
+
 export const GET = async (request, { params }) => {
   try {
     await dbConnect();
 
-    const prompt = await Place.findById(params.id);
-    if (!prompt) return new Response("Place Not Found", { status: 404 });
+    const comment = await Comment.findById(params.id);
+    if (!comment) return new Response("Comment Not Found", { status: 404 });
 
-    return new Response(JSON.stringify(prompt), { status: 200 });
+    return new Response(JSON.stringify(comment), { status: 200 });
   } catch (error) {
     return new Response("Internal Server Error", { status: 500 });
   }
@@ -27,10 +27,10 @@ export const PATCH = async (request, { params }) => {
   if (!session) {
     return new NextResponse(
       JSON.stringify({
-        error: { global: "You are not logged in" },
+        error: "You are not logged in.",
       }),
       {
-        status: 404,
+        status: 401,
       }
     );
   }
@@ -38,13 +38,13 @@ export const PATCH = async (request, { params }) => {
   try {
     await dbConnect();
 
-    // Find the existing place by ID
-    const existingPlace = await Place.findById(params.id);
+    // Find the existing comment by ID
+    const comment = await Comment.findById(params.id);
 
-    if (!existingPlace) {
+    if (!comment) {
       return new NextResponse(
         JSON.stringify({
-          error: { global: "Place not found" },
+          error: "Comment not found",
         }),
         {
           status: 404,
@@ -52,15 +52,15 @@ export const PATCH = async (request, { params }) => {
       );
     }
 
-    // Check if the user is the author of the attraction or has an admin role
+    // Check if the user is the author of the comment or has an admin role
     const isAdminUser = await isAdmin(request);
     const userId = session.user._id;
-    const authorId = existingPlace.userId.toString();
+    const authorId = comment.userId.toString();
 
     if (!isAdminUser || userId !== authorId) {
       return new NextResponse(
         JSON.stringify({
-          error: { global: "You do not have permission to edit this place" },
+          error: "You do not have permission to edit this comment",
         }),
         {
           status: 401,
@@ -68,23 +68,18 @@ export const PATCH = async (request, { params }) => {
       );
     }
 
-    // Update the place with new data
-    existingPlace.category = requestBody.category;
-    existingPlace.coordinates = requestBody.coordinates;
-    existingPlace.image = requestBody.image;
-    existingPlace.title = requestBody.title;
-    existingPlace.description = requestBody.description;
-    existingPlace.googleMapUrl = requestBody.googleMapUrl;
+    // Update the comment with new data
+    comment.content = requestBody.content;
 
-    await existingPlace.save();
+    await comment.save();
 
-    return new Response(JSON.stringify("Successfully updated the place"), {
+    return new Response(JSON.stringify("Successfully updated the comment"), {
       status: 201,
     });
   } catch (error) {
     return new NextResponse(
       JSON.stringify({
-        error: { global: "Error updating place" },
+        error: "Error updating comment",
       }),
       {
         status: 500,
@@ -99,7 +94,7 @@ export const DELETE = async (request, { params }) => {
   if (!session) {
     return new NextResponse(
       JSON.stringify({
-        error: { global: "You are not logged in" },
+        error: "You are not logged in",
       }),
       {
         status: 404,
@@ -110,16 +105,16 @@ export const DELETE = async (request, { params }) => {
   try {
     await dbConnect();
 
-    // Find the place by ID and remove it
-    await Place.findByIdAndRemove(params.id);
+    // Find the comment by ID and remove it
+    await Comment.findByIdAndRemove(params.id);
 
-    return new Response(JSON.stringify("Place deleted successfully"), {
+    return new Response(JSON.stringify("Comment deleted successfully"), {
       status: 201,
     });
   } catch (error) {
     return new NextResponse(
       JSON.stringify({
-        error: { global: "Error deleting place" },
+        error: "Error when deleting a comment",
       }),
       {
         status: 500,

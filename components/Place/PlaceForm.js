@@ -75,6 +75,11 @@ const PlaceForm = ({ place }) => {
       if (response.ok) {
         const message = await response.json();
         toast.success(message);
+        setCoordinates({});
+        setImage("");
+        setTitle("");
+        setDescription("");
+        setGoogleMapUrl("");
       } else {
         const { error } = await response.json();
         setError(error);
@@ -96,7 +101,6 @@ const PlaceForm = ({ place }) => {
     );
 
     if (isConfirmed) {
-      console.log("DELETING");
       setError(false);
       setIsLoading(true);
 
