@@ -23,9 +23,9 @@ const PlaceForm = ({ place }) => {
   const toast = useToast();
   const { confirm } = useConfirm();
 
-  const placeId = place?._id ?? null;
   const [coordinates, setCoordinates] = useState({});
   const [image, setImage] = useState("");
+  const [images, setImages] = useState([]);
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -33,6 +33,7 @@ const PlaceForm = ({ place }) => {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const placeId = place?._id ?? null;
   const url = placeId ? `/api/place/${placeId}` : "/api/place/new";
   const method = placeId ? "PATCH" : "POST";
 
@@ -42,6 +43,7 @@ const PlaceForm = ({ place }) => {
 
       setCoordinates({ lat, lng });
       setImage(place.image ?? "");
+      setImages(place.images ?? []);
       setCategory(place.category ?? "");
       setTitle(place.title ?? "");
       setDescription(place.description ?? "");
@@ -58,6 +60,7 @@ const PlaceForm = ({ place }) => {
     const requestBody = {
       coordinates,
       image,
+      images: images,
       category,
       title,
       description,
@@ -75,11 +78,14 @@ const PlaceForm = ({ place }) => {
       if (response.ok) {
         const message = await response.json();
         toast.success(message);
-        setCoordinates({});
-        setImage("");
-        setTitle("");
-        setDescription("");
-        setGoogleMapUrl("");
+        if (!placeId) {
+          setCoordinates({});
+          setImage("");
+          setImages([]);
+          setTitle("");
+          setDescription("");
+          setGoogleMapUrl("");
+        }
       } else {
         const { error } = await response.json();
         setError(error);
@@ -125,6 +131,27 @@ const PlaceForm = ({ place }) => {
     }
   };
 
+  const addImageInputField = () => {
+    setImages([
+      ...images,
+      {
+        url: "",
+        accepted: false,
+      },
+    ]);
+  };
+  const removeImageInputField = (index) => {
+    const rows = [...images];
+    rows.splice(index, 1);
+    setImages(rows);
+  };
+  const handleChangeImageUrl = (index, event) => {
+    const { name, value } = event.target;
+    const list = [...images];
+    list[index][name] = value;
+    setImages(list);
+  };
+
   return (
     <div className="w-full sm:max-w-3xl m-auto py-20 ">
       <h2 className="mt-5 text-center text-2xl font-bold text-gray-800 dark:text-white md:text-4xl">
@@ -134,7 +161,7 @@ const PlaceForm = ({ place }) => {
       <Map
         onMarkerPositionChange={handleMarkerPositionChange}
         onMarkerPositionMove={handleMarkerPositionChange}
-        coordinates={coordinates}
+        coordinates={place ? place.coordinates : null}
         category={category}
         placeId={placeId}
       />
@@ -176,6 +203,47 @@ const PlaceForm = ({ place }) => {
             onChange={(event) => setImage(event.target.value)}
             placeholder="https://URL-to-best-photo.com"
           />
+
+          {images.map((image, index) => {
+            return (
+              <div className="relative w-full flex items-center" key={index}>
+                <Input
+                  key={index}
+                  type="text"
+                  name="url"
+                  value={image.url}
+                  onChange={(event) => handleChangeImageUrl(index, event)}
+                  placeholder="https://URL-to-best-photo.com"
+                  className="w-full"
+                />
+
+                <button
+                  type="button"
+                  className="absolute right-5"
+                  onClick={() => removeImageInputField(index)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6 text-red-500 hover:scale-110"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+            );
+          })}
+
+          <button type="button" onClick={addImageInputField}>
+            <span class="text-green-500 text-sm hover:underline">Add new</span>
+          </button>
         </div>
 
         <div className="space-y-1">

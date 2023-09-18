@@ -119,7 +119,11 @@ const MyMarkers = ({ onMarkerPositionChange, coordinates, category }) => {
 
   useEffect(() => {
     if (!map) return;
-    if (!isNaN(+coordinates.lat) && !isNaN(+coordinates.lng)) {
+    if (
+      coordinates?.lat &&
+      !isNaN(+coordinates?.lat) &&
+      !isNaN(+coordinates?.lng)
+    ) {
       setMarker([+coordinates.lat, +coordinates.lng]);
     }
   }, [coordinates]);
@@ -137,7 +141,7 @@ const MyMarkers = ({ onMarkerPositionChange, coordinates, category }) => {
 const Map = ({ onMarkerPositionChange, coordinates, category, placeId }) => {
   const zoom = placeId ? 18 : 6;
 
-  const mapPosition = placeId ? coordinates : coordinatesOfPoland;
+  const mapPosition = coordinates?.lat ? coordinates : coordinatesOfPoland;
 
   return (
     <MapWrapper

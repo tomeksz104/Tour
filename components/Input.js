@@ -5,7 +5,7 @@ const Input = forwardRef(function Input(
   ref
 ) {
   return (
-    <div className="relative flex items-center text-gray-400 focus-within:text-green-500">
+    <div className="relative w-full flex items-center text-gray-400 focus-within:text-green-500">
       {icon && (
         <span className="absolute left-4 flex h-6 items-center border-r border-gray-300 pr-3 dark:border-gray-700">
           {icon}

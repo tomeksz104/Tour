@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { isAdmin } from "@/utils/checkUser";
 
 export const POST = async (request, response) => {
   const { requestBody } = await request.json();
@@ -24,14 +25,32 @@ export const POST = async (request, response) => {
   try {
     await dbConnect();
 
-    const { coordinates, image, category, title, description, googleMapUrl } =
-      requestBody;
+    const {
+      coordinates,
+      image,
+      images,
+      category,
+      title,
+      description,
+      googleMapUrl,
+    } = requestBody;
+
+    let updatedImages;
+    const isAdminUser = await isAdmin(request);
+
+    if (isAdminUser) {
+      updatedImages = images.map((image) => ({
+        ...image,
+        accepted: true,
+      }));
+    }
 
     const newPlace = new Place({
       userId: session.user._id,
       category,
       coordinates,
       image,
+      images: updatedImages ? updatedImages : images,
       title,
       description,
       googleMapUrl,

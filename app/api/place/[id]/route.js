@@ -68,10 +68,20 @@ export const PATCH = async (request, { params }) => {
       );
     }
 
+    let updatedImages;
+
+    if (isAdminUser) {
+      updatedImages = requestBody.images.map((image) => ({
+        ...image,
+        accepted: true,
+      }));
+    }
+
     // Update the place with new data
     existingPlace.category = requestBody.category;
     existingPlace.coordinates = requestBody.coordinates;
     existingPlace.image = requestBody.image;
+    existingPlace.images = updatedImages ? updatedImages : requestBody.images;
     existingPlace.title = requestBody.title;
     existingPlace.description = requestBody.description;
     existingPlace.googleMapUrl = requestBody.googleMapUrl;
