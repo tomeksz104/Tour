@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { ZoomControl } from "react-leaflet";
 
 import Sidebar from "./Sidebar";
@@ -13,7 +13,6 @@ import ScrollableTabsSlider from "./ScrollableTabsSlider";
 import "leaflet/dist/leaflet.css";
 import "leaflet-easybutton/src/easy-button.js";
 import "leaflet-easybutton/src/easy-button.css";
-import Places_org from "./Places_org";
 
 const Map = () => {
   const [selectedCategories, setSelectedCategories] = useState(null);
@@ -51,12 +50,6 @@ const Map = () => {
         >
           <ZoomControl position="topright" />
           <UserLocate />
-          {/* <Places_org
-            hoveredMarkerId={hoveredMarkerId}
-            selectedCategories={selectedCategories}
-            onOpenMarker={handleOpenMobileMarker}
-            onChangeVisiblePlaces={handleChangeVisiblePlaces}
-          /> */}
           <Places
             hoveredMarkerId={hoveredMarkerId}
             selectedCategories={selectedCategories}
@@ -64,13 +57,6 @@ const Map = () => {
             onChangeVisiblePlaces={handleChangeVisiblePlaces}
             interactiveMap={true}
           />
-          {/* <Places_org
-            hoveredMarkerId={hoveredMarkerId}
-            selectedCategories={selectedCategories}
-            onOpenMarker={handleOpenMobileMarker}
-            onChangeVisiblePlaces={handleChangeVisiblePlaces}
-          /> */}
-          {/* <Places selectedCategories={selectedCategories} /> */}
         </MapWrapper>
         <div id="mobile-place-popup"></div>
         {selectedPlace && <MobilePlacePopup place={selectedPlace} />}

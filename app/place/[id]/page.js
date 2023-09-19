@@ -1,12 +1,9 @@
-import { getCommentsByPlaceId } from "@/actions/getCommentsByPlaceId";
+import Link from "next/link";
+import dynamic from "next/dynamic";
 import { getPlaceById } from "@/actions/getPlaceById";
 
 import CommentCard from "@/components/Comment/CommentCard";
 import ManualSlideshow from "@/components/Slideshow/ManualSlideshow";
-//import PlaceDetails from "@/components/Place/Details/PlaceDetails";
-import dynamic from "next/dynamic";
-import { Comme } from "next/font/google";
-import Link from "next/link";
 
 const PlaceDetailsMap = dynamic(
   () => import("@/components/Place/Details/PlaceDetailsMap"),

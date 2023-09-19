@@ -1,3 +1,6 @@
+export const ADD_TOAST = "ADD_TOAST";
+export const DELETE_TOAST = "DELETE_TOAST";
+
 export const toastReducer = (state, action) => {
   switch (action.type) {
     case "ADD_TOAST":

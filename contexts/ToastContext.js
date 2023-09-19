@@ -1,7 +1,11 @@
 "use client";
 
 import { createContext, useReducer } from "react";
-import { toastReducer } from "@/contexts/reducers/toastReducer";
+import {
+  ADD_TOAST,
+  DELETE_TOAST,
+  toastReducer,
+} from "@/contexts/reducers/toastReducer";
 import ToastsContainer from "@/components/Toast/ToastsContainer";
 
 const initialState = {
@@ -15,7 +19,7 @@ export const ToastContextProvider = ({ children }) => {
 
   const addToast = (type, message) => {
     const id = Math.floor(Math.random() * 10000000);
-    dispatch({ type: "ADD_TOAST", payload: { id, message, type } });
+    dispatch({ type: ADD_TOAST, payload: { id, message, type } });
   };
 
   const success = (message) => {
@@ -35,7 +39,7 @@ export const ToastContextProvider = ({ children }) => {
   };
 
   const remove = (id) => {
-    dispatch({ type: "DELETE_TOAST", payload: id });
+    dispatch({ type: DELETE_TOAST, payload: id });
   };
 
   const value = { success, warning, info, error, remove };

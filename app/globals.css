@@ -127,7 +127,7 @@ body {
   }
 }
 
-@-moz-keyframes pulse {
+@-moz-keyframes circlePulse {
   0% {
     -moz-transform: scale(0.32);
     opacity: 0.8;
@@ -153,7 +153,7 @@ body {
     opacity: 1;
   }
 }
-@keyframes pulse {
+@keyframes circlePulse {
   0% {
     transform: scale(0.32);
     opacity: 0.8;
@@ -190,9 +190,9 @@ body {
   top: -26px;
   width: 64px;
   z-index: -1;
-  -webkit-animation: pulse 1.5s ease-in-out infinite;
-  -moz-animation: pulse 1.5s ease-in-out infinite;
-  animation: pulse 1.5s ease-in-out infinite;
+  -webkit-animation: circlePulse 1.5s ease-in-out infinite;
+  -moz-animation: circlePulse 1.5s ease-in-out infinite;
+  animation: circlePulse 1.5s ease-in-out infinite;
   -moz-border-radius: 32px;
   -webkit-border-radius: 32px;
   border-radius: 32px;

@@ -1,7 +1,6 @@
-import React, { memo, useEffect, useState, cloneElement, useRef } from "react";
+import React, { memo, useEffect, useState, useRef, useContext } from "react";
 import ReactDOM from "react-dom";
-import { renderToString } from "react-dom/server";
-import { Marker, Popup, useMap } from "react-leaflet";
+import { Marker, useMap } from "react-leaflet";
 
 import { categories_list } from "../Categories/Categories";
 import Link from "next/link";
@@ -9,7 +8,11 @@ import Link from "next/link";
 import "leaflet-canvas-marker";
 import L from "leaflet";
 
-import { createRoot } from "react-dom/client"; // Importuj createRoot
+import { createRoot } from "react-dom/client";
+import { PlacesContext } from "@/contexts/PlacesContext";
+
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { useRouter } from "next/navigation";
 
 export const getIcon = (category) => {
   const selectedCategory = categories_list.find(
@@ -43,7 +46,9 @@ const getVisibleMarkers = (map, places) => {
 };
 
 const Places = memo((props) => {
-  const [places, setPlaces] = useState([]);
+  const router = useRouter();
+  const placesCtx = useContext(PlacesContext);
+  //const [places, setPlaces] = useState([]);
   const [filteredPlaces, setFilteredPlaces] = useState([]);
   const map = useMap();
 
@@ -65,7 +70,8 @@ const Places = memo((props) => {
               data.splice(markerIdToRemove, 1);
             }
           }
-          setPlaces(data);
+          //setPlaces(data);
+          placesCtx.replacePlacesList(data);
           if (props.interactiveMap === true) {
             props.onChangeVisiblePlaces(data);
           }
@@ -76,14 +82,15 @@ const Places = memo((props) => {
         console.error("Failed to fetch places:", error);
       }
     };
-
-    fetchData();
-  }, []);
+    if (placesCtx.places.length === 0) {
+      fetchData();
+    }
+  }, [placesCtx.places]);
 
   useEffect(() => {
     const handleMoveEnd = () => {
       const placesToRender =
-        filteredPlaces.length > 0 ? filteredPlaces : places;
+        filteredPlaces.length > 0 ? filteredPlaces : placesCtx.places;
       const newVisiblePlaces = getVisibleMarkers(map, placesToRender);
       props.onChangeVisiblePlaces(newVisiblePlaces);
     };
@@ -97,23 +104,24 @@ const Places = memo((props) => {
         map.off("moveend", handleMoveEnd);
       }
     };
-  }, [filteredPlaces, places, map]);
+  }, [filteredPlaces, placesCtx.places, map]);
 
   useEffect(() => {
     if (props.selectedCategories) {
-      const filteredPlaces = places.filter((place) =>
+      const filteredPlaces = placesCtx.places.filter((place) =>
         props.selectedCategories.includes(place.category)
       );
       setFilteredPlaces(filteredPlaces);
       if (filteredPlaces.length > 0 && props.interactiveMap === true) {
         props.onChangeVisiblePlaces(filteredPlaces);
       } else if (props.interactiveMap === true) {
-        props.onChangeVisiblePlaces(places);
+        props.onChangeVisiblePlaces(placesCtx.places);
       }
     }
   }, [props.selectedCategories]);
 
-  const placesToRender = filteredPlaces.length > 0 ? filteredPlaces : places;
+  const placesToRender =
+    filteredPlaces.length > 0 ? filteredPlaces : placesCtx.places;
 
   useEffect(() => {
     if (!map || placesToRender.length <= 0) return;
@@ -128,26 +136,7 @@ const Places = memo((props) => {
     }
 
     const canvasLayer = document.querySelector(".leaflet-canvas-icon-layer");
-    const parentElement = canvasLayer.parentNode; // Dostęp do rodzica
-    const handleMarkerClick = (event) => {
-      // Get the clicked marker
 
-      // You can access information about the marker or do any other actions here
-      // For example, you can access the marker's properties like this:
-      // const place = clickedMarker.getPopup().getContent().place;
-
-      // Example: Log the marker's coordinates
-      console.log(event);
-    };
-    map.on("click", handleMarkerClick);
-
-    //const ciLayer = L.canvasIconLayer({}).addTo(map);
-
-    // ciLayer.addOnHoverListener(function (e, data) {
-    //   console.log(data[0].data._leaflet_id);
-    // });
-
-    // Ukryj warstwę canvas podczas rozpoczęcia zoomu
     const hideCanvasOnZoomStart = () => {
       canvasLayer.classList.add("transition-[opacity]");
       canvasLayer.classList.add("ease-in-out");
@@ -155,12 +144,9 @@ const Places = memo((props) => {
 
       canvasLayer.classList.remove("opacity-100");
       canvasLayer.classList.add("opacity-0");
-      //canvasLayer.classList.add("blur-sm");
     };
 
-    // Odkryj warstwę canvas po zakończonym zoomie
     const showCanvasOnZoomEnd = () => {
-      //canvasLayer.classList.remove("blur-sm");
       canvasLayer.classList.remove("opacity-0");
       canvasLayer.classList.add("opacity-100");
     };
@@ -173,8 +159,12 @@ const Places = memo((props) => {
     placesToRender.forEach((place) => {
       const popupContent = document.createElement("div");
 
-      const popupRoot = createRoot(popupContent);
-      popupRoot.render(<CustomPopupContent place={place} />);
+      // const popupRoot = createRoot(popupContent);
+      // popupRoot.render(<CustomPopupContent place={place} />);
+      ReactDOM.render(
+        <CustomPopupContent place={place} router={router} />,
+        popupContent
+      );
 
       const marker = L.marker([place.coordinates.lat, place.coordinates.lng], {
         icon: getIcon(place.category),
@@ -220,49 +210,7 @@ const Places = memo((props) => {
           ]}
           icon={getIcon(props.hoveredMarkerId.category)}
           key={2}
-        >
-          {/* <Popup closeButton={false} className="w-64">
-            <div class="group rounded-3xl">
-              <div class="relative overflow-hidden rounded-t-xl">
-                <Link
-                  href={`/place/update/${props.hoveredMarkerId._id}`}
-                  className="absolute top-2 right-2 z-[1] bg-white rounded-full p-1 shadow-sm ransition duration-300 hover:scale-110"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-3 h-3 text-blue-500"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
-                    />
-                  </svg>
-                </Link>
-                <img
-                  src={props.hoveredMarkerId.image}
-                  alt={props.hoveredMarkerId.title}
-                  loading="lazy"
-                  width="1000"
-                  height="667"
-                  class="h-32 w-full object-cover object-top"
-                />
-              </div>
-              <div class="py-2 px-3 relative">
-                <h3 class="text-md font-semibold text-gray-800 dark:text-white">
-                  {props.hoveredMarkerId.title}
-                </h3>
-                <p class="pt-1 text-gray-600 dark:text-gray-300 hidden md:block">
-                  {props.hoveredMarkerId.description}
-                </p>
-              </div>
-            </div>
-          </Popup> */}
-        </Marker>
+        ></Marker>
       </>
     );
   } else {
@@ -272,48 +220,68 @@ const Places = memo((props) => {
 
 export default Places;
 
-const CustomPopupContent = ({ place }) => (
-  <div class="group rounded-3xl">
-    <div class="relative overflow-hidden rounded-t-xl">
-      <Link
-        href={`/place/update/${place._id}`}
-        className="absolute top-2 right-2 z-[1] bg-white rounded-full p-1 shadow-sm duration-300 hover:scale-110"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke="currentColor"
-          className="w-3 h-3 text-blue-500"
+const CustomPopupContent = ({ place, router }) => {
+  const handleEditPlace = () => {
+    router.push(`/place/update/${place._id}`);
+  };
+
+  const handleShowPlaceDetails = () => {
+    router.push(`/place/${place._id}`);
+  };
+
+  return (
+    <div className="group rounded-3xl">
+      <div className="relative overflow-hidden rounded-t-xl">
+        <button
+          onClick={handleEditPlace}
+          // onClick={() => {
+          //   router.push(`/place/update/${place._id}`);
+          // }}
+          href={`/place/update/${place._id}`}
+          className="absolute top-2 right-2 z-[1] bg-white rounded-full p-1 shadow-sm duration-300 hover:scale-110"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
-          />
-        </svg>
-      </Link>
-      <img
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-3 h-3 text-blue-500"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+            />
+          </svg>
+        </button>
+        {/* <img
         src={place.image}
         alt={place.title}
         loading="lazy"
-        width="1000"
-        height="667"
         class="h-32 w-full object-cover object-top"
-      />
+      /> */}
+        <LazyLoadImage
+          className="h-32 w-full object-cover object-top"
+          src={place.image}
+          width={600}
+          height={400}
+          alt={place.title}
+        />
+      </div>
+      <div class="py-2 px-3 relative">
+        <button
+          onClick={handleShowPlaceDetails}
+          // href={`/place/${place._id}`}
+          className="text-md font-semibold hover:underline"
+          style={{ color: "#000000" }}
+        >
+          {place.title}
+        </button>
+        <p class="pt-1 text-gray-600 hidden md:line-clamp-3">
+          {place.description}
+        </p>
+      </div>
     </div>
-    <div class="py-2 px-3 relative">
-      <Link
-        href={`/place/${place._id}`}
-        className="text-md font-semibold hover:underline"
-        style={{ color: "#000000" }}
-      >
-        {place.title}
-      </Link>
-      <p class="pt-1 text-gray-600 hidden md:line-clamp-3">
-        {place.description}
-      </p>
-    </div>
-  </div>
-);
+  );
+};
