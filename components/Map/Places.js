@@ -12,7 +12,7 @@ import { createRoot } from "react-dom/client";
 import { PlacesContext } from "@/contexts/PlacesContext";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const getIcon = (category) => {
   const selectedCategory = categories_list.find(
@@ -47,6 +47,7 @@ const getVisibleMarkers = (map, places) => {
 
 const Places = memo((props) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const placesCtx = useContext(PlacesContext);
   //const [places, setPlaces] = useState([]);
   const [filteredPlaces, setFilteredPlaces] = useState([]);
@@ -54,6 +55,20 @@ const Places = memo((props) => {
 
   const ciLayerRef = useRef(null);
   const markersRef = useRef([]);
+
+  const id = searchParams.get("id");
+
+  useEffect(() => {
+    if (id && placesCtx) {
+      const placeToFlyTo = placesCtx.places.find((place) => place._id === id);
+
+      if (placeToFlyTo) {
+        map.setView(placeToFlyTo.coordinates, 18);
+        const newVisiblePlaces = getVisibleMarkers(map, placesToRender);
+        props.onChangeVisiblePlaces(newVisiblePlaces);
+      }
+    }
+  }, [id, placesCtx]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -113,9 +128,13 @@ const Places = memo((props) => {
       );
       setFilteredPlaces(filteredPlaces);
       if (filteredPlaces.length > 0 && props.interactiveMap === true) {
-        props.onChangeVisiblePlaces(filteredPlaces);
+        const newVisiblePlaces = getVisibleMarkers(map, filteredPlaces);
+        props.onChangeVisiblePlaces(newVisiblePlaces);
+        //props.onChangeVisiblePlaces(filteredPlaces);
       } else if (props.interactiveMap === true) {
-        props.onChangeVisiblePlaces(placesCtx.places);
+        const newVisiblePlaces = getVisibleMarkers(map, placesCtx.places);
+        props.onChangeVisiblePlaces(newVisiblePlaces);
+        //props.onChangeVisiblePlaces(placesCtx.places);
       }
     }
   }, [props.selectedCategories]);
@@ -159,12 +178,12 @@ const Places = memo((props) => {
     placesToRender.forEach((place) => {
       const popupContent = document.createElement("div");
 
-      // const popupRoot = createRoot(popupContent);
-      // popupRoot.render(<CustomPopupContent place={place} />);
-      ReactDOM.render(
-        <CustomPopupContent place={place} router={router} />,
-        popupContent
-      );
+      const popupRoot = createRoot(popupContent);
+      popupRoot.render(<CustomPopupContent place={place} router={router} />);
+      // ReactDOM.render(
+      //   <CustomPopupContent place={place} router={router} />,
+      //   popupContent
+      // );
 
       const marker = L.marker([place.coordinates.lat, place.coordinates.lng], {
         icon: getIcon(place.category),
@@ -264,8 +283,6 @@ const CustomPopupContent = ({ place, router }) => {
         <LazyLoadImage
           className="h-32 w-full object-cover object-top"
           src={place.image}
-          width={600}
-          height={400}
           alt={place.title}
         />
       </div>

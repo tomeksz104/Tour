@@ -10,12 +10,8 @@ import UserLocate from "./UserLocate";
 import MobilePlacePopup from "./MobilePlacePopup";
 import ScrollableTabsSlider from "./ScrollableTabsSlider";
 
-import "leaflet/dist/leaflet.css";
-import "leaflet-easybutton/src/easy-button.js";
-import "leaflet-easybutton/src/easy-button.css";
-
 const Map = () => {
-  const [selectedCategories, setSelectedCategories] = useState(null);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [visiblePlaces, setVisiblePlaces] = useState([]);
   const [hoveredMarkerId, setHoveredMarkerId] = useState(null);

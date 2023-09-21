@@ -3,12 +3,10 @@
 import MapWrapper from "@/components/MapWrapper/MapWrapper";
 import { getIcon } from "@/components/Map/Places";
 import { Marker } from "react-leaflet";
-
-import "leaflet/dist/leaflet.css";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-import "leaflet-defaulticon-compatibility";
+import { useRouter } from "next/navigation";
 
 const PlaceDetailsMap = ({ place }) => {
+  const router = useRouter();
   return (
     <div className="relative">
       <MapWrapper
@@ -48,7 +46,12 @@ const PlaceDetailsMap = ({ place }) => {
           </svg>
         </button>
       </a>
-      <div class="absolute bottom-12 bottom-3 left-1/2 transform -translate-x-1/2 flex items-center justify-center bg-white rounded-md px-3 py-2 text-sm font-semibold border border-neutral-300 whitespace-nowrap	">
+      <button
+        onClick={() => {
+          router.push(`/?id=${place._id}`);
+        }}
+        class="absolute bottom-12 bottom-3 left-1/2 transform -translate-x-1/2 flex items-center justify-center bg-white rounded-md px-3 py-2 text-sm font-semibold border border-neutral-300 whitespace-nowrap	"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -69,7 +72,7 @@ const PlaceDetailsMap = ({ place }) => {
           ></path>
         </svg>
         SEE ON THE MAP
-      </div>
+      </button>
     </div>
   );
 };
