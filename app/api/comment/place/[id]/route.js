@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { isAdmin } from "@/utils/checkUser";
+import { isAdmin } from "@/libs/checkUser";
 import { NextResponse } from "next/server";
-import dbConnect from "@/utils/dbConnect";
+import dbConnect from "@/libs/dbConnect";
 
 import Comment from "@/models/comment";
 import User from "@/models/user";

@@ -1,87 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import SidebarImageSkeleton from "../Skeletons/SidebarImageSkeleton";
 import { useRouter } from "next/navigation";
+import { useSidebar } from "@/hooks/useSidebar";
 
-const mobileMediaQuery = "(min-width: 768px)";
+import SidebarImageSkeleton from "../Skeletons/SidebarImageSkeleton";
 
 const Sidebar = ({ places, onMarkerHover }) => {
   const router = useRouter();
-  const [showSidebar, setShowSidebar] = useState(
-    window.matchMedia(mobileMediaQuery).matches
-  );
-  const [visiblePlaces, setVisiblePlaces] = useState([]);
-  const [hoverTimeout, setHoverTimeout] = useState(null);
-  const [page, setPage] = useState(0);
-  const placesPerPage = 10;
-
-  const handleToggleSidebar = () => {
-    setShowSidebar((current) => !current);
-  };
-
-  const handleMouseEnter = (markerId) => {
-    clearTimeout(hoverTimeout);
-
-    const timeoutId = setTimeout(() => {
-      onMarkerHover(markerId);
-    }, 1000);
-
-    setHoverTimeout(timeoutId);
-  };
-
-  const handleMouseLeave = () => {
-    clearTimeout(hoverTimeout);
-    onMarkerHover(null);
-  };
-
-  const handleScroll = (e) => {
-    const container = e.target;
-
-    if (
-      container.scrollHeight - container.scrollTop ===
-      container.clientHeight
-    ) {
-      loadMorePlaces();
-    }
-  };
-
-  const loadMorePlaces = () => {
-    const startIndex = (page - 1) * placesPerPage;
-    const endIndex = startIndex + placesPerPage;
-    const newVisiblePlaces = places.slice(startIndex, endIndex);
-
-    setVisiblePlaces((prevVisiblePlaces) => [
-      ...prevVisiblePlaces,
-      ...newVisiblePlaces,
-    ]);
-
-    setPage((prevPage) => prevPage + 1);
-  };
-
-  useEffect(() => {
-    setVisiblePlaces([]);
-    setPage(0);
-    loadMorePlaces();
-  }, [places]);
-
-  useEffect(() => {
-    const query = window.matchMedia(mobileMediaQuery);
-
-    function handleQueryChange(queryEvent) {
-      setShowSidebar(queryEvent.matches);
-    }
-
-    query.addEventListener("change", handleQueryChange);
-
-    return () => {
-      query.removeEventListener("change", handleQueryChange);
-    };
-  }, []);
-
-  const handleFlyToPlace = (place) => {
-    router.push(`?id=${place._id}`, undefined, { shallow: true });
-  };
+  const {
+    showSidebar,
+    visiblePlaces,
+    placesPerPage,
+    handleToggleSidebar,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleScroll,
+    handleFlyToPlace,
+  } = useSidebar(places, onMarkerHover);
 
   return (
     <>

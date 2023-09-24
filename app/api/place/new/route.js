@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { isAdmin } from "@/utils/checkUser";
+import { isAdmin } from "@/libs/checkUser";
 
 export const POST = async (request, response) => {
   const { requestBody } = await request.json();

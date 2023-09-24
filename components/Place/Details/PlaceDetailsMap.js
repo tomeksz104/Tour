@@ -1,7 +1,7 @@
 "use client";
 
 import MapWrapper from "@/components/MapWrapper/MapWrapper";
-import { getIcon } from "@/components/Map/Places";
+import { getIcon } from "@/utils/mapUtils";
 import { Marker } from "react-leaflet";
 import { useRouter } from "next/navigation";
 

@@ -1,3 +1,5 @@
+import { categories_list } from "@/components/Categories/Categories";
+
 export const getIcon = (category) => {
   const selectedCategory = categories_list.find(
     (item) => item.title === category

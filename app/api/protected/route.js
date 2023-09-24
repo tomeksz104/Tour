@@ -1,4 +1,4 @@
-import { hasTokenMiddleware } from "@/utils/checkUser";
+import { hasTokenMiddleware } from "@/libs/checkUser";
 import router from "@/utils/handler";
 
 router.use(hasTokenMiddleware).get(protectedAPI);

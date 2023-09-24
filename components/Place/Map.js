@@ -6,11 +6,8 @@ import { Marker, useMap } from "react-leaflet";
 import L, { Icon } from "leaflet";
 
 import MapWrapper from "../MapWrapper/MapWrapper";
-import Places, { getIcon } from "../Map/Places";
-
-import "leaflet/dist/leaflet.css";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-import "leaflet-defaulticon-compatibility";
+import Places from "../Map/Places/Places";
+import { getIcon } from "@/utils/mapUtils";
 
 const coordinatesOfPoland = [52.10650519075632, 19.281005859375004];
 

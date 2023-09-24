@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import User from "@/models/user";
-import dbConnect from "@/utils/dbConnect";
+import dbConnect from "@/libs/dbConnect";
 
 export const authOptions = {
   // Enable JSON Web Tokens since we will not store sessions in our DB

@@ -5,9 +5,9 @@ import { ZoomControl } from "react-leaflet";
 
 import Sidebar from "./Sidebar";
 import MapWrapper from "../MapWrapper/MapWrapper";
-import Places from "./Places";
+import Places from "./Places/Places";
 import UserLocate from "./UserLocate";
-import MobilePlacePopup from "./MobilePlacePopup";
+import MobilePlacePopup from "./Places/MobilePlacePopup";
 import ScrollableTabsSlider from "./ScrollableTabsSlider";
 
 const Map = () => {
