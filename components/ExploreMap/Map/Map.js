@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { ZoomControl } from "react-leaflet";
 
-import Sidebar from "./Sidebar";
-import MapWrapper from "../MapWrapper/MapWrapper";
-import Places from "./Places/Places";
+import Sidebar from "../Sidebar/Sidebar";
+import MapWrapper from "../../MapWrapper/MapWrapper";
+import Places from "./Places";
 import UserLocate from "./UserLocate";
-import MobilePlacePopup from "./Places/MobilePlacePopup";
-import ScrollableTabsSlider from "./ScrollableTabsSlider";
+import MobilePlacePopup from "./MobilePlacePopup";
+import ScrollableTabsSlider from "../ScrollableTabsSlider";
 
 const Map = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);

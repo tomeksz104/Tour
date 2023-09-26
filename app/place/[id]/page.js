@@ -4,14 +4,12 @@ import { getPlaceById } from "@/actions/getPlaceById";
 
 import CommentCard from "@/components/Comment/CommentCard";
 import Slideshow from "@/components/Slideshow/Slideshow";
+import WatchlistButton from "@/components/PlaceDetails/WatchlistButton";
 
-const PlaceDetailsMap = dynamic(
-  () => import("@/components/Place/Details/PlaceDetailsMap"),
-  {
-    loading: () => <p>loading...</p>,
-    ssr: false,
-  }
-);
+const PlaceDetailsMap = dynamic(() => import("@/components/PlaceDetails/Map"), {
+  loading: () => <p>loading...</p>,
+  ssr: false,
+});
 
 export default async function PlaceDetailsPage({ params }) {
   const place = await getPlaceById(params?.id);
@@ -46,23 +44,8 @@ export default async function PlaceDetailsPage({ params }) {
                 {place.title}
               </h3>
               <div className="flex items-center">
-                <button
-                  type="button"
-                  class="rounded-full p-2 duration-300 text-white hover:text-red-400 hover:scale-110 pointer-events-auto"
-                >
-                  <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24">
-                    <path
-                      fill-rule="evenodd"
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="1"
-                      d="M11.995 7.23319C10.5455 5.60999 8.12832 5.17335 6.31215 6.65972C4.49599 8.14609 4.2403 10.6312 5.66654 12.3892L11.995 18.25L18.3235 12.3892C19.7498 10.6312 19.5253 8.13046 17.6779 6.65972C15.8305 5.18899 13.4446 5.60999 11.995 7.23319Z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                </button>
-                <Link
+                <WatchlistButton id={place._id} />
+                {/* <Link
                   href={`/place/update/${place._id}`}
                   class="rounded-full p-2 duration-300 text-white hover:text-blue-400 hover:scale-110 pointer-events-auto"
                 >
@@ -78,6 +61,25 @@ export default async function PlaceDetailsPage({ params }) {
                       stroke-linecap="round"
                       stroke-linejoin="round"
                       d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                    ></path>
+                  </svg>
+                </Link> */}
+                <Link
+                  href={`/place/update/${place._id}`}
+                  className="ml-3 bg-white rounded-full p-1.5 shadow-sm duration-300 hover:bg-blue-50 hover:scale-110 pointer-events-auto"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
                     ></path>
                   </svg>
                 </Link>

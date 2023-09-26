@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 
 const PlaceDetailsMap = ({ place }) => {
   const router = useRouter();
+
   return (
     <div className="relative">
       <MapWrapper

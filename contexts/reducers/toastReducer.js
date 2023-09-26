@@ -3,12 +3,12 @@ export const DELETE_TOAST = "DELETE_TOAST";
 
 export const toastReducer = (state, action) => {
   switch (action.type) {
-    case "ADD_TOAST":
+    case ADD_TOAST:
       return {
         ...state,
         toasts: [...state.toasts, action.payload],
       };
-    case "DELETE_TOAST":
+    case DELETE_TOAST:
       const updatedToasts = state.toasts.filter(
         (toast) => toast.id !== action.payload
       );

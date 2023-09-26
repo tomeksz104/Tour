@@ -11,7 +11,7 @@ import Label from "../Label";
 import InputError from "../InputError";
 import Button from "../Button";
 
-const Map = dynamic(() => import("@/components/Place/Map"), {
+const Map = dynamic(() => import("@/components/PlaceManagement/Map"), {
   loading: () => <p>loading...</p>,
   ssr: false,
 });

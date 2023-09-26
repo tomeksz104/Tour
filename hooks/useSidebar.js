@@ -75,10 +75,6 @@ export function useSidebar(places, onMarkerHover) {
     };
   }, []);
 
-  const handleFlyToPlace = (place) => {
-    router.push(`?id=${place._id}`, undefined, { shallow: true });
-  };
-
   return {
     showSidebar,
     visiblePlaces,
@@ -87,6 +83,5 @@ export function useSidebar(places, onMarkerHover) {
     handleMouseEnter,
     handleMouseLeave,
     handleScroll,
-    handleFlyToPlace,
   };
 }
