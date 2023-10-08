@@ -35,7 +35,6 @@ const Card = ({ place, onMouseEnter, onMouseLeave }) => {
                 onClick={() => {
                   watchlistCtx.toggleWatchlistItem(place._id);
                 }}
-                clas
                 className={`bg-white rounded-full p-1.5 shadow-sm duration-300 hover:bg-red-50 hover:scale-110 `}
               >
                 <svg

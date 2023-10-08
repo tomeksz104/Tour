@@ -145,6 +145,7 @@ const PlaceForm = ({ place }) => {
     rows.splice(index, 1);
     setImages(rows);
   };
+
   const handleChangeImageUrl = (index, event) => {
     const { name, value } = event.target;
     const list = [...images];

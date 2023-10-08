@@ -55,14 +55,18 @@ const CommentForm = ({
 
       if (response.ok) {
         const message = await response.json();
+
         toast.success(message);
         setContent("");
+
         onCommentAdd();
       } else {
         const { error } = await response.json();
+
         setError(error);
       }
     } catch (error) {
+      console.log("ERROR 2");
       setError(error);
     } finally {
       setIsLoading(false);

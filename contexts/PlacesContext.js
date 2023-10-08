@@ -1,33 +1,45 @@
 "use client";
 
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 export const PlacesContext = createContext({
   places: [],
-  filteredPlaces: [],
-  sortfield: "",
   replacePlacesList: (places) => {},
 });
 
 export const PlacesContextProvider = ({ children }) => {
   const [places, setPlaces] = useState([]);
-  const [filteredPlaces, setFilteredPlaces] = useState([]);
-  const [sortfield, sortField] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/place", { method: "GET" });
+        if (response.ok) {
+          const data = await response.json();
+
+          setPlaces(data);
+        } else {
+          console.error("Failed to fetch placess:", response.status);
+        }
+      } catch (error) {
+        console.error("Failed to fetch places:", error);
+      }
+    };
+    if (places.length === 0) {
+      fetchData();
+    }
+  }, []);
 
   const replacePlacesList = (places) => {
     setPlaces(places);
   };
 
-  const filterPlacesByName = (name) => {
-    const filtered = places.filter((place) =>
-      place.title.toLowerCase().includes(name.toLowerCase())
-    );
-    setFilteredPlaces(filtered);
-  };
-
   return (
     <PlacesContext.Provider
-      value={{ places, filteredPlaces, sortfield, replacePlacesList }}
+      value={{
+        places,
+        replacePlacesList,
+      }}
     >
       {children}
     </PlacesContext.Provider>

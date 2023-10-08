@@ -152,7 +152,7 @@ const Map = ({ onMarkerPositionChange, coordinates, category, placeId }) => {
         coordinates={coordinates}
         category={category}
       />
-      <Places interactiveMap={false} markerToRemove={placeId} />
+      {/* <Places interactiveMap={false} markerToRemove={placeId} /> */}
     </MapWrapper>
   );
 };

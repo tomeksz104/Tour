@@ -28,7 +28,7 @@ const PlaceDetailsMap = ({ place }) => {
       <a
         className="absolute right-6 -bottom-5"
         target="_blank"
-        href="https://goo.gl/maps/SjpTxHtfDhH7bxcV8"
+        href={place.googleMapUrl}
       >
         <button class="flex items-center justify-center w-10 h-10 duration-300 text-white bg-blue-500 hover:shadow-lg hover:shadow-blue-600/20 rounded-full">
           <svg

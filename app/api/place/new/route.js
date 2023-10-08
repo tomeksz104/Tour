@@ -1,5 +1,5 @@
 import Place from "@/models/place";
-import dbConnect from "@/utils/dbConnect";
+import dbConnect from "@/libs/dbConnect";
 import { NextResponse } from "next/server";
 
 import { getServerSession } from "next-auth/next";

@@ -15,6 +15,9 @@ const Map = () => {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [visiblePlaces, setVisiblePlaces] = useState([]);
   const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
+  const [isShowWatchlist, setIsShowWatchlist] = useState(false);
+
+  // console.log("RENDERING MAP COMPONENT");
 
   const handleOpenMobileMarker = (place) => {
     setSelectedPlace(place);
@@ -32,11 +35,20 @@ const Map = () => {
     setHoveredMarkerId(markerId);
   };
 
+  const handleToggleWatchlist = () => {
+    setIsShowWatchlist((current) => !current);
+  };
+
   return (
     <>
       <ScrollableTabsSlider onChangeCategory={handleChangeCategory} />
       <div className="relative flex flex-1 h-full overflow-hidden">
-        <Sidebar places={visiblePlaces} onMarkerHover={handleMarkerHover} />
+        <Sidebar
+          places={visiblePlaces}
+          onMarkerHover={handleMarkerHover}
+          isShowWatchlist={isShowWatchlist}
+          onToggleWatchlist={handleToggleWatchlist}
+        />
         <MapWrapper
           center={[51.9713, 16.0]}
           zoom={7} // 7
@@ -52,6 +64,7 @@ const Map = () => {
             onOpenMarker={handleOpenMobileMarker}
             onChangeVisiblePlaces={handleChangeVisiblePlaces}
             interactiveMap={true}
+            isShowWatchlist={isShowWatchlist}
           />
         </MapWrapper>
         <div id="mobile-place-popup"></div>

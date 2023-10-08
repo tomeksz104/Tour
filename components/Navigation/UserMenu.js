@@ -16,39 +16,22 @@ const UserMenu = ({ user }) => {
   };
 
   return (
-    <div className="relative hidden md:inline-block text-left dropdown z-10">
-      <button className="inline-flex items-center p-2 text-sm text-gray-500 hover:bg-gray-100 focus:bg-gray-100 rounded-lg">
-        <span className="sr-only">User Menu</span>
-        <div className="md:flex md:items-end md:leading-tight">
-          <span className="text-gray-400">Hello, </span>
-          <span className="font-semibold">
-            {" "}
-            {user.name ? user.name : user.email}
-          </span>
-        </div>
-        <span className="h-8 w-8 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden">
+    <div className="relative inline-block text-left dropdown z-10">
+      <button className="inline-flex items-center rounded-full hover:ring-green-500 focus:ring-green-500 focus:ring-offset-4 ring-1 ring-transparent transition-all duration-300 hover:ring-offset-4">
+        <span className="h-8 w-8 bg-gray-100 rounded-full overflow-hidden">
           {user.photoURL ? (
             <img
               src={user.photoURL}
               alt="user profile photo"
-              className="h-full w-full object-cover"
+              className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100 object-cover"
             />
           ) : (
             <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-amber-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                />
-              </svg>
+              <img
+                className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-800"
+                src="/assets/icons/avatar.svg"
+                alt={user.email}
+              />
             </div>
           )}
         </span>
@@ -58,61 +41,7 @@ const UserMenu = ({ user }) => {
           className="absolute right-0 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none"
           role="menu"
         >
-          <a className="flex items-center p-3 mt-0 text-sm text-gray-600 transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-            {user.photoURL ? (
-              <img
-                className="flex-shrink-0 object-cover mx-1 rounded-full w-8 h-8"
-                src={user.photoURL}
-                alt="jane avatar"
-              />
-            ) : (
-              <div className="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                  />
-                </svg>
-              </div>
-            )}
-
-            <div className="mx-1">
-              <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                {user.displayName ? user.displayName : user.email}
-              </h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {user.displayName && user.email}
-              </p>
-            </div>
-          </a>
           <div>
-            <a className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-              <svg
-                className="w-5 h-5 mx-1"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7 8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8C17 10.7614 14.7614 13 12 13C9.23858 13 7 10.7614 7 8ZM12 11C13.6569 11 15 9.65685 15 8C15 6.34315 13.6569 5 12 5C10.3431 5 9 6.34315 9 8C9 9.65685 10.3431 11 12 11Z"
-                  fill="currentColor"
-                ></path>
-                <path
-                  d="M6.34315 16.3431C4.84285 17.8434 4 19.8783 4 22H6C6 20.4087 6.63214 18.8826 7.75736 17.7574C8.88258 16.6321 10.4087 16 12 16C13.5913 16 15.1174 16.6321 16.2426 17.7574C17.3679 18.8826 18 20.4087 18 22H20C20 19.8783 19.1571 17.8434 17.6569 16.3431C16.1566 14.8429 14.1217 14 12 14C9.87827 14 7.84344 14.8429 6.34315 16.3431Z"
-                  fill="currentColor"
-                ></path>
-              </svg>
-
-              <span className="mx-1">view profile</span>
-            </a>
             <Link
               href="/place/new"
               className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"

@@ -46,7 +46,7 @@ const PlacePopup = ({ place, router }) => {
         >
           {place.title}
         </button>
-        <p class="pt-1 text-gray-600 hidden md:line-clamp-3">
+        <p class="pt-1 text-gray-600 hidden md:line-clamp-2">
           {place.description}
         </p>
       </div>

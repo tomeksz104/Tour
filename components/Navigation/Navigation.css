@@ -6,3 +6,30 @@
   background: linear-gradient(#ffffff, #ffffff) padding-box,
     conic-gradient(#22c55e, #cbd5e1 30%, #cbd5e1 70%, #22c55e 100%) border-box;
 }
+
+.bar {
+  width: 13px;
+  height: 3px;
+  display: flex;
+  transition: all 0.25s ease-in-out;
+  --tw-bg-opacity: 1;
+  background-color: rgba(33, 33, 33, var(--tw-bg-opacity));
+  border-radius: 0.125rem;
+}
+
+.bar:nth-child(2) {
+  width: 26px;
+  margin: 5px 0;
+}
+
+.bar:last-child {
+  width: 18px;
+}
+
+.menuBtn:hover .bar:first-child {
+  width: 26px;
+}
+
+.menuBtn:hover .bar:nth-child(2) {
+  width: 13px;
+}

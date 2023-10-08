@@ -1,71 +1,124 @@
-import React, { memo, useEffect, useContext, useRef } from "react";
+import React, {
+  memo,
+  useEffect,
+  useContext,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 import { Marker, useMap } from "react-leaflet";
 
 import L from "leaflet";
 import "leaflet-canvas-marker";
 
-import { PlacesContext } from "@/contexts/PlacesContext";
-
-import { getIcon } from "@/utils/mapUtils";
+import { getIcon, getVisibleMarkers } from "@/utils/mapUtils";
 //import useMarkerLayer from "@/hooks/useMarkerLayer";
 import usePlaces from "@/hooks/usePlaces";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createRoot } from "react-dom/client";
 import PlacePopup from "./PlacePupup";
+import { PlacesContext } from "@/contexts/PlacesContext";
+import { WatchlistContext } from "@/contexts/WatchlistContext";
+
+function arraysAreEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 const Places = memo((props) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const placesCtx = useContext(PlacesContext);
   const map = useMap();
-  const { placesToRender, handleFlyToPlace } = usePlaces(props);
+  const placesCtx = useContext(PlacesContext);
+  const watchlistCtx = useContext(WatchlistContext);
+  const searchParams = useSearchParams();
+  const [placesToRender, setPlacesToRender] = useState([]);
 
   const ciLayerRef = useRef(null);
   const markersRef = useRef([]);
 
-  const id = searchParams.get("id");
+  const idToZoom = searchParams.get("id");
 
+  // Filtering places
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/place", { method: "GET" });
-        if (response.ok) {
-          const data = await response.json();
+    if (placesCtx.places.length > 0) {
+      let newPlacesToRender = placesCtx.places;
 
-          if (props?.markerToRemove) {
-            const markerIdToRemove = data.findIndex(
-              (element) => element._id === props.markerToRemove
-            );
-            if (markerIdToRemove !== -1) {
-              data.splice(markerIdToRemove, 1);
-            }
-          }
-          placesCtx.replacePlacesList(data);
+      if (map && props?.markerToRemove) {
+        newPlacesToRender = newPlacesToRender.filter(
+          (element) => element._id !== props.markerToRemove
+        );
+      }
 
-          if (id && placesCtx && props.interactiveMap === true) {
-            const placeToFlyTo = placesCtx.places.find(
-              (place) => place._id === id
-            );
+      if (props.isShowWatchlist) {
+        newPlacesToRender = newPlacesToRender.filter((place) =>
+          watchlistCtx.watchlist.includes(place._id)
+        );
+      }
 
-            if (placeToFlyTo) {
-              handleFlyToPlace(placeToFlyTo);
-            }
-          } else if (props.interactiveMap === true) {
-            props.onChangeVisiblePlaces(data);
-          }
-        } else {
-          console.error("Failed to fetch placess:", response.status);
-        }
-      } catch (error) {
-        console.error("Failed to fetch places:", error);
+      if (props.selectedCategories?.length > 0) {
+        newPlacesToRender = newPlacesToRender.filter((place) =>
+          props.selectedCategories.includes(place.category)
+        );
+      }
+
+      setPlacesToRender(newPlacesToRender);
+      const newVisiblePlaces = getVisibleMarkers(map, newPlacesToRender);
+      if (props.interactiveMap === true)
+        props.onChangeVisiblePlaces(newVisiblePlaces);
+    }
+  }, [
+    props.selectedCategories,
+    props.isShowWatchlist,
+    placesCtx.places,
+    watchlistCtx.watchlist,
+    map,
+    props.interactiveMap,
+  ]);
+
+  // Map movement
+  useEffect(() => {
+    const handleMoveEnd = () => {
+      const newVisiblePlaces = getVisibleMarkers(map, placesToRender);
+      props.onChangeVisiblePlaces(newVisiblePlaces);
+    };
+
+    if (map && props.interactiveMap === true) {
+      map.on("moveend", handleMoveEnd);
+    }
+
+    return () => {
+      if (map && props.interactiveMap === true) {
+        map.off("moveend", handleMoveEnd);
       }
     };
-    if (placesCtx.places.length === 0) {
-      fetchData();
+  }, [placesToRender, map, props.interactiveMap]);
+
+  // Flight to location based on ID
+  useEffect(() => {
+    if (idToZoom && placesToRender) {
+      const placeToFlyTo = placesToRender.find(
+        (place) => place._id === idToZoom
+      );
+
+      if (placeToFlyTo) handleZoomToPlace(placeToFlyTo);
     }
-  }, [placesCtx.places]);
+  }, [idToZoom, placesToRender]);
+
+  const handleZoomToPlace = (placeToFlyTo) => {
+    map.setView(placeToFlyTo.coordinates, 18);
+    const newVisiblePlaces = getVisibleMarkers(map, placesToRender);
+    if (props.interactiveMap === true)
+      props.onChangeVisiblePlaces(newVisiblePlaces);
+  };
 
   // useMarkerLayer({
   //   map,
@@ -76,7 +129,21 @@ const Places = memo((props) => {
   //   router,
   // });
   useEffect(() => {
-    if (!map || placesToRender.length <= 0) return;
+    if (!map) return;
+
+    if (
+      placesToRender.length === 0 &&
+      markersRef.current.length > 0 &&
+      ciLayerRef.current !== null
+    ) {
+      markersRef.current.forEach((marker) => {
+        ciLayerRef.current.removeMarker(marker);
+      });
+      ciLayerRef.current.redraw();
+      return;
+    }
+
+    if (placesToRender.length === 0) return;
 
     if (!ciLayerRef.current) {
       ciLayerRef.current = L.canvasIconLayer({}).addTo(map);
@@ -113,10 +180,6 @@ const Places = memo((props) => {
 
       const popupRoot = createRoot(popupContent);
       popupRoot.render(<PlacePopup place={place} router={router} />);
-      // ReactDOM.render(
-      //   <CustomPopupContent place={place} router={router} />,
-      //   popupContent
-      // );
 
       const marker = L.marker([place.coordinates.lat, place.coordinates.lng], {
         icon: getIcon(place.category),
@@ -133,7 +196,7 @@ const Places = memo((props) => {
 
     markersRef.current = markers;
     ciLayerRef.current.addLayers(markers);
-  }, [map, placesToRender, props.selectedCategories]);
+  }, [map, placesToRender]);
 
   if (props.hoveredMarkerId) {
     const animatedCircleIcon = L.divIcon({
@@ -171,5 +234,3 @@ const Places = memo((props) => {
 });
 
 export default Places;
-
-// 300 lines

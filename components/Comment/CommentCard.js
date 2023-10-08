@@ -77,7 +77,7 @@ const CommentCard = ({ place }) => {
       <CommentForm
         placeId={place._id}
         totalComments={comments.length}
-        commentsonCommentAdd={fetchComments}
+        onCommentAdd={fetchComments}
       />
 
       {comments.map((comment, index) => (

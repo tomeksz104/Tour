@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 
 import { categories_list } from "../Categories/Categories";
 
-const ScrollableTabsSlider = (props) => {
+const ScrollableTabsSlider = ({ onChangeCategory }) => {
   const tabsRef = useRef(null);
   const [activeTab, setActiveTab] = useState([]);
   const [isAtLeftEdge, setIsAtLeftEdge] = useState(true);
@@ -64,7 +64,7 @@ const ScrollableTabsSlider = (props) => {
   };
 
   useEffect(() => {
-    props.onChangeCategory(activeTab);
+    onChangeCategory(activeTab);
   }, [activeTab]);
 
   return (
@@ -105,10 +105,17 @@ const ScrollableTabsSlider = (props) => {
         {categories_list.map((category, index) => (
           <li key={index}>
             <button
-              className={`text-xs no-underline inline-block rounded-full select-none whitespace-nowrap px-6 py-1 border ${
+              // className={`text-xs no-underline inline-block rounded-full select-none whitespace-nowrap px-6 py-1 border ${
+              //   activeTab.includes(category.title)
+              //     ? "bg-black text-white border-0"
+              //     : ""
+              // }`}
+              className={`text-xs no-underline inline-block rounded-full select-none whitespace-nowrap px-6 py-1 transition duration-300 ${
                 category.color[0]
-              } ${category.color[2]}  ${
-                activeTab.includes(category.title) ? category.color[1] : ""
+              } ${
+                activeTab.includes(category.title)
+                  ? `${category.color[2]} ${category.color[1]}`
+                  : "bg-slate-100"
               }`}
               onClick={() => handleTabClick(category.title)}
             >

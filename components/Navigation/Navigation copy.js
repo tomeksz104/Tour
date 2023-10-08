@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
@@ -8,7 +8,6 @@ import SearchBar from "../SearchBar/SearchBar";
 import UserMenu from "./UserMenu";
 
 import "./Navigation.css";
-import Logo from "../Logo";
 
 const mobileMediaQuery = "(min-width: 768px)";
 
@@ -32,54 +31,49 @@ const Navigation = () => {
               id="toggle_nav"
               className="peer hidden"
             />
-
-            <div className="flex items-center md:hidden max-h-10">
-              <label
-                role="button"
-                htmlFor="toggle_nav"
-                aria-label="humburger"
-                id="hamburger"
-                className="relative z-40 px-2 py-3"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  className="w-6 h-6"
+            <div className="flex shrink-0 items-center py-1 md:px-0">
+              <div className="flex items-center md:hidden max-h-10">
+                <label
+                  role="button"
+                  htmlFor="toggle_nav"
+                  aria-label="humburger"
+                  id="hamburger"
+                  className="relative z-40 px-2 py-3"
                 >
-                  <path
-                    d="M3 4h18v2H3V4zm0 7h12v2H3v-2zm0 7h18v2H3v-2z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
-              </label>
-            </div>
-
-            {hideLogo && (
-              <Logo
-                classes="flex shrink-0 md:hidden"
-                imgClasses="h-7 md:h-8 w-full"
-              />
-            )}
-
-            <label
-              role="button"
-              htmlFor="toggle_nav"
-              className="fixed w-full z-30 h-full top-0 left-0 bg-gray-700 bg-opacity-40 hidden peer-checked:block md:peer-checked:hidden"
-            ></label>
-
-            <div
-              className="flex  z-50 flex-col md:flex-row 
-                    items-center gap-y-4 p-6 bg-white dark:bg-gray-800 md:w-auto
-                    md:gap-y-4 md:p-0
-                    md:bg-transparent fixed top-0 -left-full transition-all duration-500 peer-checked:left-0 max-w-sm h-full
-                    md:left-0 md:h-auto w-4/5 md:relative lg:first-letter:top-0"
-            >
-              <div className="flex pb-5 md:pb-0">
-                <Logo classes="flex shrink-0" imgClasses="h-8 w-auto" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      d="M3 4h18v2H3V4zm0 7h12v2H3v-2zm0 7h18v2H3v-2z"
+                      fill="currentColor"
+                    ></path>
+                  </svg>
+                </label>
               </div>
 
-              {/* MENU ORG */}
-              <div className="md:ml-5 block w-full md:w-auto h-full md:h-auto">
+              {/* {hideLogo ? (
+                <a href="#" aria-label="logo">
+                  <img
+                    src="/assets/images/tour-logo5.png"
+                    className="h-6 md:h-8 w-auto"
+                    alt="Tour logo"
+                  />
+                </a>
+              ) : (
+                window.matchMedia(mobileMediaQuery).matches && (
+                  <a href="#" aria-label="logo">
+                    <img
+                      src="/assets/images/tour-logo5.png"
+                      className="h-6 md:h-8 w-auto"
+                      alt="Tour logo"
+                    />
+                  </a>
+                )
+              )} */}
+              {/* 
+              <div className="ml-5 hidden md:block h-full md:h-auto">
                 <ul className="space-y-8 tracking-wide font-medium md:flex md:space-y-0">
                   <li>
                     <Link href="/" className="block md:px-4 group">
@@ -92,7 +86,56 @@ const Navigation = () => {
                   </li>
                   <li>
                     <Link href="/" className="block md:px-3 group">
-                      <div className="relative text-green-600 dark:text-green-400 before:absolute before:-bottom-2 md:before:-bottom-5 before:w-full before:h-1 before:mx-auto before:mt-auto before:rounded-t-full before:bg-green-500">
+                      <div
+                        className="relative text-green-600 dark:text-green-400
+                        before:absolute before:-bottom-2 md:before:-bottom-5 before:w-full before:h-1 before:mx-auto before:mt-auto before:rounded-t-full before:bg-green-500"
+                      >
+                        <span>Map</span>
+                      </div>
+                    </Link>
+                  </li>
+                </ul>
+              </div> */}
+            </div>
+
+            <label
+              role="button"
+              htmlFor="toggle_nav"
+              className="fixed w-full z-30 h-full top-0 left-0 bg-gray-700 bg-opacity-40 hidden peer-checked:block md:peer-checked:hidden"
+            ></label>
+
+            <div
+              className="flex md:hidden z-50 flex-col md:flex-row justify-between
+                    items-center gap-y-4 p-6 bg-white dark:bg-gray-800 md:w-8/12
+                    md:gap-y-4 md:p-0
+                    md:bg-transparent lg:w-7/12 fixed top-0 -left-full transition-all duration-500 peer-checked:left-0 max-w-sm h-full
+                    md:left-0 md:h-auto w-4/5 md:max-w-none md:relative lg:first-letter:top-0"
+            >
+              <div className="flex md:hidden w-full pb-5">
+                <a href="#" aria-label="logo">
+                  <img
+                    src="/assets/images/tour-logo.png"
+                    className="w-36"
+                    alt="Tour logo"
+                  />
+                </a>
+              </div>
+
+              {/* MENU ORG */}
+              <div className="block md:hidden w-full h-full md:h-auto">
+                <ul className="space-y-8 tracking-wide font-medium md:flex md:space-y-0">
+                  <li>
+                    <Link href="/" className="block md:px-4 group">
+                      <div className="relative text-gray-600 before:absolute before:-bottom-2 md:before:-bottom-6 before:w-full before:h-0.5 before:origin-left before:mt-auto before:rounded-full before:bg-green-800 before:transition before:scale-x-0 group-hover:before:scale-x-100">
+                        <span className="group-hover:text-green-500 dark:text-gray-300 ">
+                          Home
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/" className="block md:px-3 group">
+                      <div className="relative text-green-600 dark:text-green-400 before:absolute before:-bottom-2 md:before:-bottom-6 before:w-full before:h-1 before:mx-auto before:mt-auto before:rounded-t-full before:bg-green-500">
                         <span>Map</span>
                       </div>
                     </Link>
