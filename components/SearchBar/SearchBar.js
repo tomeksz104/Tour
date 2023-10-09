@@ -1,9 +1,8 @@
-import { PlacesContext } from "@/contexts/PlacesContext";
 import { useContext, useEffect, useRef, useState } from "react";
-import SeatchResultList from "./SearchResultsList";
-import useMediaQuery from "@/hooks/useMediaQuery";
 
-const mobileMediaQuery = "(min-width: 768px)";
+import { PlacesContext } from "@/contexts/PlacesContext";
+import SearchResultList from "./SearchResultsList";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 const SearchBar = ({ onHideLogo }) => {
   const placesCtx = useContext(PlacesContext);
@@ -14,19 +13,6 @@ const SearchBar = ({ onHideLogo }) => {
   const [isShowSearchBar, setIsShowSearchBar] = useState(false);
   const isMobile = useMediaQuery();
 
-  //   const handleSearch = (event) => {
-  //     const searchTerm = event.target.value;
-
-  //     if (searchTerm.length >= 3) {
-  //       const newFilter = placesCtx.places.filter((place) =>
-  //         place.title.toLowerCase().includes(searchTerm.toLowerCase())
-  //       );
-
-  //       setFilteredPlaces(newFilter);
-  //     } else {
-  //       setFilteredPlaces([]);
-  //     }
-  //   };
   useEffect(() => {
     onHideLogo(hideSuggestions);
   }, [hideSuggestions]);
@@ -43,6 +29,10 @@ const SearchBar = ({ onHideLogo }) => {
     }
   }, [searchWord]);
 
+  useEffect(() => {
+    if (isShowSearchBar) searchInputRef.current.focus();
+  }, [isShowSearchBar]);
+
   const handleFocus = () => {
     setHideSuggestions(false);
   };
@@ -53,10 +43,6 @@ const SearchBar = ({ onHideLogo }) => {
       setIsShowSearchBar(false);
     }, 200);
   };
-
-  useEffect(() => {
-    if (isShowSearchBar) searchInputRef.current.focus();
-  }, [isShowSearchBar]);
 
   return (
     <>
@@ -87,13 +73,12 @@ const SearchBar = ({ onHideLogo }) => {
                   onBlur={handleBlur}
                   type="search"
                   placeholder="What are you looking..."
-                  //onChange={handleSearch}
                   onChange={(e) => setSearchWord(e.target.value)}
                   className="mr-2 outline-none w-full rounded-md bg-slate-100 border border-gray-200 py-2.5 pl-16 text-sm text-gray-600  transition-all duration-300 focus:bg-white focus:ring-1 focus:ring-green-500"
                 />
               </div>
             </form>
-            <SeatchResultList
+            <SearchResultList
               results={filteredPlaces}
               hideSuggestions={hideSuggestions}
               searchWordLength={searchWord.length}
@@ -107,15 +92,14 @@ const SearchBar = ({ onHideLogo }) => {
               setIsShowSearchBar(true);
             }}
             type="button"
-            class="text-gray-400 hover:ring-gray-200 inline-flex h-9 w-9 items-center justify-center rounded-full ring-1 ring-transparent transition-all duration-300 hover:ring-offset-4"
+            className="text-gray-400 hover:ring-gray-200 inline-flex h-9 w-9 items-center justify-center rounded-full ring-1 ring-transparent transition-all duration-300 hover:ring-offset-4"
           >
-            <span class="border-gray-200 flex h-9 w-9 items-center justify-center rounded-full border bg-white">
+            <span className="border-gray-200 flex h-9 w-9 items-center justify-center rounded-full border bg-white">
               <svg
-                data-v-26e5b7b0=""
                 xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true"
                 role="img"
-                class="icon w-5 h-5"
+                className="w-5 h-5"
                 width="1em"
                 height="1em"
                 viewBox="0 0 256 256"
@@ -132,34 +116,6 @@ const SearchBar = ({ onHideLogo }) => {
           </button>
         </div>
       )}
-      {/* <button
-        onClick={() => {
-          setIsShowSearchBar(true);
-        }}
-        type="button"
-        class="group-hover:ring-muted-200 dark:group-hover:ring-muted-700 dark:ring-offset-muted-900 inline-flex h-9 w-9 items-center justify-center rounded-full ring-1 ring-transparent transition-all duration-300 group-hover:ring-offset-4"
-      >
-        <span class="border-muted-200 dark:border-muted-700 dark:bg-muted-800 flex h-9 w-9 items-center justify-center rounded-full border bg-white">
-          <svg
-            data-v-26e5b7b0=""
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            role="img"
-            class="icon w-5 h-5"
-            width="1em"
-            height="1em"
-            viewBox="0 0 256 256"
-          >
-            <g fill="currentColor">
-              <path
-                d="M192 112a80 80 0 1 1-80-80a80 80 0 0 1 80 80Z"
-                opacity=".2"
-              ></path>
-              <path d="m229.66 218.34l-50.06-50.06a88.21 88.21 0 1 0-11.32 11.31l50.06 50.07a8 8 0 0 0 11.32-11.32ZM40 112a72 72 0 1 1 72 72a72.08 72.08 0 0 1-72-72Z"></path>
-            </g>
-          </svg>
-        </span>
-      </button> */}
     </>
   );
 };

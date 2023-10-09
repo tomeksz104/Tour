@@ -200,3 +200,25 @@ body {
   -webkit-box-shadow: #172554 2px 2px 40px 0px;
   box-shadow: #172554 2px 2px 40px 0px; */
 }
+
+/* Disable scrollbar in ScrollableTabsSlider component */
+.scrollable-tabs-container ul.dragging button {
+  pointer-events: none;
+}
+
+.scrollable-tabs-container ul.dragging {
+  scroll-behavior: auto;
+}
+
+.scrollable-tabs-container ul::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollable-tabs-container ul::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollable-tabs-container ul {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}

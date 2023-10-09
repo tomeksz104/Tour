@@ -4,7 +4,11 @@ import { getPlaceById } from "@/actions/getPlaceById";
 
 import CommentCard from "@/components/Comment/CommentCard";
 import Slideshow from "@/components/Slideshow/Slideshow";
-import WatchlistButton from "@/components/PlaceDetails/WatchlistButton";
+
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import WatchlistButton from "@/components/WatchlistButton";
+import CircleButton from "@/components/CircleButton";
 
 const PlaceDetailsMap = dynamic(() => import("@/components/PlaceDetails/Map"), {
   loading: () => <p>loading...</p>,
@@ -13,6 +17,10 @@ const PlaceDetailsMap = dynamic(() => import("@/components/PlaceDetails/Map"), {
 
 export default async function PlaceDetailsPage({ params }) {
   const place = await getPlaceById(params?.id);
+  const session = await getServerSession(authOptions);
+
+  const isUserAdmin = session?.user?.role === "admin";
+  const isCreator = session?.user?._id === place.userId;
 
   let gallery = [{ url: place.image, accepted: true }, ...place.images];
   gallery = gallery.filter((item) => item.accepted !== false);
@@ -29,60 +37,40 @@ export default async function PlaceDetailsPage({ params }) {
           <div className="w-full h-full backdrop-blur-md"></div>
         </div>
         <div className="mx-auto max-w-5xl w-full h-[480px]">
-          <div class="relative flex flex-col group overflow-hidden z-0 max-w-5xl h-[480px]">
-            <div
-              href="http://127.0.0.1:8000/quiz/jesli-w-kuchni-gotujesz-tylko-wode-na-herbate-nie-poradzisz=sobie-z-tym-quizem"
-              class="flex items-start relative w-full h-full"
-            >
-              <div class="absolute inset-0 overflow-hidden z-0 overflow-hidden z-0 select-none	">
+          <div className="relative flex flex-col group overflow-hidden z-0 max-w-5xl h-[480px]">
+            <div className="flex items-start relative w-full h-full">
+              <div className="absolute inset-0 overflow-hidden z-0 overflow-hidden z-0 select-none	">
                 <Slideshow images={gallery} />
               </div>
             </div>
             <div className="absolute w-full content-[''] bg-gradient-to-b from-[rgba(0,0,0,0.75)] to-transparent h-[200px] pointer-events-none"></div>
-            <div class="absolute flex justify-between items-center top-2 inset-x-4 sm:inset-x-5 pointer-events-none">
-              <h3 class="block text-3xl font-semibold text-white line-clamp-2">
+            <div className="absolute flex justify-between items-center top-2 inset-x-4 sm:inset-x-5 pointer-events-none">
+              <h3 className="block text-3xl font-semibold text-white line-clamp-2">
                 {place.title}
               </h3>
               <div className="flex items-center">
                 <WatchlistButton id={place._id} />
-                {/* <Link
-                  href={`/place/update/${place._id}`}
-                  class="rounded-full p-2 duration-300 text-white hover:text-blue-400 hover:scale-110 pointer-events-auto"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1"
-                    stroke="currentColor"
-                    className="w-10 h-10"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                    ></path>
-                  </svg>
-                </Link> */}
-                <Link
-                  href={`/place/update/${place._id}`}
-                  className="ml-3 bg-white rounded-full p-1.5 shadow-sm duration-300 hover:bg-blue-50 hover:scale-110 pointer-events-auto"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5 text-blue-500"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
-                    ></path>
-                  </svg>
-                </Link>
+
+                {isUserAdmin || isCreator ? (
+                  <Link href={`/place/update/${place._id}`}>
+                    <CircleButton className="ml-3 hover:bg-blue-50">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-5 h-5 text-blue-500"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                        ></path>
+                      </svg>
+                    </CircleButton>
+                  </Link>
+                ) : null}
               </div>
             </div>
           </div>

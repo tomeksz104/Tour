@@ -177,6 +177,7 @@ const Places = memo((props) => {
 
     placesToRender.forEach((place) => {
       const popupContent = document.createElement("div");
+      popupContent.style.width = "301px";
 
       const popupRoot = createRoot(popupContent);
       popupRoot.render(<PlacePopup place={place} router={router} />);

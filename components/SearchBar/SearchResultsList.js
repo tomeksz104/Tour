@@ -4,38 +4,6 @@ import useLoadMore from "@/hooks/useLoadMore";
 
 const SeatchResultList = ({ results, hideSuggestions, searchWordLength }) => {
   const { data: visiblePlaces, handleScroll } = useLoadMore(results, 10);
-  //   const [visiblePlaces, setVisiblePlaces] = useState([]);
-  //   const placesPerPage = 10;
-
-  //   const handleScroll = (e) => {
-  //     const container = e.target;
-
-  //     if (
-  //       container.scrollHeight - container.scrollTop ===
-  //       container.clientHeight
-  //     ) {
-  //       loadMorePlaces(visiblePlaces.length);
-  //     }
-  //   };
-
-  //   const loadMorePlaces = (startId) => {
-  //     const newVisiblePlaces = results.slice(startId, startId + placesPerPage);
-
-  //     if (startId === 0) {
-  //       setVisiblePlaces(newVisiblePlaces);
-  //     } else {
-  //       setVisiblePlaces((prevVisiblePlaces) => [
-  //         ...prevVisiblePlaces,
-  //         ...newVisiblePlaces,
-  //       ]);
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     if (results.length > 0) {
-  //       loadMorePlaces(0);
-  //     }
-  //   }, [results]);
 
   return (
     <div

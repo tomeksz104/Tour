@@ -105,11 +105,6 @@ const ScrollableTabsSlider = ({ onChangeCategory }) => {
         {categories_list.map((category, index) => (
           <li key={index}>
             <button
-              // className={`text-xs no-underline inline-block rounded-full select-none whitespace-nowrap px-6 py-1 border ${
-              //   activeTab.includes(category.title)
-              //     ? "bg-black text-white border-0"
-              //     : ""
-              // }`}
               className={`text-xs no-underline inline-block rounded-full select-none whitespace-nowrap px-6 py-1 transition duration-300 ${
                 category.color[0]
               } ${
@@ -146,27 +141,8 @@ const ScrollableTabsSlider = ({ onChangeCategory }) => {
           />
         </svg>
       </div>
-      {disableScrollbar}
     </div>
   );
 };
 
 export default ScrollableTabsSlider;
-
-const disableScrollbar = (
-  <style>
-    {`
-  .scrollable-tabs-container ul.dragging button {
-    pointer-events: none;
-  }
-  
-  .scrollable-tabs-container ul.dragging {
-    scroll-behavior: auto;
-  }
-  
-  .scrollable-tabs-container ul::-webkit-scrollbar {
-    display: none;
-  }
-`}
-  </style>
-);

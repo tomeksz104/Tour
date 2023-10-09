@@ -93,9 +93,9 @@ const CommentForm = ({
         <div className="flex justify-center border border-gray-200 mb-6 py-6 rounded-md">
           <div className="flex flex-col space-y-3">
             <div className="commentTeaser relative mx-auto bg-green-500">
-              <div class="commentTeaser-icon commentTeaser-icon--ask absolute"></div>
-              <div class="commentTeaser-icon commentTeaser-icon--like absolute"></div>
-              <div class="commentTeaser-icon commentTeaser-icon--check absolute"></div>
+              <div className="commentTeaser-icon commentTeaser-icon--ask absolute"></div>
+              <div className="commentTeaser-icon commentTeaser-icon--like absolute"></div>
+              <div className="commentTeaser-icon commentTeaser-icon--check absolute"></div>
             </div>
             <p className="text-gray-700 text-xl font-semibold">
               Questions? Opinions? Suggestions?
@@ -105,13 +105,13 @@ const CommentForm = ({
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
-                class="mr-3 w-6 h-6"
+                className="mr-3 w-6 h-6"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
                 />
               </svg>
@@ -121,11 +121,11 @@ const CommentForm = ({
         </div>
       )}
       {(isCommentButtonClicked || totalComments > 0 || commentId) && (
-        <div class="flex">
+        <div className="flex">
           {!commentId && (
-            <div class="mr-3 shrink-0 hidden sm:block">
+            <div className="mr-3 shrink-0 hidden sm:block">
               <img
-                class="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-800"
+                className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-800"
                 src={
                   session?.user.avatar
                     ? session.user.avatar
@@ -140,9 +140,9 @@ const CommentForm = ({
             </div>
           )}
 
-          <form onSubmit={handleSubmitForm} class="mb-6 w-full">
-            <div class="mb-4">
-              <label for="comment" class="sr-only">
+          <form onSubmit={handleSubmitForm} className="mb-6 w-full">
+            <div className="mb-4">
+              <label htmlFor="comment" className="sr-only">
                 Your comment
               </label>
               <textarea
@@ -167,7 +167,7 @@ const CommentForm = ({
                 <button
                   type="button"
                   onClick={onCancelEdit}
-                  class="text-red-500 font-bold text-xs uppercase"
+                  className="text-red-500 font-bold text-xs uppercase"
                 >
                   Cancel
                 </button>

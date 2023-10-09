@@ -1,10 +1,14 @@
+"use client";
+
 import { useState, useEffect } from "react";
 
 const mobileMediaQuery = "(min-width: 768px)";
 
 const useMediaQuery = () => {
+  const isClient = typeof window === "object";
+
   const [matches, setMatches] = useState(
-    window.matchMedia(mobileMediaQuery).matches
+    isClient ? window.matchMedia(mobileMediaQuery).matches : false
   );
 
   useEffect(() => {

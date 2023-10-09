@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import CircleButton from "../CircleButton";
 
 const SearchResult = ({ place }) => {
   const router = useRouter();
@@ -27,10 +28,7 @@ const SearchResult = ({ place }) => {
         </Link>
       </div>
 
-      <button
-        onClick={handleFlyToPlace}
-        className="bg-white hidden group-hover:block rounded-full p-1.5 shadow-sm duration-300 hover:bg-blue-200 hover:scale-110 pointer-events-auto"
-      >
+      <CircleButton onClick={handleFlyToPlace} className="hover:bg-blue-200">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -50,7 +48,7 @@ const SearchResult = ({ place }) => {
             d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
           />
         </svg>
-      </button>
+      </CircleButton>
     </div>
   );
 };

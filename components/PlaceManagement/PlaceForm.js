@@ -227,13 +227,13 @@ const PlaceForm = ({ place }) => {
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    stroke-width="1.5"
+                    strokeWidth="1.5"
                     stroke="currentColor"
-                    class="w-6 h-6 text-red-500 hover:scale-110"
+                    className="w-6 h-6 text-red-500 hover:scale-110"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
@@ -243,7 +243,9 @@ const PlaceForm = ({ place }) => {
           })}
 
           <button type="button" onClick={addImageInputField}>
-            <span class="text-green-500 text-sm hover:underline">Add new</span>
+            <span className="text-green-500 text-sm hover:underline">
+              Add new
+            </span>
           </button>
         </div>
 

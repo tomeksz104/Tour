@@ -67,9 +67,9 @@ const CommentCard = ({ place }) => {
   };
 
   return (
-    <section class="bg-white py-8 lg:py-16 antialiased">
-      <div class="mb-6">
-        <h2 class="text-xl font-semibold text-gray-700 md:text-2xl">
+    <section className="bg-white py-8 lg:py-16 antialiased">
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
           Discussion ({comments.length})
         </h2>
       </div>
