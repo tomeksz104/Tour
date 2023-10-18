@@ -13,6 +13,7 @@ import InstagramIcon from "@/public/assets/icons/instagram.svg";
 import TwitterIcon from "@/public/assets/icons/twitter.svg";
 import YoutubeIcon from "@/public/assets/icons/youtube.svg";
 import Categories from "../Categories/Categories";
+import Button from "../Button";
 
 const tabs = ["profile", "socialmedia", "password"];
 
@@ -287,14 +288,21 @@ const Settings = () => {
 
                 <InputError messages={[error]} className="mt-2" />
 
-                <button
+                <Button
+                  type="button"
+                  className="w-full"
+                  onClick={handleUpdateProfile}
+                >
+                  Update
+                </Button>
+                {/* <button
                   onClick={handleUpdateProfile}
                   className="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-green-500 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95"
                 >
                   <span className="relative text-base font-semibold text-white dark:text-dark">
                     Update
                   </span>
-                </button>
+                </button> */}
               </form>
             </div>
           </div>

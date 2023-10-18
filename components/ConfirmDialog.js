@@ -60,6 +60,6 @@ const ConfirmDialog = () => {
     </div>
   ) : null;
 
-  return createPortal(component, document.body);
+  return createPortal(component, document?.body);
 };
 export default ConfirmDialog;

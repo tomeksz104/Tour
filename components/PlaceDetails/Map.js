@@ -49,7 +49,7 @@ const PlaceDetailsMap = ({ place }) => {
       </a>
       <button
         onClick={() => {
-          router.push(`/?id=${place._id}`);
+          router.push(`/map?id=${place._id}`);
         }}
         className="absolute bottom-12 bottom-3 left-1/2 transform -translate-x-1/2 flex items-center justify-center bg-white rounded-md px-3 py-2 text-sm font-semibold border border-neutral-300 whitespace-nowrap	"
       >

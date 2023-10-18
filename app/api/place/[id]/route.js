@@ -10,10 +10,10 @@ export const GET = async (request, { params }) => {
   try {
     await dbConnect();
 
-    const prompt = await Place.findById(params.id);
-    if (!prompt) return new Response("Place Not Found", { status: 404 });
+    const place = await Place.findById(params.id);
+    if (!place) return new Response("Place Not Found", { status: 404 });
 
-    return new Response(JSON.stringify(prompt), { status: 200 });
+    return new Response(JSON.stringify(place), { status: 200 });
   } catch (error) {
     return new Response("Internal Server Error", { status: 500 });
   }

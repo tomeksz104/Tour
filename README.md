@@ -47,3 +47,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - TailwindCSS for styling
 - eslint, prettier and husky for code format automation
 - [next-firebase-auth](https://github.com/gladly-team/next-firebase-auth) for the authentication and secure cookies management
+- swiper for card slider

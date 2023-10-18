@@ -14,17 +14,17 @@ const UserLocate = () => {
       .locate({
         position: "topright",
         strings: {
-          title: "Show me where I am, yo!",
-        },
-        icon: "leaflet-control-locate-location-icon",
-      })
+        title: "Show me where I am, yo!",
+      },
+      icon: "leaflet-control-locate-location-icon",
+    })
       .addTo(map);
 
-    return () => {
-      if (locateControl) {
-        locateControl.remove();
-      }
-    };
+    // return () => {
+    //   if (locateControl) {
+    //     locateControl.remove();
+    //   }
+    // };
   }, [map]);
 
   return null;

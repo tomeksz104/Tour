@@ -91,7 +91,7 @@ const Navigation = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/" className="block md:px-3 group">
+                    <Link href="/map" className="block md:px-3 group">
                       <div className="relative text-green-600 dark:text-green-400 before:absolute before:-bottom-2 md:before:-bottom-5 before:w-full before:h-1 before:mx-auto before:mt-auto before:rounded-t-full before:bg-green-500">
                         <span>Map</span>
                       </div>
