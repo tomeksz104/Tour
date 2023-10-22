@@ -6,12 +6,13 @@ import ExploreCategories from "@/components/HomePage/ExploreCategories";
 
 import Image from "next/image";
 import Link from "next/link";
+import { Fragment } from "react";
 
 export default async function Home() {
   const randomPlaces = await getRandomPlaces(9);
 
   return (
-    <>
+    <Fragment>
       <section className="pb-20 2xl:pb-28 pt-10 2xl:pt-20 relative">
         <div className="absolute -bottom-52 left-0 -z-10">
           <Image
@@ -229,6 +230,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-    </>
+    </Fragment>
   );
 }

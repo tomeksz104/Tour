@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import dynamic from "next/dynamic";
 
 import MapWrapper from "@/components/PlaceManagement/Map";
@@ -12,10 +13,10 @@ import PlaceForm from "@/components/PlaceManagement/PlaceForm";
 
 export default function CreatePlace() {
   return (
-    <>
+    <Fragment>
       {/* <MapWrapper /> */}
 
       <PlaceForm />
-    </>
+    </Fragment>
   );
 }
