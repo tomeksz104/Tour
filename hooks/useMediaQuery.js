@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 const mobileMediaQuery = "(min-width: 768px)";
 
 const useMediaQuery = () => {
-  const isClient = typeof window === "object";
+  //const isClient = typeof window === "object";
+  const isClient = typeof window !== "undefined";
 
   const [matches, setMatches] = useState(
     isClient ? window.matchMedia(mobileMediaQuery).matches : false

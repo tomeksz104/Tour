@@ -10,12 +10,9 @@ export const getPlaceById = async (id) => {
   //   }
   // );
 
-  const response = await fetch(
-    `https://tour-fn48fza9i-tomeksz104.vercel.app/api/place/${id}`,
-    {
-      cache: "no-store",
-    }
-  );
+  const response = await fetch(`${apiUrl}/api/place/${id}`, {
+    cache: "no-store",
+  });
 
   if (!response.ok) {
     throw new Error("Error fetching place by ID");

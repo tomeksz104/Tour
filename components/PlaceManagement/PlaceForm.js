@@ -18,7 +18,7 @@ const Map = dynamic(() => import("@/components/PlaceManagement/Map"), {
 
 import { categories_list } from "@/utils/categories";
 
-const PlaceForm = ({ place }) => {
+const PlaceForm = ({ place = null }) => {
   const router = useRouter();
   const toast = useToast();
   const { confirm } = useConfirm();
@@ -74,6 +74,10 @@ const PlaceForm = ({ place }) => {
           requestBody,
         }),
       });
+      // check if the response was successful
+      if (!response.ok) {
+        throw new Error(`Server responded with status: ${response.status}`);
+      }
 
       if (response.ok) {
         const message = await response.json();
@@ -114,6 +118,10 @@ const PlaceForm = ({ place }) => {
         const response = await fetch(`/api/place/${placeId}`, {
           method: "DELETE",
         });
+
+        if (!response.ok) {
+          throw new Error(`Server responded with status: ${response.status}`);
+        }
 
         if (response.ok) {
           const message = await response.json();

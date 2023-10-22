@@ -10,12 +10,9 @@ export const getRandomPlaces = async (count) => {
   //   }
   // );
 
-  const response = await fetch(
-    `https://tour-fn48fza9i-tomeksz104.vercel.app/api/places/random/${count}`,
-    {
-      cache: "no-store",
-    }
-  );
+  const response = await fetch(`${apiUrl}/api/places/random/${count}`, {
+    cache: "no-store",
+  });
 
   if (!response.ok) {
     throw new Error("Error fetching places");
