@@ -1,4 +1,4 @@
-import { categories_list } from "@/components/Categories/Categories";
+import { categories_list } from "./categories";
 
 export const getIcon = (category) => {
   const selectedCategory = categories_list.find(

@@ -29,7 +29,7 @@ const UserMenu = ({ user }) => {
             <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-amber-500">
               <img
                 className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-800"
-                src="/assets/icons/avatar.svg"
+                src="/avatar.svg"
                 alt={user.email}
               />
             </div>

@@ -1,8 +1,8 @@
 .commentTeaser {
   width: 54px;
   height: 52px;
-  -webkit-mask: url(/assets/icons/chat-bubble.svg) center/contain no-repeat;
-  mask: url(/assets/icons/chat-bubble.svg) center/contain no-repeat;
+  -webkit-mask: url(/chat-bubble.svg) center/contain no-repeat;
+  mask: url(/chat-bubble.svg) center/contain no-repeat;
 }
 
 .commentTeaser-icon {
@@ -26,7 +26,7 @@
   width: 37px;
   height: 37px;
   transform: rotate(350deg);
-  background-image: url(https://www.pepper.pl/assets/img/comment-teaser/ask_f9384.svg);
+  background-image: url(/ask.svg);
 }
 
 .commentTeaser-icon--like {
@@ -41,7 +41,7 @@
   width: 34px;
   height: 34px;
   transform: rotate(355deg);
-  background-image: url(https://www.pepper.pl/assets/img/comment-teaser/like_4f446.svg);
+  background-image: url(/like.svg);
 }
 
 .commentTeaser-icon--check {
@@ -56,7 +56,7 @@
   width: 31px;
   height: 31px;
   transform: rotate(361deg);
-  background-image: url(https://www.pepper.pl/assets/img/comment-teaser/check_f1f5a.svg);
+  background-image: url(/check.svg);
 }
 
 @-webkit-keyframes commentTeaser {

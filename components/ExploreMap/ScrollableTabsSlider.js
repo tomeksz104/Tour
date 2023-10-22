@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 
-import { categories_list } from "../Categories/Categories";
+import { categories_list } from "@/utils/categories";
 
 const ScrollableTabsSlider = ({ onChangeCategory }) => {
   const tabsRef = useRef(null);

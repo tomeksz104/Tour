@@ -27,6 +27,8 @@ const useLoadMore = (initialData = [], perPage = 10) => {
   useEffect(() => {
     if (initialData.length > 0) {
       loadMore(0);
+    } else if (initialData.length === 0) {
+      setData([]);
     }
   }, [initialData]);
 

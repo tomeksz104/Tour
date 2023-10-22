@@ -9,9 +9,115 @@ body {
   margin: 0;
 }
 
+/* HomePage SVGs animations */
+.animate-1 {
+  -webkit-animation: animate_1 backwards 8s ease-out infinite;
+  animation: animate_1 backwards 8s ease-out infinite;
+}
+
+.animate-2 {
+  -webkit-animation: animate_2 backwards 10s ease-out infinite;
+  animation: animate_2 backwards 10s ease-out infinite;
+}
+
+.animate-3 {
+  -webkit-animation: animate_3 backwards 7s ease-out infinite;
+  animation: animate_3 backwards 7s ease-out infinite;
+}
+
+@-webkit-keyframes animate_1 {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(45%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes animate_1 {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(45%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@-webkit-keyframes animate_2 {
+  0% {
+    transform: rotate(0) translate(0, 0);
+    -webkit-transform: rotate(0) translate(0, 0);
+  }
+
+  50% {
+    transform: rotate(180deg) translate(4%, 4%);
+    -webkit-transform: rotate(180deg) translate(4%, 4%);
+  }
+
+  100% {
+    transform: rotate(0) translate(0, 0);
+    -webkit-transform: rotate(0) translate(0, 0);
+  }
+}
+
+@keyframes animate_2 {
+  0% {
+    transform: rotate(0) translate(0, 0);
+    -webkit-transform: rotate(0) translate(0, 0);
+  }
+
+  50% {
+    transform: rotate(180deg) translate(4%, 4%);
+    -webkit-transform: rotate(180deg) translate(4%, 4%);
+  }
+
+  100% {
+    transform: rotate(0) translate(0, 0);
+    -webkit-transform: rotate(0) translate(0, 0);
+  }
+}
+
+@-webkit-keyframes animate_3 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(-30%, 15%);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes animate_3 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(-30%, 15%);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
 /* Leaflet marker custom pin */
-.pin {
-  /* background-color: #8000ff; */
+/* .pin {
+  //background-color: #8000ff; 
   border-radius: 20px 20px 0px 20px;
   position: relative;
   transform: rotate(45deg);
@@ -23,7 +129,7 @@ body {
   content: "";
   width: 80%;
   height: 80%;
-  /* background: #9c4fe9; */
+  // background: #9c4fe9; 
   position: absolute;
   left: 16;
   top: 16;
@@ -60,7 +166,7 @@ body {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
-}
+} */
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
@@ -77,44 +183,6 @@ body {
 }
 
 /* Marker pulsating */
-/* .pulsating-marker {
-  display: block;
-  border-radius: 50%;
-  cursor: pointer;
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    -moz-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 0 0;
-  }
-  70% {
-    -moz-box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
-    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
-  }
-  100% {
-    -moz-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-  }
-} */
-
-/* @keyframes pulsate {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.pulsating-marker {
-  animation: pulsate 1s infinite;
-} */
-
 @-webkit-keyframes fade {
   0% {
     opacity: 0;

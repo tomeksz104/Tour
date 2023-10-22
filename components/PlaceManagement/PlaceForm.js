@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
@@ -16,7 +16,7 @@ const Map = dynamic(() => import("@/components/PlaceManagement/Map"), {
   ssr: false,
 });
 
-import { categories_list } from "../Categories/Categories"; // categories array
+import { categories_list } from "@/utils/categories";
 
 const PlaceForm = ({ place }) => {
   const router = useRouter();

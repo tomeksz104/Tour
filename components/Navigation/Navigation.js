@@ -1,19 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
+import Logo from "../Logo";
 import SearchBar from "../SearchBar/SearchBar";
 import UserMenu from "./UserMenu";
 
 import "./Navigation.css";
-import Logo from "../Logo";
 
-const mobileMediaQuery = "(min-width: 768px)";
+const navigationMenuItems = [
+  { name: "Home", url: "/" },
+  { name: "Map", url: "/map" },
+];
 
-// const Navigation = ({ session }) => {
 const Navigation = () => {
+  const currentRoute = usePathname();
   const { data: session } = useSession();
   const [hideLogo, setHideLogo] = useState(false);
 
@@ -81,22 +85,28 @@ const Navigation = () => {
               {/* MENU ORG */}
               <div className="md:ml-5 block w-full md:w-auto h-full md:h-auto">
                 <ul className="space-y-8 tracking-wide font-medium md:flex md:space-y-0">
-                  <li>
-                    <Link href="/" className="block md:px-4 group">
-                      <div className="relative text-gray-600 before:absolute before:-bottom-2 md:before:-bottom-5 before:w-full before:h-0.5 before:origin-left before:mt-auto before:rounded-full before:bg-green-800 before:transition before:scale-x-0 group-hover:before:scale-x-100">
-                        <span className="group-hover:text-green-500 dark:text-gray-300 ">
-                          Home
-                        </span>
-                      </div>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/map" className="block md:px-3 group">
-                      <div className="relative text-green-600 dark:text-green-400 before:absolute before:-bottom-2 md:before:-bottom-5 before:w-full before:h-1 before:mx-auto before:mt-auto before:rounded-t-full before:bg-green-500">
-                        <span>Map</span>
-                      </div>
-                    </Link>
-                  </li>
+                  {navigationMenuItems.map((menuItem, index) => (
+                    <li key={index} className="text-white">
+                      <Link href={menuItem.url} className="block md:px-4 group">
+                        <div
+                          className={`relative before:absolute before:-bottom-2 md:before:-bottom-5 before:w-full before:mt-auto ${
+                            currentRoute === menuItem.url
+                              ? "text-green-600 before:h-1 before:mx-auto before:rounded-t-full before:bg-green-500"
+                              : "text-gray-600 before:h-0.5 before:origin-left before:rounded-full before:bg-green-800 before:transition before:scale-x-0 group-hover:before:scale-x-100"
+                          }`}
+                        >
+                          <span
+                            className={`${
+                              currentRoute !== menuItem.url &&
+                              "group-hover:text-green-500"
+                            }`}
+                          >
+                            {menuItem.name}
+                          </span>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -110,7 +120,7 @@ const Navigation = () => {
                     <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-amber-500">
                       <img
                         className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-800"
-                        src="/assets/icons/avatar.svg"
+                        src="/avatar.svg"
                         alt="user menu"
                       />
                     </div>

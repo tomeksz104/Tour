@@ -10,13 +10,10 @@ import CircleButton from "@/components/CircleButton";
 
 const Card = ({ place, onMouseEnter, onMouseLeave }) => {
   const router = useRouter();
-  const watchlistCtx = useContext(WatchlistContext);
 
   const handleFlyToPlace = () => {
     router.push(`?id=${place._id}`, undefined, { shallow: true });
   };
-
-  const isOnWatchlist = watchlistCtx.isOnWatchlist(place._id);
 
   return (
     <article

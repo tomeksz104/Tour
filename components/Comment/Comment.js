@@ -36,11 +36,7 @@ const Comment = ({ comment, onEditComment, onDeleteComment }) => {
             <div className="flex items-center">
               <img
                 className="mr-2 h-6 w-6 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-800"
-                src={
-                  comment.user.avatar
-                    ? comment.user.avatar
-                    : "/assets/icons/avatar.svg"
-                }
+                src={comment.user.avatar ? comment.user.avatar : "/avatar.svg"}
                 alt={
                   comment.user.username
                     ? comment.user.username

@@ -7,7 +7,7 @@ const SearchResult = ({ place }) => {
   const router = useRouter();
 
   const handleFlyToPlace = () => {
-    router.push(`/?id=${place._id}`);
+    router.push(`/map?id=${place._id}`);
   };
 
   return (

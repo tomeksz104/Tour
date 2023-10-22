@@ -7,13 +7,12 @@ import { useToast } from "@/hooks/useToast";
 import Input from "../Input";
 import Label from "../Label";
 import InputError from "../InputError";
-
-import FacebookIcon from "@/public/assets/icons/facebook.svg";
-import InstagramIcon from "@/public/assets/icons/instagram.svg";
-import TwitterIcon from "@/public/assets/icons/twitter.svg";
-import YoutubeIcon from "@/public/assets/icons/youtube.svg";
-import Categories from "../Categories/Categories";
 import Button from "../Button";
+
+import FacebookIcon from "@/public/facebook.svg";
+import InstagramIcon from "@/public/instagram.svg";
+import TwitterIcon from "@/public/twitter.svg";
+import YoutubeIcon from "@/public/youtube.svg";
 
 const tabs = ["profile", "socialmedia", "password"];
 
@@ -295,14 +294,6 @@ const Settings = () => {
                 >
                   Update
                 </Button>
-                {/* <button
-                  onClick={handleUpdateProfile}
-                  className="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-green-500 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95"
-                >
-                  <span className="relative text-base font-semibold text-white dark:text-dark">
-                    Update
-                  </span>
-                </button> */}
               </form>
             </div>
           </div>
@@ -322,147 +313,3 @@ const Dot = () => {
     ></div>
   );
 };
-
-{
-  /* <div
-        className="card rounded-md bg-white dark:bg-slate-800 lg:h-full  shadow-base"
-        data-v-cda99232=""
-      >
-        <div className="card-body flex flex-col p-6" data-v-cda99232="">
-          <header
-            className="flex mb-5 items-center border-b border-slate-100 dark:border-slate-700 pb-5  -mx-6 px-6"
-            data-v-cda99232=""
-          >
-            <div className="flex-1" data-v-cda99232="">
-              <div
-                className="card-title text-slate-900 dark:text-white"
-                data-v-cda99232=""
-              >
-                Vertical Nav Tabs
-              </div>
-            </div>
-          </header>
-          <div className="card-text h-full" data-v-cda99232="">
-            <div className="grid grid-cols-12 md:gap-2">
-              <div className="lg:col-span-3 md:col-span-5 col-span-12">
-                <div role="tablist" aria-orientation="horizontal">
-                  <button
-                    className="text-white bg-blue-500 text-sm font-medium md:block inline-block mb-4 last:mb-0 capitalize ring-0 foucs:ring-0 focus:outline-none px-6 rounded-md py-2 transition duration-150"
-                    id="headlessui-tabs-tab-129"
-                    role="tab"
-                    aria-selected="true"
-                    tabindex="0"
-                    data-headlessui-state="selected"
-                    type="button"
-                    aria-controls="headlessui-tabs-panel-133"
-                  >
-                    Home
-                  </button>
-                  <button
-                    className="text-slate-500 bg-white dark:bg-slate-700 dark:text-slate-300 text-sm font-medium md:block inline-block mb-4 last:mb-0 capitalize ring-0 foucs:ring-0 focus:outline-none px-6 rounded-md py-2 transition duration-150"
-                    id="headlessui-tabs-tab-130"
-                    role="tab"
-                    aria-selected="false"
-                    tabindex="-1"
-                    data-headlessui-state=""
-                    type="button"
-                    aria-controls="headlessui-tabs-panel-134"
-                  >
-                    Profile
-                  </button>
-                  <button
-                    className="text-slate-500 bg-white dark:bg-slate-700 dark:text-slate-300 text-sm font-medium md:block inline-block mb-4 last:mb-0 capitalize ring-0 foucs:ring-0 focus:outline-none px-6 rounded-md py-2 transition duration-150"
-                    id="headlessui-tabs-tab-131"
-                    role="tab"
-                    aria-selected="false"
-                    tabindex="-1"
-                    data-headlessui-state=""
-                    type="button"
-                    aria-controls="headlessui-tabs-panel-135"
-                  >
-                    Messages
-                  </button>
-                  <button
-                    className="text-slate-500 bg-white dark:bg-slate-700 dark:text-slate-300 text-sm font-medium md:block inline-block mb-4 last:mb-0 capitalize ring-0 foucs:ring-0 focus:outline-none px-6 rounded-md py-2 transition duration-150"
-                    id="headlessui-tabs-tab-132"
-                    role="tab"
-                    aria-selected="false"
-                    tabindex="-1"
-                    data-headlessui-state=""
-                    type="button"
-                    aria-controls="headlessui-tabs-panel-136"
-                  >
-                    Settings
-                  </button>
-                </div>
-              </div>
-              <div className="lg:col-span-9 md:col-span-7 col-span-12">
-                <div>
-                  <div
-                    id="headlessui-tabs-panel-133"
-                    role="tabpanel"
-                    aria-labelledby="headlessui-tabs-tab-129"
-                    tabindex="0"
-                    data-headlessui-state="selected"
-                  >
-                    <div className="text-slate-600 dark:text-slate-400 text-sm font-normal">
-                      {" "}
-                      Aliqua id fugiat nostrud irure ex duis ea quis id quis ad
-                      et. Sunt qui esse pariatur duis deserunt mollit dolore
-                      cillum minim tempor enim. Elit aute irure tempor cupidatat
-                      incididunt sint deserunt ut voluptate aute id deserunt
-                      nisi.{" "}
-                    </div>
-                  </div>
-                  <span
-                    id="headlessui-tabs-panel-134"
-                    role="tabpanel"
-                    tabindex="-1"
-                    aria-labelledby="headlessui-tabs-tab-130"
-                    style={{
-                      position: "fixed",
-                      height: "0px",
-                      padding: "0px",
-                      overflow: "hidden",
-                      clip: "rect(0px, 0px, 0px, 0px)",
-                      whiteSpace: "nowrap",
-                      borderWidth: "0px",
-                    }}
-                  ></span>
-                  <span
-                    id="headlessui-tabs-panel-135"
-                    role="tabpanel"
-                    tabindex="-1"
-                    aria-labelledby="headlessui-tabs-tab-131"
-                    style={{
-                      position: "fixed",
-                      height: "0px",
-                      padding: "0px",
-                      overflow: "hidden",
-                      clip: "rect(0px, 0px, 0px, 0px)",
-                      whiteSpace: "nowrap",
-                      borderWidth: "0px",
-                    }}
-                  ></span>
-                  <span
-                    id="headlessui-tabs-panel-136"
-                    role="tabpanel"
-                    tabindex="-1"
-                    aria-labelledby="headlessui-tabs-tab-132"
-                    style={{
-                      position: "fixed",
-                      height: "0px",
-                      padding: "0px",
-                      overflow: "hidden",
-                      clip: "rect(0px, 0px, 0px, 0px)",
-                      whiteSpace: "nowrap",
-                      borderWidth: "0px",
-                    }}
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */
-}

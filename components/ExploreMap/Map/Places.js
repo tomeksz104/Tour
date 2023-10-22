@@ -1,24 +1,15 @@
-import React, {
-  memo,
-  useEffect,
-  useContext,
-  useRef,
-  useState,
-  useMemo,
-} from "react";
+import React, { memo, useEffect, useContext, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { createRoot } from "react-dom/client";
 import { Marker, useMap } from "react-leaflet";
-
+import { PlacesContext } from "@/contexts/PlacesContext";
+import { WatchlistContext } from "@/contexts/WatchlistContext";
 import L from "leaflet";
 import "leaflet-canvas-marker";
 
 import { getIcon, getVisibleMarkers } from "@/utils/mapUtils";
-//import useMarkerLayer from "@/hooks/useMarkerLayer";
-import usePlaces from "@/hooks/usePlaces";
-import { useRouter, useSearchParams } from "next/navigation";
-import { createRoot } from "react-dom/client";
+
 import PlacePopup from "./PlacePupup";
-import { PlacesContext } from "@/contexts/PlacesContext";
-import { WatchlistContext } from "@/contexts/WatchlistContext";
 
 function arraysAreEqual(arr1, arr2) {
   if (arr1.length !== arr2.length) {
@@ -50,6 +41,7 @@ const Places = memo((props) => {
   // Filtering places
   useEffect(() => {
     if (placesCtx.places.length > 0) {
+      if (props.interactiveMap === true) props.isLoading(true);
       let newPlacesToRender = placesCtx.places;
 
       if (map && props?.markerToRemove) {
@@ -72,8 +64,10 @@ const Places = memo((props) => {
 
       setPlacesToRender(newPlacesToRender);
       const newVisiblePlaces = getVisibleMarkers(map, newPlacesToRender);
-      if (props.interactiveMap === true)
+      if (props.interactiveMap === true) {
         props.onChangeVisiblePlaces(newVisiblePlaces);
+        props.isLoading(false);
+      }
     }
   }, [
     props.selectedCategories,
@@ -109,7 +103,11 @@ const Places = memo((props) => {
         (place) => place._id === idToZoom
       );
 
-      if (placeToFlyTo) handleZoomToPlace(placeToFlyTo);
+      if (placeToFlyTo) {
+        handleZoomToPlace(placeToFlyTo);
+
+        router.replace("/map", undefined, { shallow: true });
+      }
     }
   }, [idToZoom, placesToRender]);
 
@@ -120,14 +118,6 @@ const Places = memo((props) => {
       props.onChangeVisiblePlaces(newVisiblePlaces);
   };
 
-  // useMarkerLayer({
-  //   map,
-  //   placesToRender,
-  //   ciLayerRef,
-  //   markersRef,
-  //   props,
-  //   router,
-  // });
   useEffect(() => {
     if (!map) return;
 

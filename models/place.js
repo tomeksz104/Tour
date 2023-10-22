@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 
-import { categories_list } from "../components/Categories/Categories";
+import { categories_list } from "@/utils/categories";
 
 // const validateCategory = function (value) {
 //   const categoryTitles = categories_list.map((category) => category.title);

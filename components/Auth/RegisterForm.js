@@ -51,11 +51,7 @@ function RegisterForm() {
       {/* Google Provider */}
       <button className="w-full h-11 rounded-full border border-gray-300/75 bg-white px-6 mt-12 transition active:bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-800 dark:hover:border-gray-700">
         <div className="w-full mx-auto flex items-center justify-center space-x-4">
-          <img
-            src="/assets/icons/google.svg"
-            alt="Google logo"
-            className="w-5"
-          />
+          <img src="/google.svg" alt="Google logo" className="w-5" />
           <span className="block w-full text-sm font-semibold tracking-wide text-cyan-700 dark:text-white">
             With Google
           </span>

@@ -11,6 +11,7 @@ const Sidebar = ({
   onMarkerHover,
   isShowWatchlist,
   onToggleWatchlist,
+  isLoading,
 }) => {
   const { data: visiblePlaces, handleScroll } = useLoadMore(places, 10);
   const [showSidebar, setShowSidebar] = useState(
@@ -166,8 +167,12 @@ const Sidebar = ({
           onScroll={handleScroll}
           className="flex flex-wrap p-1 overflow-y-auto overflow-x-hidden"
         >
-          {places.length === 0 && (
-            <SidebarImageSkeleton count={placesPerPage} />
+          {isLoading && <SidebarImageSkeleton count={placesPerPage} />}
+
+          {visiblePlaces.length === 0 && (
+            <h3 className="flex h-full w-full items-center justify-center py-10 font-semibold text-gray-400">
+              No places found
+            </h3>
           )}
 
           {visiblePlaces.map((place, index) => (

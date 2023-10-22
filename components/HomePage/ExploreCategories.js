@@ -1,23 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { categories_list } from "../Categories/Categories";
+import { categories_list } from "@/utils/categories";
 
 const ExploreCategories = () => {
   const [selectedCategory, setSelectedCategory] = useState(0);
 
   return (
-    <div class="py-16">
-      <div class="container m-auto text-gray-600 px-4 sm:px-6 lg:px-8">
-        <div class="bg-green-200 p-6 lg:p-16 rounded-3xl space-y-6 justify-center lg:items-center">
-          <h2 class="text-center text-3xl lg:text-4xl font-bold text-gray-800">
+    <div className="py-16">
+      <div className="container m-auto text-gray-600 px-4 sm:px-6 lg:px-8">
+        <div className="bg-green-200 p-6 lg:p-16 rounded-3xl space-y-6 justify-center lg:items-center">
+          <h2 className="text-center text-3xl lg:text-4xl font-bold text-gray-800">
             Browse by Category
           </h2>
-          <div class="m-auto mt-12 items-center justify-center space-y-6 lg:flex lg:space-y-0 lg:space-x-6">
-            <div class="w-full relative lg:flex">
-              <div class="lg:w-5/12">
-                <div class="relative h-full overflow-x-auto lg:overflow-hidden no-scrollbar">
-                  <ul class="flex h-full w-max justify-center space-x-2 lg:w-full lg:flex-col lg:space-x-0 lg:space-y-1.5 lg:px-8 no-scrollbar">
+          <div className="m-auto mt-12 items-center justify-center space-y-6 lg:flex lg:space-y-0 lg:space-x-6">
+            <div className="w-full relative lg:flex">
+              <div className="lg:w-5/12">
+                <div className="relative h-full overflow-x-auto lg:overflow-hidden no-scrollbar">
+                  <ul className="flex h-full w-max justify-center space-x-2 lg:w-full lg:flex-col lg:space-x-0 lg:space-y-1.5 lg:px-8 no-scrollbar">
                     {categories_list.map((category, index) => (
                       <li key={index}>
                         <button
@@ -42,8 +42,8 @@ const ExploreCategories = () => {
                   </ul>
                 </div>
               </div>
-              <div class="flex items-center lg:w-7/12">
-                <img src="https://roadtrippers.com/wp-content/uploads/2022/10/Places-to-Camp-Web@2x-1024x757.png" />
+              <div className="flex items-center lg:w-7/12">
+                <img src={categories_list[selectedCategory].imagePath} />
               </div>
             </div>
           </div>
