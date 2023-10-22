@@ -59,7 +59,9 @@ const ConfirmDialog = () => {
       </div>
     </div>
   ) : null;
-
-  return createPortal(component, document?.body);
+  return typeof document !== "undefined"
+    ? createPortal(component, document.body)
+    : null;
+  // return createPortal(component, document?.body);
 };
 export default ConfirmDialog;
