@@ -125,7 +125,7 @@ const CommentForm = ({
           {!commentId && (
             <div className="mr-3 shrink-0 hidden sm:block">
               <img
-                className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-800"
+                className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100"
                 src={session?.user.avatar ? session.user.avatar : "/avatar.svg"}
                 alt={
                   session?.user.username

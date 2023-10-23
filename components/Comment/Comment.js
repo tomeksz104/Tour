@@ -35,7 +35,7 @@ const Comment = ({ comment, onEditComment, onDeleteComment }) => {
           <footer className="flex justify-between items-center mb-2 w-full">
             <div className="flex items-center">
               <img
-                className="mr-2 h-6 w-6 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-800"
+                className="mr-2 h-6 w-6 flex-shrink-0 rounded-full bg-slate-100"
                 src={comment.user.avatar ? comment.user.avatar : "/avatar.svg"}
                 alt={
                   comment.user.username
@@ -81,7 +81,7 @@ const Comment = ({ comment, onEditComment, onDeleteComment }) => {
                   {" "}
                   <button
                     onClick={handleEditComment}
-                    className="flex w-full items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    className="flex w-full items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +102,7 @@ const Comment = ({ comment, onEditComment, onDeleteComment }) => {
                   </button>
                   <button
                     onClick={() => onDeleteComment(comment._id)}
-                    className="flex w-full items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    className="flex w-full items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

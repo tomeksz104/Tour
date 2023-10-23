@@ -108,14 +108,14 @@ const Settings = () => {
   return (
     <>
       <div className="w-full sm:max-w-4xl m-auto py-20">
-        <h2 className="text-center text-2xl font-bold text-gray-800 dark:text-white md:text-4xl">
+        <h2 className="text-center text-2xl font-bold text-gray-800 md:text-4xl">
           Account Settings
         </h2>
 
         <div className="m-auto mt-12 items-center justify-center space-y-6 lg:flex lg:space-y-0 lg:space-x-6 xl:w-10/12">
           <div className="w-full relative sm:flex">
             <div className="mt-16 pb-20 sm:mt-0 sm:w-5/12 sm:pb-0">
-              <div className="relative h-full before:absolute before:right-0 before:top-1 before:my-auto before:h-0.5 before:w-full before:rounded-full before:bg-gray-200 dark:before:bg-gray-700 sm:pt-0 sm:before:inset-y-0 sm:before:h-[85%] sm:before:w-0.5">
+              <div className="relative h-full before:absolute before:right-0 before:top-1 before:my-auto before:h-0.5 before:w-full before:rounded-full before:bg-gray-200 sm:pt-0 sm:before:inset-y-0 sm:before:h-[85%] sm:before:w-0.5">
                 <div className="relative -mt-1 h-full overflow-x-auto sm:overflow-hidden pt-7 pb-6 sm:-mr-1 sm:pr-1">
                   <ul className="flex h-full w-max justify-center space-x-2 px-6 sm:w-full sm:flex-col sm:space-x-0 sm:space-y-6 sm:px-8">
                     <li
@@ -123,7 +123,7 @@ const Settings = () => {
                       onClick={() => handleChangeTab(tabs[0])}
                     >
                       <label
-                        className={`block cursor-pointer rounded-full bg-green-100 dark:bg-gray-700 py-2 px-4 text-center text-green-800 dark:text-sky-300 ${
+                        className={`block cursor-pointer rounded-full bg-green-100 py-2 px-4 text-center text-green-800 ${
                           tab === tabs[0] &&
                           "text-green-500 ring-1 ring-green-500"
                         }`}
@@ -139,7 +139,7 @@ const Settings = () => {
                       onClick={() => handleChangeTab(tabs[1])}
                     >
                       <label
-                        className={`block cursor-pointer rounded-full bg-green-100 dark:bg-gray-700 py-2 px-4 text-center text-green-800 dark:text-sky-300 ${
+                        className={`block cursor-pointer rounded-full bg-green-100 py-2 px-4 text-center text-green-800 ${
                           tab === tabs[1] &&
                           "text-green-500 ring-1 ring-green-500"
                         }`}
@@ -155,7 +155,7 @@ const Settings = () => {
                       onClick={() => handleChangeTab(tabs[2])}
                     >
                       <label
-                        className={`block cursor-pointer rounded-full bg-green-100 dark:bg-gray-700 py-2 px-4 text-center text-green-800 dark:text-sky-300 ${
+                        className={`block cursor-pointer rounded-full bg-green-100 py-2 px-4 text-center text-green-800 ${
                           tab === tabs[2] &&
                           "text-green-500 ring-1 ring-green-500"
                         }`}
@@ -171,7 +171,7 @@ const Settings = () => {
               </div>
             </div>
 
-            <div className="p-8 pb-20 sm:w-7/12 sm:pb-8">
+            <div className="p-6 pb-20 sm:w-7/12 sm:pb-8">
               <form className="space-y-8">
                 {/* Profile Tab */}
                 {tab === tabs[0] && (
@@ -309,7 +309,7 @@ const Dot = () => {
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-x-0 top-[-2.20rem] z-[1] mx-auto h-6 w-6 scale-0 rounded-full border-8 border-white dark:border-gray-800 bg-green-500 transition scale-100 sm:inset-y-0 sm:right-[-2.70rem] sm:my-auto sm:mr-0"
+      className="absolute inset-x-0 top-[-2.20rem] z-[1] mx-auto h-6 w-6 scale-0 rounded-full border-8 border-white bg-green-500 transition scale-100 sm:inset-y-0 sm:right-[-2.70rem] sm:my-auto sm:mr-0"
     ></div>
   );
 };

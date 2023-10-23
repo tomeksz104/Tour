@@ -9,10 +9,10 @@ import "swiper/css/autoplay";
 import "swiper/css/grid";
 import Card from "./Card";
 
-const CardSlider = ({ places }) => {
+const CardSlider = ({ places = null }) => {
   return (
     <>
-      <div className="container mx-auto px-6 md:px-12 lg:px-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <Swiper
           modules={[Grid, Autoplay]}
           className="mySwiper grid p-5"

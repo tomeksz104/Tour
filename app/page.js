@@ -161,10 +161,10 @@ export default async function Home() {
         <div className="container m-auto space-y-8 px-6 md:px-12 lg:px-20">
           <div className="items-center justify-center gap-16 text-center md:flex md:text-left">
             <div className="order-last mb-6 space-y-6 md:mb-0 md:w-7/12 lg:w-6/12">
-              <h1 className="text-4xl font-bold text-green-900 md:text-5xl dark:text-white">
+              <h1 className="text-3xl lg:text-4xl font-bold text-green-900">
                 On all your devices
               </h1>
-              <p className="text-lg text-gray-600 dark:text-gray-300">
+              <p className="text-lg leading-tight text-gray-600">
                 Our app is designed to work perfectly on any device, providing a
                 smooth and responsive experience.
               </p>
@@ -191,7 +191,7 @@ export default async function Home() {
             className="mx-auto w-72"
             src="/sunrise.svg"
           />
-          <h2 className="max-w-screen-md mx-auto mt-6 text-center text-gray-900 text-6xl font-bold">
+          <h2 className="max-w-screen-md mx-auto mt-6 text-center text-gray-900 text-3xl lg:text-4xl 2xl:text-6xl font-bold">
             <span className="block">Ready to start </span>
             <span className="relative block">
               <span className="relative">

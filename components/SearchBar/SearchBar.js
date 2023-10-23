@@ -51,7 +51,7 @@ const SearchBar = ({ onHideLogo }) => {
           <div className="relative w-full">
             <form>
               <div className="flex items-center text-gray-400 focus-within:text-green-400">
-                <span className="absolute left-4 flex h-6 items-center border-r border-gray-300 pr-3 dark:border-gray-700">
+                <span className="absolute left-4 flex h-6 items-center border-r border-gray-300 pr-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

@@ -165,6 +165,7 @@ const Sidebar = ({
 
         <div
           onScroll={handleScroll}
+          onTouchMove={handleScroll}
           className="flex flex-wrap p-1 overflow-y-auto overflow-x-hidden"
         >
           {isLoading && <SidebarImageSkeleton count={placesPerPage} />}

@@ -32,7 +32,7 @@ const Button = ({
         ></path>
       </svg>
     )}
-    <span className="relative px-10 flex items-center font-semibold text-white dark:text-dark">
+    <span className="relative px-10 flex items-center font-semibold text-white">
       {children}
     </span>
   </button>

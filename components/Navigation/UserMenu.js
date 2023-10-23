@@ -28,7 +28,7 @@ const UserMenu = ({ user }) => {
           ) : (
             <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-amber-500">
               <img
-                className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-800"
+                className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100"
                 src="/avatar.svg"
                 alt={user.email}
               />
@@ -44,7 +44,7 @@ const UserMenu = ({ user }) => {
           <div>
             <Link
               href="/place/new"
-              className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +65,7 @@ const UserMenu = ({ user }) => {
             </Link>
             <Link
               href="/user/settings"
-              className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100"
             >
               <svg
                 className="w-5 h-5 mx-1"
@@ -84,7 +84,7 @@ const UserMenu = ({ user }) => {
           </div>
           <button
             onClick={handleSignOut}
-            className="flex w-full items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+            className="flex w-full items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100"
           >
             <svg
               className="w-5 h-5 mx-1"

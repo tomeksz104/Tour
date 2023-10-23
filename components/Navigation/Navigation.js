@@ -73,7 +73,7 @@ const Navigation = () => {
 
             <div
               className="flex  z-50 flex-col md:flex-row 
-                    items-center gap-y-4 p-6 bg-white dark:bg-gray-800 md:w-auto
+                    items-center gap-y-4 p-6 bg-white md:w-auto
                     md:gap-y-4 md:p-0
                     md:bg-transparent fixed top-0 -left-full transition-all duration-500 peer-checked:left-0 max-w-sm h-full
                     md:left-0 md:h-auto w-4/5 md:relative lg:first-letter:top-0"
@@ -119,7 +119,7 @@ const Navigation = () => {
                   <span className="h-8 w-8 bg-gray-100 rounded-full overflow-hidden">
                     <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-amber-500">
                       <img
-                        className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-800"
+                        className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100"
                         src="/avatar.svg"
                         alt="user menu"
                       />
@@ -134,7 +134,7 @@ const Navigation = () => {
                     <div>
                       <Link
                         href="/signin"
-                        className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -155,7 +155,7 @@ const Navigation = () => {
                       </Link>
                       <Link
                         href="/signup"
-                        className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100"
                       >
                         <svg
                           className="w-5 h-5 mx-1"

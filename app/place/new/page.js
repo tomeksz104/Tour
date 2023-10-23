@@ -1,9 +1,7 @@
 "use client";
 
 import { Fragment } from "react";
-import dynamic from "next/dynamic";
 
-import MapWrapper from "@/components/PlaceManagement/Map";
 import PlaceForm from "@/components/PlaceManagement/PlaceForm";
 
 // const MapWrapper = dynamic(() => import("@/components/Place/MapWrapper"), {
@@ -16,7 +14,7 @@ export default function CreatePlace() {
     <Fragment>
       {/* <MapWrapper /> */}
 
-      <PlaceForm />
+      <PlaceForm place={null} />
     </Fragment>
   );
 }

@@ -17,8 +17,13 @@ const Map = dynamic(() => import("@/components/PlaceManagement/Map"), {
 });
 
 import { categories_list } from "@/utils/categories";
+import { useSession } from "next-auth/react";
 
 const PlaceForm = ({ place = null }) => {
+  const { session } = useSession({
+    required: true,
+  });
+
   const router = useRouter();
   const toast = useToast();
   const { confirm } = useConfirm();
@@ -33,7 +38,7 @@ const PlaceForm = ({ place = null }) => {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const placeId = place?._id ?? null;
+  const placeId = place?._id || null;
   const url = placeId ? `/api/place/${placeId}` : "/api/place/new";
   const method = placeId ? "PATCH" : "POST";
 
@@ -162,8 +167,8 @@ const PlaceForm = ({ place = null }) => {
   };
 
   return (
-    <div className="w-full sm:max-w-3xl m-auto py-20 ">
-      <h2 className="mt-5 text-center text-2xl font-bold text-gray-800 dark:text-white md:text-4xl">
+    <div className="w-full sm:max-w-3xl m-auto py-20 px-6">
+      <h2 className="mt-5 text-center text-2xl font-bold text-gray-800 md:text-4xl">
         {placeId ? "Update the place" : "Add a unique place"}
       </h2>
 

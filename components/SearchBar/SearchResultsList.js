@@ -8,6 +8,7 @@ const SeatchResultList = ({ results, hideSuggestions, searchWordLength }) => {
   return (
     <div
       onScroll={handleScroll}
+      onTouchMove={handleScroll}
       className={`absolute z-50 mt-2 w-full overflow-auto max-h-96 rounded-md bg-white shadow-md ${
         hideSuggestions && "hidden"
       }`}
