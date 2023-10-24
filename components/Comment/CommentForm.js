@@ -91,13 +91,13 @@ const CommentForm = ({
     <>
       {!isCommentButtonClicked && totalComments === 0 && (
         <div className="flex justify-center border border-gray-200 mb-6 py-6 rounded-md">
-          <div className="flex flex-col space-y-3">
+          <div className="flex flex-col space-y-3 px-4">
             <div className="commentTeaser relative mx-auto bg-green-500">
               <div className="commentTeaser-icon commentTeaser-icon--ask absolute"></div>
               <div className="commentTeaser-icon commentTeaser-icon--like absolute"></div>
               <div className="commentTeaser-icon commentTeaser-icon--check absolute"></div>
             </div>
-            <p className="text-gray-700 text-xl font-semibold">
+            <p className="text-gray-700 text-xl font-semibold text-center">
               Questions? Opinions? Suggestions?
             </p>
             <Button onClick={handleCommentButtonCliked} className={`text-sm`}>

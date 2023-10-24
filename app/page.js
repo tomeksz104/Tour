@@ -158,7 +158,7 @@ export default async function Home() {
 
       {/* On all your devices section */}
       <div className="bg-green-50 py-16">
-        <div className="container m-auto space-y-8 px-6 md:px-12 lg:px-20">
+        <div className="container m-auto space-y-8 px-4 md:px-12 lg:px-20">
           <div className="items-center justify-center gap-16 text-center md:flex md:text-left">
             <div className="order-last mb-6 space-y-6 md:mb-0 md:w-7/12 lg:w-6/12">
               <h1 className="text-3xl lg:text-4xl font-bold text-green-900">

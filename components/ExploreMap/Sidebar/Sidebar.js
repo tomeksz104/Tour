@@ -85,7 +85,8 @@ const Sidebar = ({
         <div className="flex items-center justify-between px-5 py-3">
           <div className="flex text-slate-500 text-xs gap-1">
             <span className="font-semibold">{places.length}</span>
-            <span>places on the map</span>
+            <span>places</span>
+            <span className="hidden sm:inline-block"> on the map</span>
           </div>
           <div className="flex items-center gap-3">
             <div className="inline-flex rounded-md shadow-sm" role="group">

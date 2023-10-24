@@ -57,7 +57,9 @@ const Card = ({ place, onMouseEnter, onMouseLeave }) => {
               href={`/place/${place._id}`}
               className="bottom-0 box-border left-0 p-3 absolute w-full bg-gradient-to-b from-transparent to-black/80 to-90%"
             >
-              <div className="line-clamp-3 hover:underline">{place.title}</div>
+              <div className="text-sm sm:text-base line-clamp-3 hover:underline leading-none">
+                {place.title}
+              </div>
             </Link>
           </div>
         </div>

@@ -7,23 +7,15 @@ import { useEffect, useState } from "react";
 import LoginForm from "@/components/Auth/LoginForm";
 
 function Login() {
-  const { data: session } = useSession();
-  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     getSession().then((session) => {
       if (session?.user?.email) {
         router.push("/");
-      } else {
-        setIsLoading(false);
       }
     });
   }, [router]);
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
 
   return <LoginForm />;
 }

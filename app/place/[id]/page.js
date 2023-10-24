@@ -27,25 +27,25 @@ export default async function PlaceDetailsPage({ params }) {
 
   return (
     <>
-      <div className="w-full h-[480px]">
+      <div className="w-full h-56 sm:h-[480px]">
         <div
-          className="absolute w-full h-[480px] bg-cover bg-center bg-no-repeat"
+          className="absolute w-full h-56 sm:h-[480px] bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url(${place.image})`,
           }}
         >
           <div className="w-full h-full backdrop-blur-md"></div>
         </div>
-        <div className="mx-auto max-w-5xl w-full h-[480px]">
-          <div className="relative flex flex-col group overflow-hidden z-0 max-w-5xl h-[480px]">
+        <div className="mx-auto max-w-5xl w-full h-56 sm:h-[480px]">
+          <div className="relative flex flex-col group overflow-hidden z-0 max-w-5xl h-56 sm:h-[480px]">
             <div className="flex items-start relative w-full h-full">
               <div className="absolute inset-0 overflow-hidden z-0 overflow-hidden z-0 select-none	">
                 <Slideshow images={gallery} />
               </div>
             </div>
             <div className="absolute w-full content-[''] bg-gradient-to-b from-[rgba(0,0,0,0.75)] to-transparent h-[200px] pointer-events-none"></div>
-            <div className="absolute flex justify-between items-center top-2 inset-x-4 sm:inset-x-5 pointer-events-none">
-              <h3 className="block text-3xl font-semibold text-white line-clamp-2">
+            <div className="absolute flex justify-between items-start sm:items-center top-2 inset-x-4 sm:inset-x-5 pointer-events-none">
+              <h3 className="block text-xl sm:text-2xl font-semibold text-white line-clamp-2">
                 {place.title}
               </h3>
               <div className="flex items-center">

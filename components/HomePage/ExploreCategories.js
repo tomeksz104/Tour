@@ -8,7 +8,7 @@ const ExploreCategories = () => {
 
   return (
     <div className="py-16">
-      <div className="container m-auto text-gray-600 px-2 sm:px-6 lg:px-8">
+      <div className="container m-auto text-gray-600 px-4 sm:px-6 lg:px-8">
         <div className="bg-green-200 px-3 py-10 lg:p-16 rounded-2xl space-y-6 justify-center lg:items-center">
           <h2 className="text-center text-3xl lg:text-4xl font-bold text-gray-800">
             Browse by Category

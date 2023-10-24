@@ -15,7 +15,7 @@ const CardSlider = ({ places = null }) => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <Swiper
           modules={[Grid, Autoplay]}
-          className="mySwiper grid p-5"
+          // className="grid"
           spaceBetween={20}
           autoplay={{
             delay: 2500,
@@ -49,7 +49,7 @@ const CardSlider = ({ places = null }) => {
           }}
         >
           {places.map((place, index) => (
-            <SwiperSlide key={index} className="p-3 h-full">
+            <SwiperSlide key={index} className="p-[1px] h-full">
               <Card place={place} />
             </SwiperSlide>
           ))}
