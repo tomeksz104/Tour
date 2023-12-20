@@ -2,8 +2,6 @@ import { MapContainer, TileLayer } from "react-leaflet";
 
 import "./MapWrapper.css";
 import "leaflet/dist/leaflet.css";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-import "leaflet-defaulticon-compatibility";
 
 const MapWrapper = ({ children, ...props }) => {
   return (

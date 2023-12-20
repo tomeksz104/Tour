@@ -30,15 +30,10 @@ export const PlacesContextProvider = ({ children }) => {
     }
   }, []);
 
-  const replacePlacesList = (places) => {
-    setPlaces(places);
-  };
-
   return (
     <PlacesContext.Provider
       value={{
         places,
-        replacePlacesList,
       }}
     >
       {children}

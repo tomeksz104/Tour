@@ -10,8 +10,10 @@ export const getIcon = (category) => {
 
     const icon = new L.icon({
       iconUrl: iconPath,
-      iconSize: [30, 38],
-      iconAnchor: [15, 18],
+      iconSize: [18, 23],
+      iconAnchor: [9, 11],
+      //iconSize: [30, 38],
+      //iconAnchor: [15, 18],
     });
 
     return icon;

@@ -5,25 +5,11 @@ import { Marker, useMap } from "react-leaflet";
 import { PlacesContext } from "@/contexts/PlacesContext";
 import { WatchlistContext } from "@/contexts/WatchlistContext";
 import L from "leaflet";
-import "leaflet-canvas-marker";
+import "node_modules/leaflet-canvas-marker/src/_full.js";
 
 import { getIcon, getVisibleMarkers } from "@/utils/mapUtils";
 
 import PlacePopup from "./PlacePupup";
-
-function arraysAreEqual(arr1, arr2) {
-  if (arr1.length !== arr2.length) {
-    return false;
-  }
-
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) {
-      return false;
-    }
-  }
-
-  return true;
-}
 
 const Places = memo((props) => {
   const router = useRouter();
@@ -152,11 +138,11 @@ const Places = memo((props) => {
       canvasLayer.classList.add("duration-500");
 
       canvasLayer.classList.remove("opacity-100");
-      canvasLayer.classList.add("opacity-0");
+      canvasLayer.classList.add("opacity-50");
     };
 
     const showCanvasOnZoomEnd = () => {
-      canvasLayer.classList.remove("opacity-0");
+      canvasLayer.classList.remove("opacity-50");
       canvasLayer.classList.add("opacity-100");
     };
 
