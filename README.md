@@ -2,7 +2,7 @@
 
 ## Live 💻
 
-⭐ ![Tour](https://tour-tomeksz104.vercel.app/) ⭐
+⭐ [Tour](https://tour-tomeksz104.vercel.app/) ⭐
 
 ## About project 🔍
 
