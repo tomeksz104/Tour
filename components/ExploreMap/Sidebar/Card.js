@@ -1,12 +1,9 @@
-import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import { WatchlistContext } from "@/contexts/WatchlistContext";
-
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import WatchlistButton from "@/components/WatchlistButton";
 import CircleButton from "@/components/CircleButton";
+import Image from "next/image";
 
 const Card = ({ place, onMouseEnter, onMouseLeave }) => {
   const router = useRouter();
@@ -24,7 +21,8 @@ const Card = ({ place, onMouseEnter, onMouseLeave }) => {
       <div className="relative pb-[100%]">
         <div className="flex flex-col h-full left-0 absolute top-0 w-full">
           <div className="rounded-md text-white overflow-hidden relative flex-[1_1_100%] group hover:opacity-90">
-            <LazyLoadImage
+            <Image
+              fill
               src={place.image}
               className="bg-gray-400 block h-full object-cover w-full"
               alt={place.title}

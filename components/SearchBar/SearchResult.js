@@ -1,6 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import CircleButton from "../CircleButton";
 
 const SearchResult = ({ place }) => {
@@ -14,9 +14,11 @@ const SearchResult = ({ place }) => {
     <div className="flex justify-between w-full cursor-pointer items-center border-b border-border-100 px-5 py-2 transition-colors last:border-b-0 hover:bg-slate-100 group">
       <div className="flex items-center">
         <div className="relative h-8 w-8 overflow-hidden rounded">
-          <LazyLoadImage
-            src={place.image}
+          <Image
+            layout="fill"
+            objectFit="cover"
             className="h-full w-full object-cover"
+            src={place.image}
             alt={place.title}
           />
         </div>

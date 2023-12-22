@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { categories_list } from "@/utils/categories";
+import Image from "next/image";
 
 const ExploreCategories = () => {
   const [selectedCategory, setSelectedCategory] = useState(0);
@@ -43,7 +44,14 @@ const ExploreCategories = () => {
                 </div>
               </div>
               <div className="flex items-center lg:w-7/12">
-                <img src={categories_list[selectedCategory].imagePath} />
+                <Image
+                  width={16}
+                  height={9}
+                  layout="responsive"
+                  objectFit="cover"
+                  src={categories_list[selectedCategory].imagePath}
+                  alt=""
+                />
               </div>
             </div>
           </div>

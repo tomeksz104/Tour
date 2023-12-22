@@ -128,7 +128,11 @@ export default async function Home() {
               </div>
             </div>
             <div className="lg:col-span-2 aos-init aos-animate">
-              <img
+              <Image
+                width={16}
+                height={9}
+                layout="responsive"
+                objectFit="cover"
                 className="w-full max-w-xl hidden lg:block"
                 src="/hero-image.png"
                 alt=""
@@ -169,13 +173,13 @@ export default async function Home() {
                 smooth and responsive experience.
               </p>
             </div>
-            <img
+            <Image
               src="/cross-device-asset.png"
               width="832"
               height="608"
               className="m-auto md:w-5/12"
               loading="lazy"
-              alt="mobility_illustration"
+              alt="Mobility illustration"
             />
           </div>
         </div>
@@ -202,7 +206,6 @@ export default async function Home() {
                   className="absolute inset-0 transform translate-y-9 sm:translate-y-11 xl:translate-y-14"
                   src="/underline-simple-light-purple.svg"
                 />
-
                 <span className="relative">your adventure?</span>
               </span>
             </span>

@@ -1,4 +1,4 @@
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import Image from "next/image";
 
 const PlacePopup = ({ place, router }) => {
   const handleShowPlaceDetails = () => {
@@ -8,10 +8,13 @@ const PlacePopup = ({ place, router }) => {
   return (
     <div className="group rounded-3xl">
       <div className="relative overflow-hidden rounded-t-xl">
-        <LazyLoadImage
-          className="h-32 w-full object-cover object-top"
+        <Image
           src={place.image}
           alt={place.title}
+          width={16}
+          height={9}
+          layout="responsive"
+          objectFit="cover"
         />
       </div>
       <div className="py-2 px-3 relative">
