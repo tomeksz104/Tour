@@ -20,6 +20,16 @@ export const getIcon = (category) => {
   }
 };
 
+export const getIconPath = (category) => {
+  const selectedCategory = categories_list.find(
+    (item) => item.title === category
+  );
+
+  if (selectedCategory && selectedCategory.iconPath) {
+    return selectedCategory.iconPath;
+  }
+};
+
 export const getVisibleMarkers = (map, places) => {
   if (map) {
     const visiblePlaces = places.filter((place) =>

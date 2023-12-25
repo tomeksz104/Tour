@@ -5,9 +5,10 @@ import { Marker, useMap } from "react-leaflet";
 import { PlacesContext } from "@/contexts/PlacesContext";
 import { WatchlistContext } from "@/contexts/WatchlistContext";
 import L from "leaflet";
-import "node_modules/leaflet-canvas-marker/src/_full.js";
 
-import { getIcon, getVisibleMarkers } from "@/utils/mapUtils";
+import "node_modules/leaflet-canvas-markers/leaflet-canvas-markers.js";
+
+import { getIcon, getIconPath, getVisibleMarkers } from "@/utils/mapUtils";
 
 import PlacePopup from "./PlacePupup";
 
@@ -105,52 +106,35 @@ const Places = memo((props) => {
   };
 
   useEffect(() => {
-    if (!map) return;
+    if (!map || placesToRender === 0) return;
 
-    if (
-      placesToRender.length === 0 &&
-      markersRef.current.length > 0 &&
-      ciLayerRef.current !== null
-    ) {
-      markersRef.current.forEach((marker) => {
-        ciLayerRef.current.removeMarker(marker);
-      });
-      ciLayerRef.current.redraw();
-      return;
-    }
-
-    if (placesToRender.length === 0) return;
-
-    if (!ciLayerRef.current) {
-      ciLayerRef.current = L.canvasIconLayer({}).addTo(map);
-    } else {
-      markersRef.current.forEach((marker) => {
-        ciLayerRef.current.removeMarker(marker);
-      });
-      ciLayerRef.current.redraw();
-    }
-
-    const canvasLayer = document.querySelector(".leaflet-canvas-icon-layer");
+    const canvasLayer = document.querySelector("canvas.leaflet-zoom-animated");
 
     const hideCanvasOnZoomStart = () => {
-      canvasLayer.classList.add("transition-[opacity]");
-      canvasLayer.classList.add("ease-in-out");
-      canvasLayer.classList.add("duration-500");
-
-      canvasLayer.classList.remove("opacity-100");
-      canvasLayer.classList.add("opacity-50");
+      if (canvasLayer) {
+        canvasLayer.classList.add("transition-[opacity]");
+        canvasLayer.classList.add("ease-in-out");
+        canvasLayer.classList.add("duration-500");
+        canvasLayer.classList.remove("opacity-100");
+        canvasLayer.classList.add("opacity-50");
+      }
     };
 
     const showCanvasOnZoomEnd = () => {
-      canvasLayer.classList.remove("opacity-50");
-      canvasLayer.classList.add("opacity-100");
+      if (canvasLayer) {
+        canvasLayer.classList.remove("opacity-50");
+        canvasLayer.classList.add("opacity-100");
+      }
     };
 
     map.on("zoomstart", hideCanvasOnZoomStart);
     map.on("zoomend", showCanvasOnZoomEnd);
 
-    const markers = [];
+    markersRef.current.forEach((marker) => {
+      map.removeLayer(marker);
+    });
 
+    let markers = [];
     placesToRender.forEach((place) => {
       const popupContent = document.createElement("div");
       popupContent.style.width = "301px";
@@ -158,22 +142,97 @@ const Places = memo((props) => {
       const popupRoot = createRoot(popupContent);
       popupRoot.render(<PlacePopup place={place} router={router} />);
 
-      const marker = L.marker([place.coordinates.lat, place.coordinates.lng], {
-        icon: getIcon(place.category),
-      }).bindPopup(popupContent);
-
-      if (props.interactiveMap === true) {
-        marker.on("popupopen", () => {
-          props.onOpenMarker(place);
-        });
-      }
+      const marker = L.canvasMarker(
+        [place.coordinates.lat, place.coordinates.lng],
+        {
+          radius: 0,
+          img: {
+            url: getIconPath(place.category), //image link
+            size: [18, 23], //image size ( default [40, 40] )
+            rotate: 0, //image base rotate ( default 0 )
+            offset: { x: 0, y: 0 }, //image offset ( default { x: 0, y: 0 } )
+          },
+        }
+      )
+        .bindPopup(popupContent)
+        .addTo(map);
 
       markers.push(marker);
     });
 
     markersRef.current = markers;
-    ciLayerRef.current.addLayers(markers);
   }, [map, placesToRender]);
+
+  // useEffect(() => {
+  //   if (!map) return;
+
+  //   if (
+  //     placesToRender.length === 0 &&
+  //     markersRef.current.length > 0 &&
+  //     ciLayerRef.current !== null
+  //   ) {
+  //     markersRef.current.forEach((marker) => {
+  //       ciLayerRef.current.removeMarker(marker);
+  //     });
+  //     ciLayerRef.current.redraw();
+  //     return;
+  //   }
+
+  //   if (placesToRender.length === 0) return;
+
+  //   if (!ciLayerRef.current) {
+  //     ciLayerRef.current = L.canvasIconLayer({}).addTo(map);
+  //   } else {
+  //     markersRef.current.forEach((marker) => {
+  //       ciLayerRef.current.removeMarker(marker);
+  //     });
+  //     ciLayerRef.current.redraw();
+  //   }
+
+  //   const canvasLayer = document.querySelector(".leaflet-canvas-icon-layer");
+
+  //   const hideCanvasOnZoomStart = () => {
+  //     canvasLayer.classList.add("transition-[opacity]");
+  //     canvasLayer.classList.add("ease-in-out");
+  //     canvasLayer.classList.add("duration-500");
+
+  //     canvasLayer.classList.remove("opacity-100");
+  //     canvasLayer.classList.add("opacity-50");
+  //   };
+
+  //   const showCanvasOnZoomEnd = () => {
+  //     canvasLayer.classList.remove("opacity-50");
+  //     canvasLayer.classList.add("opacity-100");
+  //   };
+
+  // map.on("zoomstart", hideCanvasOnZoomStart);
+  // map.on("zoomend", showCanvasOnZoomEnd);
+
+  //   const markers = [];
+
+  //   placesToRender.forEach((place) => {
+  //     const popupContent = document.createElement("div");
+  //     popupContent.style.width = "301px";
+
+  //     const popupRoot = createRoot(popupContent);
+  //     popupRoot.render(<PlacePopup place={place} router={router} />);
+
+  //     const marker = L.marker([place.coordinates.lat, place.coordinates.lng], {
+  //       icon: getIcon(place.category),
+  //     }).bindPopup(popupContent);
+
+  //     if (props.interactiveMap === true) {
+  //       marker.on("popupopen", () => {
+  //         props.onOpenMarker(place);
+  //       });
+  //     }
+
+  //     markers.push(marker);
+  //   });
+
+  //   markersRef.current = markers;
+  //   ciLayerRef.current.addLayers(markers);
+  // }, [map, placesToRender]);
 
   if (props.hoveredMarkerId) {
     const animatedCircleIcon = L.divIcon({
