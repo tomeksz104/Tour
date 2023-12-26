@@ -42,7 +42,7 @@ export default async function PlaceDetailsPage({ params }) {
           <div className="relative flex flex-col group overflow-hidden z-0 max-w-5xl h-56 sm:h-[480px]">
             <div className="flex items-start relative w-full h-full">
               <div className="absolute inset-0 overflow-hidden z-0 overflow-hidden z-0 select-none	">
-                <Slideshow images={gallery} />
+                <Slideshow images={gallery} placeTitle={place.title} />
               </div>
             </div>
             <div className="absolute w-full content-[''] bg-gradient-to-b from-[rgba(0,0,0,0.75)] to-transparent h-[200px] pointer-events-none"></div>
@@ -92,7 +92,7 @@ export default async function PlaceDetailsPage({ params }) {
           </div>
           <div className="col-span-2 space-y-3">
             <p className="text-center text-gray-700">{place.title} map</p>
-            <PlaceDetailsMap place={place} />
+            {/*  <PlaceDetailsMap place={place} /> */}
           </div>
         </div>
       </div>

@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "./Image";
+import CardImage from "./CardImage";
 import "./Slideshow.css";
 
-export default function ManualSlideshow({ images }) {
+export default function ManualSlideshow({ images, placeTitle }) {
   const [imgIndex, setImgIndex] = useState(0);
   const [dotsStyling, setDotsStyling] = useState({
     transform: "translateX(0px)",
@@ -66,11 +66,12 @@ export default function ManualSlideshow({ images }) {
       </div>
       <div className="slides">
         {images.map((image, index) => (
-          <Image
+          <CardImage
+            fill
             className="slide"
             key={index}
             src={image.url}
-            alt={image.altText}
+            alt={`The photo shows ${placeTitle}`}
             style={{
               transform: `translateX(${-imgIndex * 100}%)`,
               transition: "0.8s",
