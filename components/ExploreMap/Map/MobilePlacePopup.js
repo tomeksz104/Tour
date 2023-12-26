@@ -24,8 +24,12 @@ const MobilePlacePopup = ({ place }) => {
             alt={place.title}
             width={16}
             height={9}
-            layout="responsive"
-            objectFit="cover"
+            sizes="100vw"
+            style={{
+              width: "100%",
+              height: "auto",
+              objectFit: "cover",
+            }}
           />
         </div>
         <div className="w-3/4 bg-white flex flex-col space-y-2 ">

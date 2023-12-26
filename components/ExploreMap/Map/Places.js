@@ -159,6 +159,12 @@ const Places = memo((props) => {
         .bindPopup(popupContent)
         .addTo(map);
 
+      if (props.interactiveMap === true) {
+        marker.on("popupopen", () => {
+          props.onOpenMarker(place);
+        });
+      }
+
       markers.push(marker);
     });
 

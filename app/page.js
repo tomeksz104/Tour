@@ -21,6 +21,10 @@ export default async function Home() {
             className="w-full"
             src="/home-icons/shape-left.svg"
             alt=""
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+            }}
           />
         </div>
         <div className="absolute -top-40 right-0 -z-10">
@@ -30,6 +34,10 @@ export default async function Home() {
             className="w-full"
             src="/home-icons/shape-right.svg"
             alt=""
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+            }}
           />
         </div>
         <div className="absolute z-10 hidden xl:block opacity-25 2xl:opacity-100 top-0 bottom-0 right-0 left-0">
@@ -39,6 +47,10 @@ export default async function Home() {
               height="75"
               src="/home-icons/rectangular-pattern-green.svg"
               alt=""
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+              }}
             />
           </span>
           <span className="animate-2 absolute left-28 bottom-52">
@@ -47,10 +59,23 @@ export default async function Home() {
               height="20"
               src="/home-icons/green-dot.svg"
               alt=""
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+              }}
             />
           </span>
           <span className="animate-3 absolute left-32 top-40">
-            <Image width="38" height="38" src="/home-icons/star.svg" alt="" />
+            <Image
+              width="38"
+              height="38"
+              src="/home-icons/star.svg"
+              alt=""
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+              }}
+            />
           </span>
           <span className="animate-2 absolute left-96 top-20">
             <Image
@@ -58,6 +83,10 @@ export default async function Home() {
               height="20"
               src="/home-icons/green-dot.svg"
               alt=""
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+              }}
             />
           </span>
           <span className="animate-3 absolute right-96 top-0">
@@ -66,10 +95,23 @@ export default async function Home() {
               height="75"
               src="/home-icons/rectangular-pattern-green.svg"
               alt=""
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+              }}
             />
           </span>
           <span className="animate-1 absolute right-52 top-60">
-            <Image width="38" height="38" src="/home-icons/star.svg" alt="" />
+            <Image
+              width="38"
+              height="38"
+              src="/home-icons/star.svg"
+              alt=""
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+              }}
+            />
           </span>
           <span className="animate-2 absolute right-1/3 bottom-20">
             <Image
@@ -77,6 +119,10 @@ export default async function Home() {
               height="75"
               src="/home-icons/rectangular-pattern-yellow.svg"
               alt=""
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+              }}
             />
           </span>
           <span className="animate-3 absolute right-16 bottom-32">
@@ -85,6 +131,10 @@ export default async function Home() {
               height="20"
               src="/home-icons/green-dot.svg"
               alt=""
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+              }}
             />
           </span>
         </div>
@@ -131,11 +181,15 @@ export default async function Home() {
               <Image
                 width={16}
                 height={9}
-                layout="responsive"
-                objectFit="cover"
                 className="w-full max-w-xl hidden lg:block"
                 src="/hero-image.png"
                 alt=""
+                sizes="100vw"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  objectFit: "cover",
+                }}
               />
             </div>
           </div>
@@ -180,6 +234,10 @@ export default async function Home() {
               className="m-auto md:w-5/12"
               loading="lazy"
               alt="Mobility illustration"
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+              }}
             />
           </div>
         </div>
@@ -194,6 +252,10 @@ export default async function Home() {
             height="125"
             className="mx-auto w-72"
             src="/sunrise.svg"
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+            }}
           />
           <h2 className="max-w-screen-md mx-auto mt-6 text-center text-gray-900 text-3xl lg:text-4xl 2xl:text-6xl font-bold">
             <span className="block">Ready to start </span>
@@ -205,6 +267,10 @@ export default async function Home() {
                   height="64"
                   className="absolute inset-0 transform translate-y-9 sm:translate-y-11 xl:translate-y-14"
                   src="/underline-simple-light-purple.svg"
+                  style={{
+                    maxWidth: "100%",
+                    height: "auto",
+                  }}
                 />
                 <span className="relative">your adventure?</span>
               </span>

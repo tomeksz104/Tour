@@ -7,10 +7,12 @@ const Logo = ({ classes, imgClasses }) => {
       <Image
         width={233}
         height={83}
-        objectFit="contain"
         className={imgClasses}
         src={"/logo.png"}
         alt="Tour logo"
+        style={{
+          objectFit: "contain",
+        }}
       />
     </Link>
   );

@@ -13,8 +13,11 @@ const PlacePopup = ({ place, router }) => {
           alt={place.title}
           width={16}
           height={9}
-          layout="responsive"
-          objectFit="cover"
+          sizes="100vw"
+          className="h-32 w-full"
+          style={{
+            objectFit: "cover",
+          }}
         />
       </div>
       <div className="py-2 px-3 relative">

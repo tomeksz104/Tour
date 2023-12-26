@@ -15,12 +15,14 @@ const SearchResult = ({ place }) => {
       <div className="flex items-center">
         <div className="relative h-8 w-8 overflow-hidden rounded">
           <Image
-            layout="fill"
-            objectFit="cover"
             className="h-full w-full object-cover"
             src={place.image}
             alt={place.title}
-          />
+            fill
+            sizes="100vw"
+            style={{
+              objectFit: "cover"
+            }} />
         </div>
         <Link
           href={`/place/${place._id}`}

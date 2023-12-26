@@ -47,11 +47,14 @@ const ExploreCategories = () => {
                 <Image
                   width={16}
                   height={9}
-                  layout="responsive"
-                  objectFit="cover"
                   src={categories_list[selectedCategory].imagePath}
                   alt=""
-                />
+                  sizes="100vw"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "cover"
+                  }} />
               </div>
             </div>
           </div>
