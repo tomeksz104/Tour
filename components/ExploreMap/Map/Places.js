@@ -11,6 +11,7 @@ import "node_modules/leaflet-canvas-markers/leaflet-canvas-markers.js";
 import { getIcon, getIconPath, getVisibleMarkers } from "@/utils/mapUtils";
 
 import PlacePopup from "./PlacePupup";
+import { useDebouncedCallback } from "use-debounce";
 
 const Places = memo((props) => {
   const router = useRouter();
@@ -65,13 +66,14 @@ const Places = memo((props) => {
     props.interactiveMap,
   ]);
 
+  // Using useDebouncedCallback to delay handleMoveEnd function
+  const handleMoveEnd = useDebouncedCallback(() => {
+    const newVisiblePlaces = getVisibleMarkers(map, placesToRender);
+    props.onChangeVisiblePlaces(newVisiblePlaces);
+  }, 500);
+
   // Map movement
   useEffect(() => {
-    const handleMoveEnd = () => {
-      const newVisiblePlaces = getVisibleMarkers(map, placesToRender);
-      props.onChangeVisiblePlaces(newVisiblePlaces);
-    };
-
     if (map && props.interactiveMap === true) {
       map.on("moveend", handleMoveEnd);
     }
