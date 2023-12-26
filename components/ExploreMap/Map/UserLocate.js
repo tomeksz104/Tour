@@ -14,10 +14,11 @@ const UserLocate = () => {
       .locate({
         position: "topright",
         strings: {
-        title: "Show me where I am, yo!",
-      },
-      icon: "leaflet-control-locate-location-icon",
-    })
+          title: "Show me where I am, yo!",
+        },
+        icon: "leaflet-control-locate-location-icon",
+        flyTo: true,
+      })
       .addTo(map);
 
     // return () => {
