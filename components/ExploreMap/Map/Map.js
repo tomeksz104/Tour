@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, lazy, useCallback, useState } from "react";
 import { ZoomControl } from "react-leaflet";
 
 import Sidebar from "../Sidebar/Sidebar";
 import MapWrapper from "../../MapWrapper/MapWrapper";
 import Places from "./Places";
 import UserLocate from "./UserLocate";
-import MobilePlacePopup from "./MobilePlacePopup";
 import ScrollableTabsSlider from "../ScrollableTabsSlider";
+
+const MobilePlacePopup = lazy(() => import("./MobilePlacePopup"));
 
 const Map = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -22,25 +23,25 @@ const Map = () => {
     setSelectedPlace(place);
   };
 
-  const handleChangeVisiblePlaces = (places) => {
+  const handleChangeVisiblePlaces = useCallback((places) => {
     setVisiblePlaces(places);
-  };
+  }, []);
 
-  const handleChangeCategory = (category) => {
+  const handleChangeCategory = useCallback((category) => {
     setSelectedCategories(category);
-  };
+  }, []);
 
-  const handleMarkerHover = (markerId) => {
+  const handleMarkerHover = useCallback((markerId) => {
     setHoveredMarkerId(markerId);
-  };
+  }, []);
 
-  const handleToggleWatchlist = () => {
+  const handleToggleWatchlist = useCallback(() => {
     setIsShowWatchlist((current) => !current);
-  };
+  }, []);
 
-  const handleChangeIsLoading = (state) => {
+  const handleChangeIsLoading = useCallback((state) => {
     setIsLoading(state);
-  };
+  }, []);
 
   return (
     <>
@@ -73,7 +74,11 @@ const Map = () => {
           />
         </MapWrapper>
         <div id="mobile-place-popup"></div>
-        {selectedPlace && <MobilePlacePopup place={selectedPlace} />}
+        {selectedPlace && (
+          <Suspense>
+            <MobilePlacePopup place={selectedPlace} />
+          </Suspense>
+        )}
       </div>
     </>
   );
