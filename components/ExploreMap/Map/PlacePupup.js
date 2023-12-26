@@ -1,10 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 
-const PlacePopup = ({ place, router }) => {
-  const handleShowPlaceDetails = () => {
-    router.push(`/place/${place._id}`);
-  };
-
+const PlacePopup = ({ place }) => {
   return (
     <div className="group rounded-3xl">
       <div className="relative overflow-hidden rounded-t-xl">
@@ -21,13 +18,13 @@ const PlacePopup = ({ place, router }) => {
         />
       </div>
       <div className="py-2 px-3 relative">
-        <button
-          onClick={handleShowPlaceDetails}
+        <Link
+          href={`/place/${place._id}`}
           className="text-md font-semibold hover:underline"
           style={{ color: "#000000" }}
         >
           {place.title}
-        </button>
+        </Link>
         <p className="pt-1 text-gray-600 hidden md:line-clamp-2">
           {place.description}
         </p>

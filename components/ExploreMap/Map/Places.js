@@ -142,7 +142,7 @@ const Places = memo((props) => {
       popupContent.style.width = "301px";
 
       const popupRoot = createRoot(popupContent);
-      popupRoot.render(<PlacePopup place={place} router={router} />);
+      popupRoot.render(<PlacePopup place={place} />);
 
       const marker = L.canvasMarker(
         [place.coordinates.lat, place.coordinates.lng],
