@@ -1,16 +1,13 @@
-import { getRandomPlaces } from "@/actions/getRandomPlaces";
-import Button from "@/components/Button";
-
-import CardSlider from "@/components/HomePage/CardSlider";
-import ExploreCategories from "@/components/HomePage/ExploreCategories";
-
+import { Fragment, Suspense, lazy } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment } from "react";
+
+import Button from "@/components/Button";
+import ExploreCategories from "@/components/HomePage/ExploreCategories";
+
+const RandomPlaces = lazy(() => import("@/components/HomePage/RandomPlaces"));
 
 export default async function Home() {
-  const randomPlaces = await getRandomPlaces(9);
-
   return (
     <Fragment>
       <section className="pb-20 2xl:pb-28 pt-10 2xl:pt-20 relative">
@@ -209,7 +206,10 @@ export default async function Home() {
           Are you ready for amazing adventures? Start your journey now!
         </p>
       </div> */}
-      <CardSlider places={randomPlaces} />
+      {/* <CardSlider places={randomPlaces} /> */}
+      <Suspense>
+        <RandomPlaces />
+      </Suspense>
 
       {/* Categories section */}
       <ExploreCategories />
