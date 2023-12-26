@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
 import Logo from "../Logo";
@@ -16,9 +15,8 @@ const navigationMenuItems = [
   { name: "Map", url: "/map" },
 ];
 
-const Navigation = () => {
+const Navigation = ({ session }) => {
   const currentRoute = usePathname();
-  const { data: session } = useSession();
   const [hideLogo, setHideLogo] = useState(false);
 
   const handleHideLogo = (value) => {

@@ -5,13 +5,13 @@ import SearchResultList from "./SearchResultsList";
 import useMediaQuery from "@/hooks/useMediaQuery";
 
 const SearchBar = ({ onHideLogo }) => {
+  const isMobile = useMediaQuery();
   const placesCtx = useContext(PlacesContext);
   const searchInputRef = useRef(null);
   const [searchWord, setSearchWord] = useState("");
   const [filteredPlaces, setFilteredPlaces] = useState([]);
   const [hideSuggestions, setHideSuggestions] = useState(true);
   const [isShowSearchBar, setIsShowSearchBar] = useState(false);
-  const isMobile = useMediaQuery();
 
   useEffect(() => {
     onHideLogo(hideSuggestions);
@@ -43,7 +43,7 @@ const SearchBar = ({ onHideLogo }) => {
       setIsShowSearchBar(false);
     }, 200);
   };
-
+  if (isMobile === null) return;
   return (
     <>
       {isShowSearchBar || isMobile ? (

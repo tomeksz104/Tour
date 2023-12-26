@@ -11,6 +11,8 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 import "./globals.css";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 export const metadata = {
   title: "Excursionists",
@@ -18,6 +20,8 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       <body className={`${inter.className}`}>
@@ -28,7 +32,7 @@ export default async function RootLayout({ children }) {
               <ConfirmContextProvider>
                 <ToastContextProvider>
                   <div className="flex h-screen flex-col">
-                    <Navigation />
+                    <Navigation session={session} />
                     {children}
                   </div>
                   <ConfirmDialog />
