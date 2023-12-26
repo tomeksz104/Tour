@@ -48,13 +48,14 @@ const ExploreCategories = () => {
                   width={16}
                   height={9}
                   src={categories_list[selectedCategory].imagePath}
-                  alt=""
+                  alt="Photos illustrating the category"
                   sizes="100vw"
                   style={{
                     width: "100%",
                     height: "auto",
-                    objectFit: "cover"
-                  }} />
+                    objectFit: "cover",
+                  }}
+                />
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import WatchlistButton from "../WatchlistButton";
+import Image from "next/image";
 
 const Card = ({ place }) => {
   return (
@@ -10,17 +11,29 @@ const Card = ({ place }) => {
         <WatchlistButton id={place._id} />
       </div>
 
-      <Link href={`/place/${place._id}`}>
-        <div
+      <Link
+        href={`/place/${place._id}`}
+        className="relative block w-full h-56 mb-4"
+        aria-label={`Go to "${place.title}" details`}
+      >
+        {/*  <div
           className="w-full h-56 bg-cover bg-center relative rounded-lg mb-4 flex items-end justify-center"
           style={{
             backgroundImage: `url(${place.image})`,
           }}
-        ></div>
+        ></div> */}
+
+        <Image
+          src={place.image}
+          className="w-full h-56 rounded-lg"
+          alt={place.title}
+          fill
+        />
       </Link>
 
       <Link
         href={`/place/${place._id}`}
+        aria-label={`Go to "${place.title}" details`}
         className="text-xl font-medium text-gray-900 group-hover:text-green-500"
       >
         {place.title}

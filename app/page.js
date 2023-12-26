@@ -13,6 +13,7 @@ export default async function Home() {
       <section className="pb-20 2xl:pb-28 pt-10 2xl:pt-20 relative">
         <div className="absolute -bottom-52 left-0 -z-10">
           <Image
+            priority
             width="301"
             height="691"
             className="w-full"
@@ -26,6 +27,7 @@ export default async function Home() {
         </div>
         <div className="absolute -top-40 right-0 -z-10">
           <Image
+            priority
             width="1262"
             height="1356"
             className="w-full"
@@ -138,9 +140,6 @@ export default async function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
           <div className="grid items-center grid-cols-1 lg:grid-cols-5 gap-8">
             <div className="hero-content xl:pr-20 lg:col-span-3">
-              <span className="-rotate-2	 inline-flex items-center justify-center bg-green-500 text-green-900 text-xs lg:text-base font-medium rounded-full transition-all duration-500 px-4 py-2 mb-2">
-                BIGGEST INTERACTIVE MAP
-              </span>
               <h2 className="text-3xl lg:text-4xl 2xl:text-6xl leading-tight font-bold text-gray-900">
                 Find the <span className="bg-yellow-100">BEST</span> Place
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-green-600 inline-block">

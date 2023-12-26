@@ -93,6 +93,7 @@ const SearchBar = ({ onHideLogo }) => {
             }}
             type="button"
             className="text-gray-400 hover:ring-gray-200 inline-flex h-9 w-9 items-center justify-center rounded-full ring-1 ring-transparent transition-all duration-300 hover:ring-offset-4"
+            aria-label="Go to search"
           >
             <span className="border-gray-200 flex h-9 w-9 items-center justify-center rounded-full border bg-white">
               <svg
