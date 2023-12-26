@@ -17,6 +17,7 @@ const WatchlistButton = ({ id }) => {
     <CircleButton
       onClick={handleToggleWatchlistItem}
       className="hover:bg-red-50"
+      ariaLabel="Toggle Watchlist"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
