@@ -202,32 +202,32 @@ const Places = memo((props) => {
     markersRef.current = markers;
   }, [map, placesToRender]);
 
-  if (props.hoveredMarkerId) {
+  if (props.hoveredPlace) {
     const animatedCircleIcon = L.divIcon({
       html: `<div class="dot med">
       <span class="point">
         <span class="pulse"></span>
       </span>
     </div>`,
-      iconSize: [15, 18],
+      iconSize: [12, 12],
     });
 
     return (
       <>
         <Marker
           position={[
-            props.hoveredMarkerId.coordinates.lat,
-            props.hoveredMarkerId.coordinates.lng,
+            props.hoveredPlace.coordinates.lat,
+            props.hoveredPlace.coordinates.lng,
           ]}
           icon={animatedCircleIcon}
           key={1}
         ></Marker>
         <Marker
           position={[
-            props.hoveredMarkerId.coordinates.lat,
-            props.hoveredMarkerId.coordinates.lng,
+            props.hoveredPlace.coordinates.lat,
+            props.hoveredPlace.coordinates.lng,
           ]}
-          icon={getIconPath(props.hoveredMarkerId.category)}
+          icon={getIcon(props.hoveredPlace.category)}
           key={2}
         ></Marker>
       </>

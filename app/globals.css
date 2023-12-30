@@ -253,9 +253,9 @@ body {
   border: 3px solid #172554;
   display: block;
   height: 64px;
-  left: -26px;
+  left: -27px;
   position: absolute;
-  top: -26px;
+  top: -28px;
   width: 64px;
   z-index: -1;
   -webkit-animation: circlePulse 1.5s ease-in-out infinite;

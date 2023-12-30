@@ -14,7 +14,7 @@ const MobilePlacePopup = lazy(() => import("./MobilePlacePopup"));
 const Map = () => {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [visiblePlaces, setVisiblePlaces] = useState([]);
-  const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
+  const [hoveredPlace, setHoveredPlace] = useState(null);
   const [isShowWatchlist, setIsShowWatchlist] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,8 +27,8 @@ const Map = () => {
     setIsLoading(false);
   }, []);
 
-  const handleMarkerHover = useCallback((markerId) => {
-    setHoveredMarkerId(markerId);
+  const handleMarkerHover = useCallback((place) => {
+    setHoveredPlace(place);
   }, []);
 
   const handleToggleWatchlist = useCallback(() => {
@@ -56,7 +56,7 @@ const Map = () => {
 
         <Suspense>
           <Places
-            hoveredMarkerId={hoveredMarkerId}
+            hoveredPlace={hoveredPlace}
             onOpenMarker={handleOpenMobileMarker}
             onChangeVisiblePlaces={handleChangeVisiblePlaces}
             interactiveMap={true}

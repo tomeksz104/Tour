@@ -17,25 +17,9 @@ const Sidebar = memo(
     const [showSidebar, setShowSidebar] = useState(
       window.matchMedia(mobileMediaQuery).matches
     );
-    const [hoverTimeout, setHoverTimeout] = useState(null);
 
     const handleToggleSidebar = () => {
       setShowSidebar((current) => !current);
-    };
-
-    const handleMouseEnter = (markerId) => {
-      clearTimeout(hoverTimeout);
-
-      const timeoutId = setTimeout(() => {
-        onMarkerHover(markerId);
-      }, 1000);
-
-      setHoverTimeout(timeoutId);
-    };
-
-    const handleMouseLeave = () => {
-      clearTimeout(hoverTimeout);
-      onMarkerHover(null);
     };
 
     useEffect(() => {
@@ -174,8 +158,7 @@ const Sidebar = memo(
           >
             <PlacesList
               places={visiblePlaces}
-              onMouseLeave={handleMouseLeave}
-              onMouseEnter={() => handleMouseEnter()}
+              onMarkerHover={onMarkerHover}
               isLoading={isLoading}
             />
           </div>
