@@ -6,12 +6,9 @@ import { Marker, useMap } from "react-leaflet";
 import L, { Icon } from "leaflet";
 
 import MapWrapper from "../MapWrapper/MapWrapper";
-import Places from "../ExploreMap/Map/Places";
-import { getIcon } from "@/utils/mapUtils";
+import { getDefaultIcon, getIcon } from "@/utils/mapUtils";
 
 const coordinatesOfPoland = [52.10650519075632, 19.281005859375004];
-
-const defaultIcon = new Icon.Default();
 
 const ShowMarkers = ({ onMarkerPositionMove, marker, category }) => {
   const map = useMap();
@@ -22,7 +19,7 @@ const ShowMarkers = ({ onMarkerPositionMove, marker, category }) => {
   if (category !== null && category) {
     icon = getIcon(category);
   } else {
-    icon = defaultIcon;
+    icon = getDefaultIcon();
   }
 
   // useEffect(() => {
