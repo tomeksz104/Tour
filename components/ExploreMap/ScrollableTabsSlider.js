@@ -1,14 +1,22 @@
-import React, { useState, useRef, useEffect } from "react";
+"use client";
+
+import React, { useState, useRef } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { categories_list } from "@/utils/categories";
 
-const ScrollableTabsSlider = ({ onChangeCategory }) => {
+const ScrollableTabsSlider = () => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
   const tabsRef = useRef(null);
-  const [activeTab, setActiveTab] = useState([]);
   const [isAtLeftEdge, setIsAtLeftEdge] = useState(true);
   const [isAtRightEdge, setIsAtRightEdge] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
+
+  const activeCategories = searchParams.getAll("category");
 
   const handleCheckSides = () => {
     const scrollContainer = tabsRef.current;
@@ -54,18 +62,36 @@ const ScrollableTabsSlider = ({ onChangeCategory }) => {
   };
 
   const handleTabClick = (category) => {
-    if (activeTab.includes(category)) {
-      setActiveTab((prevActiveTab) =>
-        prevActiveTab.filter((item) => item !== category)
-      );
-    } else {
-      setActiveTab((prevActiveTab) => [...prevActiveTab, category]);
+    if (!router) {
+      return;
     }
-  };
 
-  useEffect(() => {
-    onChangeCategory(activeTab);
-  }, [activeTab]);
+    // Create a new set of parameters based on the current URL parameters
+    const currentParams = new URLSearchParams(
+      Array.from(searchParams.entries())
+    );
+
+    if (activeCategories.includes(category)) {
+      // If the selected category already exists, delete it
+      const filteredCategories = activeCategories.filter(
+        (cat) => cat !== category
+      );
+
+      // Set new 'category' parameters
+      currentParams.delete("category");
+      filteredCategories.forEach((cat) => {
+        currentParams.append("category", cat);
+      });
+    } else {
+      // If the selected category does not exist, add it
+      currentParams.append("category", category);
+    }
+
+    // Update URL with new parameters
+    router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
+      shallow: true,
+    });
+  };
 
   return (
     <div
@@ -108,7 +134,7 @@ const ScrollableTabsSlider = ({ onChangeCategory }) => {
               className={`text-xs no-underline inline-block rounded-full select-none whitespace-nowrap px-6 py-1 transition duration-300 ${
                 category.color[0]
               } ${
-                activeTab.includes(category.title)
+                activeCategories.includes(category.title)
                   ? `${category.color[2]} ${category.color[1]}`
                   : "bg-slate-100"
               }`}

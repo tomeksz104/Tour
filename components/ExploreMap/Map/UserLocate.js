@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { useMap } from "react-leaflet";
 
 import Locate from "leaflet.locatecontrol";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 import * as L from "leaflet";
 
-const UserLocate = () => {
+const UserLocate = memo(() => {
   const map = useMap();
   let locateControl;
 
@@ -29,6 +29,6 @@ const UserLocate = () => {
   }, [map]);
 
   return null;
-};
+});
 
 export default UserLocate;

@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useContext, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createRoot } from "react-dom/client";
 import { Marker, useMap } from "react-leaflet";
 import { PlacesContext } from "@/contexts/PlacesContext";
@@ -15,21 +15,22 @@ import { useDebouncedCallback } from "use-debounce";
 
 const Places = memo((props) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const map = useMap();
   const placesCtx = useContext(PlacesContext);
   const watchlistCtx = useContext(WatchlistContext);
-  const searchParams = useSearchParams();
   const [placesToRender, setPlacesToRender] = useState([]);
 
-  const ciLayerRef = useRef(null);
   const markersRef = useRef([]);
 
   const idToZoom = searchParams.get("id");
+  const selectedCategories = searchParams.getAll("category");
+  const isLoadingParams = searchParams.getAll("loading");
 
   // Filtering places
   useEffect(() => {
     if (placesCtx.places.length > 0) {
-      if (props.interactiveMap === true) props.isLoading(true);
       let newPlacesToRender = placesCtx.places;
 
       if (map && props?.markerToRemove) {
@@ -44,9 +45,9 @@ const Places = memo((props) => {
         );
       }
 
-      if (props.selectedCategories?.length > 0) {
+      if (selectedCategories.length > 0) {
         newPlacesToRender = newPlacesToRender.filter((place) =>
-          props.selectedCategories.includes(place.category)
+          selectedCategories.includes(place.category)
         );
       }
 
@@ -54,11 +55,10 @@ const Places = memo((props) => {
       const newVisiblePlaces = getVisibleMarkers(map, newPlacesToRender);
       if (props.interactiveMap === true) {
         props.onChangeVisiblePlaces(newVisiblePlaces);
-        props.isLoading(false);
       }
     }
   }, [
-    props.selectedCategories,
+    searchParams,
     props.isShowWatchlist,
     placesCtx.places,
     watchlistCtx.watchlist,
@@ -68,19 +68,44 @@ const Places = memo((props) => {
 
   // Using useDebouncedCallback to delay handleMoveEnd function
   const handleMoveEnd = useDebouncedCallback(() => {
+    const currentParams = new URLSearchParams(
+      Array.from(searchParams.entries())
+    );
+
     const newVisiblePlaces = getVisibleMarkers(map, placesToRender);
     props.onChangeVisiblePlaces(newVisiblePlaces);
-  }, 500);
+
+    currentParams.delete("loading");
+
+    router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
+      shallow: true,
+    });
+  }, 1000);
+
+  const handleMoveStart = useDebouncedCallback(() => {
+    if (isLoadingParams.length > 0) return;
+
+    const currentParams = new URLSearchParams(
+      Array.from(searchParams.entries())
+    );
+    currentParams.append("loading", "true");
+
+    router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
+      shallow: true,
+    });
+  }, 100);
 
   // Map movement
   useEffect(() => {
     if (map && props.interactiveMap === true) {
       map.on("moveend", handleMoveEnd);
+      map.on("movestart", handleMoveStart);
     }
 
     return () => {
       if (map && props.interactiveMap === true) {
         map.off("moveend", handleMoveEnd);
+        map.off("movestart", handleMoveStart);
       }
     };
   }, [placesToRender, map, props.interactiveMap]);
@@ -95,7 +120,14 @@ const Places = memo((props) => {
       if (placeToFlyTo) {
         handleZoomToPlace(placeToFlyTo);
 
-        router.replace("/map", undefined, { shallow: true });
+        const currentParams = new URLSearchParams(
+          Array.from(searchParams.entries())
+        );
+        currentParams.delete("id");
+
+        router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
+          shallow: true,
+        });
       }
     }
   }, [idToZoom, placesToRender]);
@@ -141,106 +173,34 @@ const Places = memo((props) => {
       const popupContent = document.createElement("div");
       popupContent.style.width = "301px";
 
-      const popupRoot = createRoot(popupContent);
-      popupRoot.render(<PlacePopup place={place} />);
-
       const marker = L.canvasMarker(
         [place.coordinates.lat, place.coordinates.lng],
         {
           radius: 0,
           img: {
             url: getIconPath(place.category), //image link
-            size: [18, 23], //image size ( default [40, 40] )
-            rotate: 0, //image base rotate ( default 0 )
-            offset: { x: 0, y: 0 }, //image offset ( default { x: 0, y: 0 } )
+            size: [18, 23], //image size
+            rotate: 0, //image base rotate
+            offset: { x: 0, y: 0 }, //image offset
           },
         }
-      )
-        .bindPopup(popupContent)
-        .addTo(map);
+      ).addTo(map);
 
-      if (props.interactiveMap === true) {
-        marker.on("popupopen", () => {
-          props.onOpenMarker(place);
-        });
-      }
+      marker
+        .on("popupopen", () => {
+          const popupRoot = createRoot(popupContent);
+          popupRoot.render(<PlacePopup place={place} />);
+          if (props.interactiveMap === true) {
+            props.onOpenMarker(place);
+          }
+        })
+        .bindPopup(popupContent);
 
       markers.push(marker);
     });
 
     markersRef.current = markers;
   }, [map, placesToRender]);
-
-  // useEffect(() => {
-  //   if (!map) return;
-
-  //   if (
-  //     placesToRender.length === 0 &&
-  //     markersRef.current.length > 0 &&
-  //     ciLayerRef.current !== null
-  //   ) {
-  //     markersRef.current.forEach((marker) => {
-  //       ciLayerRef.current.removeMarker(marker);
-  //     });
-  //     ciLayerRef.current.redraw();
-  //     return;
-  //   }
-
-  //   if (placesToRender.length === 0) return;
-
-  //   if (!ciLayerRef.current) {
-  //     ciLayerRef.current = L.canvasIconLayer({}).addTo(map);
-  //   } else {
-  //     markersRef.current.forEach((marker) => {
-  //       ciLayerRef.current.removeMarker(marker);
-  //     });
-  //     ciLayerRef.current.redraw();
-  //   }
-
-  //   const canvasLayer = document.querySelector(".leaflet-canvas-icon-layer");
-
-  //   const hideCanvasOnZoomStart = () => {
-  //     canvasLayer.classList.add("transition-[opacity]");
-  //     canvasLayer.classList.add("ease-in-out");
-  //     canvasLayer.classList.add("duration-500");
-
-  //     canvasLayer.classList.remove("opacity-100");
-  //     canvasLayer.classList.add("opacity-50");
-  //   };
-
-  //   const showCanvasOnZoomEnd = () => {
-  //     canvasLayer.classList.remove("opacity-50");
-  //     canvasLayer.classList.add("opacity-100");
-  //   };
-
-  // map.on("zoomstart", hideCanvasOnZoomStart);
-  // map.on("zoomend", showCanvasOnZoomEnd);
-
-  //   const markers = [];
-
-  //   placesToRender.forEach((place) => {
-  //     const popupContent = document.createElement("div");
-  //     popupContent.style.width = "301px";
-
-  //     const popupRoot = createRoot(popupContent);
-  //     popupRoot.render(<PlacePopup place={place} router={router} />);
-
-  //     const marker = L.marker([place.coordinates.lat, place.coordinates.lng], {
-  //       icon: getIcon(place.category),
-  //     }).bindPopup(popupContent);
-
-  //     if (props.interactiveMap === true) {
-  //       marker.on("popupopen", () => {
-  //         props.onOpenMarker(place);
-  //       });
-  //     }
-
-  //     markers.push(marker);
-  //   });
-
-  //   markersRef.current = markers;
-  //   ciLayerRef.current.addLayers(markers);
-  // }, [map, placesToRender]);
 
   if (props.hoveredMarkerId) {
     const animatedCircleIcon = L.divIcon({
@@ -267,7 +227,7 @@ const Places = memo((props) => {
             props.hoveredMarkerId.coordinates.lat,
             props.hoveredMarkerId.coordinates.lng,
           ]}
-          icon={getIcon(props.hoveredMarkerId.category)}
+          icon={getIconPath(props.hoveredMarkerId.category)}
           key={2}
         ></Marker>
       </>
