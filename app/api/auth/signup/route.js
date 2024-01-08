@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
-import User from "@/models/user";
-import dbConnect from "@/libs/dbConnect";
+import { db } from "@/lib/db";
+
+import { hash } from "bcryptjs";
 
 export const POST = async (request) => {
   const { email, password, confirmPassword } = await request.json();
@@ -18,9 +19,9 @@ export const POST = async (request) => {
   }
 
   try {
-    await dbConnect();
-
-    const existingUser = await User.findOne({ email });
+    const existingUser = await db.user.findUnique({
+      where: { email },
+    });
 
     if (existingUser) {
       return new NextResponse(
@@ -32,8 +33,14 @@ export const POST = async (request) => {
         }
       );
     }
+    const hashed_password = await hash(password, 12);
 
-    const newUser = await User.create({ email, password });
+    const newUser = await db.user.create({
+      data: {
+        email,
+        password: hashed_password,
+      },
+    });
 
     return new Response(JSON.stringify(newUser), { status: 201 });
   } catch (error) {

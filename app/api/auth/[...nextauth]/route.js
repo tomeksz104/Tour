@@ -1,14 +1,14 @@
 import NextAuth from "next-auth";
-import { NextResponse } from "next/server";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { compare } from "bcryptjs";
 
-import User from "@/models/user";
-import dbConnect from "@/libs/dbConnect";
+import { db } from "@/lib/db";
 
 export const authOptions = {
   // Enable JSON Web Tokens since we will not store sessions in our DB
   session: {
-    jwt: true,
+    strategy: "jwt",
   },
   // Here we add our login providers - this is where you could add Google or Github SSO as well
   providers: [
@@ -25,58 +25,47 @@ export const authOptions = {
       },
       // Authorize callback is ran upon calling the signin function
       authorize: async (credentials) => {
-        dbConnect();
-
-        // Try to find the user and also return the password field
-        const user = await User.findOne({ email: credentials.email }).select(
-          "+password"
-        );
+        const user = await db.user.findUnique({
+          where: { email: credentials.email },
+          include: {
+            socialMedia: true,
+          },
+        });
 
         if (!user) {
           throw new Error("No user with a matching email was found.");
         }
 
-        // Use the comparePassword method we defined in our user.js Model file to authenticate
-        const pwValid = await user.comparePassword(credentials.password);
+        const pwValid = await compare(credentials.password, user.password);
 
         if (!pwValid) {
           throw new Error("Your password is invalid");
         }
 
-        return user;
+        const {
+          password,
+          accounts,
+          sessions,
+          places,
+          Comment,
+          Post,
+          ...restOfUser
+        } = user;
+        return restOfUser;
       },
     }),
   ],
   // All of this is just to add user information to be accessible for our app in the token/session
   callbacks: {
-    // We can pass in additional information from the user document MongoDB returns
-    // This could be avatars, role, display name, etc...
     async jwt({ token, user, trigger, session }) {
       if (trigger === "update") {
         return { ...session, ...session.user };
       }
       if (user) {
-        token.user = {
-          _id: user._id,
-          email: user.email,
-          role: user.role,
-          username: user.username,
-          image: user.image,
-          facebook: user.facebook,
-          instagram: user.instagram,
-          twitter: user.twitter,
-          youtube: user.youtube,
-        };
+        token.user = user;
       }
       return token;
     },
-    // If we want to access our extra user info from sessions we have to pass it the token here to get them in sync:
-    // session: async ({ session, token }) => {
-    //   if (token) {
-    //     session.user = token.user;
-    //   }
-    //   return session;
-    // },
     session: async ({ session, token }) => {
       if (token) {
         session.user = {
@@ -90,6 +79,7 @@ export const authOptions = {
   pages: {
     signIn: "/signin",
   },
+  adapter: PrismaAdapter(db),
 };
 
 const handler = NextAuth(authOptions);
