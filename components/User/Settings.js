@@ -13,10 +13,18 @@ import FacebookIcon from "@/public/facebook.svg";
 import InstagramIcon from "@/public/instagram.svg";
 import TwitterIcon from "@/public/twitter.svg";
 import YoutubeIcon from "@/public/youtube.svg";
+import { updateSocialMediaLinks } from "@/utils/socialMediaHelper";
+
+const icons = {
+  Facebook: <FacebookIcon className="w-4 h-4" />,
+  Instagram: <InstagramIcon className="w-4 h-4" />,
+  Twitter: <TwitterIcon className="w-4 h-4" />,
+  YouTube: <YoutubeIcon className="w-4 h-4" />,
+};
 
 const tabs = ["profile", "socialmedia", "password"];
 
-const Settings = () => {
+const Settings = ({ socialMediaPlatforms }) => {
   const {
     data: session,
     status,
@@ -28,23 +36,35 @@ const Settings = () => {
   const [error, setError] = useState(false);
   const [tab, setTab] = useState(tabs[0]);
   const [username, setUsername] = useState("");
-  const [facebook, setFacebook] = useState("");
-  const [instagram, setInstagram] = useState("");
-  const [twitter, setTwitter] = useState("");
-  const [youtube, setYoutube] = useState("");
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [aboutme, setAboutme] = useState("");
+
+  const [socialMediaLinks, setSocialMediaLinks] = useState({});
+
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassowrd, setConfirmNewPassword] = useState("");
 
   useEffect(() => {
     if (status === "authenticated") {
+      if (session.user.socialMedia && session.user.socialMedia.length > 0) {
+        const updatedLinks = {};
+
+        session.user.socialMedia.forEach((media) => {
+          updatedLinks[media.platformId] = media.link;
+        });
+
+        setSocialMediaLinks(updatedLinks);
+      }
+
       setUsername(session?.user?.username);
-      setFacebook(session?.user?.facebook);
-      setInstagram(session?.user?.instagram);
-      setTwitter(session?.user?.twitter);
-      setYoutube(session?.user?.youtube);
+      setFirstName(session?.user?.firstName);
+      setLastName(session?.user?.lastName);
+      setAboutme(session?.user?.aboutme);
     }
-  }, [status]);
+  }, [session, status]);
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -58,14 +78,14 @@ const Settings = () => {
         requestBody = {
           userId: session.user._id,
           username: username,
+          firstName: firstName,
+          lastName: lastName,
+          aboutme: aboutme,
         };
       } else if (tab === tabs[1]) {
         requestBody = {
           userId: session.user._id,
-          facebook: facebook,
-          instagram: instagram,
-          twitter: twitter,
-          youtube: youtube,
+          socialMediaLinks: socialMediaLinks,
         };
       } else if (tab === tabs[2]) {
         requestBody = {
@@ -85,10 +105,19 @@ const Settings = () => {
       });
 
       if (response.ok) {
+        let socialMedia = {};
+        if (Object.keys(socialMediaLinks).length > 0) {
+          socialMedia = updateSocialMediaLinks(
+            session?.user?.socialMedia,
+            socialMediaLinks
+          );
+        }
+
         await update({
           ...session,
-          user: { ...session?.user, ...requestBody },
+          user: { ...session?.user, ...requestBody, socialMedia },
         });
+
         const message = await response.json();
         toast.success(message);
       } else {
@@ -103,6 +132,13 @@ const Settings = () => {
   const handleChangeTab = (tab) => {
     setError(false);
     setTab(tab);
+  };
+
+  const handleSocialMediaChange = (platformId, newLink) => {
+    setSocialMediaLinks((prevLinks) => ({
+      ...prevLinks,
+      [platformId]: newLink,
+    }));
   };
 
   return (
@@ -177,15 +213,6 @@ const Settings = () => {
                 {tab === tabs[0] && (
                   <>
                     <div className="space-y-1">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={session?.user.email ?? ""}
-                        disabled
-                      />
-                    </div>
-                    <div className="space-y-1">
                       <Label htmlFor="username">Username</Label>
                       <Input
                         id="username"
@@ -195,56 +222,69 @@ const Settings = () => {
                         placeholder="username"
                       />
                     </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={session?.user.email ?? ""}
+                        disabled
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="firstname">First Name</Label>
+                      <Input
+                        id="firstname"
+                        type="text"
+                        value={firstName || ""}
+                        onChange={(event) => setFirstName(event.target.value)}
+                        placeholder="firstname"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="lastname">Last Name</Label>
+                      <Input
+                        id="lastname"
+                        type="text"
+                        value={lastName || ""}
+                        onChange={(event) => setLastName(event.target.value)}
+                        placeholder="lastname"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="aboutme">About Me</Label>
+                      <Input
+                        id="aboutme"
+                        type="text"
+                        value={aboutme || ""}
+                        onChange={(event) => setAboutme(event.target.value)}
+                        placeholder="aboutme"
+                      />
+                    </div>
                   </>
                 )}
 
                 {/* Social Media Tab */}
                 {tab === tabs[1] && (
                   <>
-                    <div className="flex flex-col gap-1">
-                      <Label htmlFor="facebook">Facebook</Label>
-                      <Input
-                        id="facebook"
-                        type="text"
-                        value={facebook}
-                        onChange={(event) => setFacebook(event.target.value)}
-                        icon={<FacebookIcon className="w-4 h-4" />}
-                        placeholder="https://www.facebook.com/yourname"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <Label htmlFor="instagram">Instagram</Label>
-                      <Input
-                        id="instragram"
-                        type="text"
-                        value={instagram}
-                        onChange={(event) => setInstagram(event.target.value)}
-                        icon={<InstagramIcon className="w-4 h-4" />}
-                        placeholder="https://instagram.com/yourname"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <Label htmlFor="twitter">Twitter</Label>
-                      <Input
-                        id="twitter"
-                        type="text"
-                        value={twitter}
-                        onChange={(event) => setTwitter(event.target.value)}
-                        icon={<TwitterIcon className="w-4 h-4" />}
-                        placeholder="https://twitter.com/yourname"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <Label htmlFor="youtube">Twitter</Label>
-                      <Input
-                        id="youtube"
-                        type="text"
-                        value={youtube}
-                        onChange={(event) => setYoutube(event.target.value)}
-                        icon={<YoutubeIcon className="w-4 h-4" />}
-                        placeholder="https://www.youtube.com/channel/yourname"
-                      />
-                    </div>
+                    {socialMediaPlatforms.map((platform) => (
+                      <div key={platform.id} className="flex flex-col gap-1">
+                        <Label htmlFor={platform.name}>{platform.name}</Label>
+                        <Input
+                          id={platform.name}
+                          type="text"
+                          value={socialMediaLinks[platform.id] || ""}
+                          onChange={(event) =>
+                            handleSocialMediaChange(
+                              platform.id,
+                              event.target.value
+                            )
+                          }
+                          icon={icons[platform.name]}
+                          placeholder="https://www.facebook.com/yourname"
+                        />
+                      </div>
+                    ))}
                   </>
                 )}
 

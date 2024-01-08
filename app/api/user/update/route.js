@@ -1,9 +1,11 @@
-import User from "@/models/user";
-import dbConnect from "@/libs/dbConnect";
 import { NextResponse } from "next/server";
 
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+import { db } from "@/lib/db";
+
+import { hash, compare } from "bcryptjs";
 
 const tabs = ["profile", "socialmedia", "password"];
 
@@ -24,95 +26,111 @@ export const PATCH = async (request, response) => {
   }
 
   try {
-    await dbConnect();
-
-    const existingUser = await User.findById(requestBody.userId);
-
-    if (!existingUser) {
-      return new Response("User not found", { status: 404 });
-    }
-
     switch (tab) {
       case tabs[0]:
-        existingUser.username = requestBody.username;
+        await db.user.update({
+          where: { id: session.user.id },
+          data: {
+            username: requestBody.username,
+            firstName: requestBody.firstName,
+            lastName: requestBody.lastName,
+            aboutme: requestBody.aboutme,
+          },
+        });
+
         break;
       case tabs[1]:
-        existingUser.facebook = requestBody.facebook;
-        existingUser.instagram = requestBody.instagram;
-        existingUser.twitter = requestBody.twitter;
-        existingUser.youtube = requestBody.youtube;
+        const socialMediaLinks = requestBody.socialMediaLinks;
+
+        for (const platformId in socialMediaLinks) {
+          const link = socialMediaLinks[platformId];
+          const platformIdNumber = parseInt(platformId);
+
+          if (link) {
+            await db.userSocialMedia.upsert({
+              where: {
+                userId_platformId: {
+                  userId: session.user.id,
+                  platformId: platformIdNumber,
+                },
+              },
+              update: {
+                link: link,
+              },
+              create: {
+                userId: session.user.id,
+                platformId: platformIdNumber,
+                link: link,
+              },
+            });
+          } else {
+            await db.userSocialMedia
+              .delete({
+                where: {
+                  userId_platformId: {
+                    userId: session.user.id,
+                    platformId: platformIdNumber,
+                  },
+                },
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          }
+        }
+
         break;
       case tabs[2]:
-        const oldPassword = requestBody.oldPassword;
-        const newPassword = requestBody.newPassword;
-        const confirmNewPassword = requestBody.confirmNewPassword;
+        const { oldPassword, newPassword, confirmNewPassword } = requestBody;
 
-        const isPasswordCorrect = await existingUser.comparePassword(
-          oldPassword
-        );
+        if (newPassword !== confirmNewPassword) {
+          return new NextResponse(
+            JSON.stringify({
+              error: "Password and confirm password do not match",
+            }),
+            { status: 400 }
+          );
+        }
 
+        const user = await db.user.findUnique({
+          where: { id: session.user.id },
+        });
+
+        if (!user) {
+          console.log("user not found");
+          return new NextResponse(
+            JSON.stringify({
+              error: "User not found",
+            }),
+            { status: 404 }
+          );
+        }
+
+        const isPasswordCorrect = await compare(oldPassword, user.password);
         if (!isPasswordCorrect) {
-          // return new Response("Incorrect old password", { status: 400 });
           return new NextResponse(
             JSON.stringify({
               error: "Incorrect old password",
             }),
-            {
-              status: 400,
-            }
+            { status: 400 }
           );
         }
 
-        if (newPassword !== confirmNewPassword) {
-          return new Response("Password and confirm password do not match", {
-            status: 400,
-          });
-        }
+        const hashedPassword = await hash(newPassword, 12);
 
-        existingUser.password = newPassword;
+        await db.user.update({
+          where: { id: session.user.id },
+          data: { password: hashedPassword },
+        });
+
         break;
     }
-
-    await existingUser.save();
 
     return new Response(JSON.stringify("Successfully updated the user"), {
       status: 201,
     });
-    // return response
-    //   .status(200)
-    //   .json({ message: "Successfully updated the user" });
   } catch (error) {
-    return new Response("Error Updating Prompt", { status: 500 });
+    console.log(error);
+    return new Response("Error Updating User", { status: 500 });
   }
 };
-
-// import User from "@/models/user";
-// import dbConnect from "@/utils/dbConnect";
-
-// export default async (req, res) => {
-//   const { userId, email, name } = req.body;
-
-//   await dbConnect();
-
-//   try {
-//     const updatedUser = await User.findByIdAndUpdate(
-//       { _id: userId },
-//       { email, name, name },
-//       { new: true }
-//     );
-
-//     if (!updatedUser) {
-//       return res.status(404).json({
-//         error: { global: "User not found" },
-//       });
-//     } else {
-//       console.log("SIEMA");
-//     }
-
-//     return res.status(200).json(updatedUser);
-//   } catch (error) {
-//     return res.status(500).json({
-//       error: { global: "Failed to update user" },
-//     });
-//   }
-// };
