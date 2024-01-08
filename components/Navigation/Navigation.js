@@ -9,13 +9,15 @@ import SearchBar from "../SearchBar/SearchBar";
 import UserMenu from "./UserMenu";
 
 import "./Navigation.css";
+import { useSession } from "next-auth/react";
 
 const navigationMenuItems = [
   { name: "Home", url: "/" },
   { name: "Map", url: "/map" },
 ];
 
-const Navigation = ({ session }) => {
+const Navigation = () => {
+  const { data: session } = useSession();
   const currentRoute = usePathname();
   const [hideLogo, setHideLogo] = useState(false);
 

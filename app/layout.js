@@ -11,20 +11,16 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 import "./globals.css";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
 
 export const metadata = {
-  title: "Excursionists",
+  title: "Tour",
   description: "Find unique places to visit.",
 };
 
 export default async function RootLayout({ children }) {
-  const session = await getServerSession(authOptions);
-
   return (
     <html lang="en">
-      <body className={`${inter.className}`}>
+      <body className={`${inter.className} bg-gray-100`}>
         {/* <body className={`${inter.className} m-auto min-h-screen flex flex-col`}> */}
         <Provider>
           <WatchlistContextProvider>
@@ -32,7 +28,7 @@ export default async function RootLayout({ children }) {
               <ConfirmContextProvider>
                 <ToastContextProvider>
                   <div className="flex h-screen flex-col">
-                    <Navigation session={session} />
+                    <Navigation />
                     {children}
                   </div>
                   <ConfirmDialog />
