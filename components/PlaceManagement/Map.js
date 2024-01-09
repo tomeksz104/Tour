@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { renderToString } from "react-dom/server";
+import ReactDom from "next/dist/compiled/react-dom/cjs/react-dom-server-legacy.browser.development";
 import { Marker, useMap } from "react-leaflet";
 import L, { Icon } from "leaflet";
 
@@ -71,7 +71,7 @@ const MyMarkers = ({ onMarkerPositionChange, coordinates, category }) => {
         "flex items-center bg-white rounded-md px-3 py-2 border border-green-500"
       );
 
-      const jsxString = renderToString(
+      const jsxString = ReactDom.renderToString(
         <>
           <svg
             xmlns="http://www.w3.org/2000/svg"

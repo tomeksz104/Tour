@@ -6,7 +6,7 @@ import { PlacesContext } from "@/contexts/PlacesContext";
 import { WatchlistContext } from "@/contexts/WatchlistContext";
 import L from "leaflet";
 
-import "node_modules/leaflet-canvas-markers/leaflet-canvas-markers.js";
+import "leaflet-canvas-markers";
 
 import { getIcon, getIconPath, getVisibleMarkers } from "@/utils/mapUtils";
 
