@@ -30,8 +30,6 @@ const Map = dynamic(() => import("@/components/PlaceManagement/Map"), {
   ssr: false,
 });
 
-import { PlaceType as placeTypes } from "@prisma/client";
-
 import { useSession } from "next-auth/react";
 import { upsertPlace } from "@/actions/upsertPlace";
 import InputError from "../InputError";
@@ -50,6 +48,7 @@ import {
   FormDescription,
   FormMessage,
 } from "../ui/form";
+import BasicSection from "./Sections/BasicSection";
 
 const initialState = { message: null, errors: {} };
 
@@ -165,153 +164,11 @@ const PlaceForm = ({ place = null, categories, topics, provinces, cities }) => {
                 Podstawowe informacje
               </AccordionTrigger>
               <AccordionContent className="border-t">
-                <div className="space-y-2 px-5 py-4">
-                  <Label htmlFor="type">Typ miejsca: </Label>
-                  <span className="block text-xs text-gray-500 italic">
-                    Na podstawie Twojego wyboru, pojawią się dodatkowe opcje i
-                    pola do wypełnienia, dostosowane do charakterystyki wybranej
-                    kategorii atrakcji.
-                  </span>
-
-                  <Select name="type">
-                    <SelectTrigger
-                      id="type"
-                      name="type"
-                      className="w-1/2 bg-gray-50 text-gray-600 transition duration-300
-                    focus:ring-1 focus:ring-green-500 focus:ring-offset-0"
-                    >
-                      <SelectValue placeholder="Wybierz typ miejsca..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.keys(placeTypes).map((key) => (
-                        <SelectItem key={key} value={placeTypes[key]}>
-                          {placeTypes[key]}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  {state.errors?.type &&
-                    state.errors.type.map((error) => (
-                      <InputError key={error} error={error} />
-                    ))}
-
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a verified email to display" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="m@example.com">
-                              m@example.com
-                            </SelectItem>
-                            <SelectItem value="m@google.com">
-                              m@google.com
-                            </SelectItem>
-                            <SelectItem value="m@support.com">
-                              m@support.com
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormDescription>
-                          You can manage email addresses in your{" "}
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="space-y-2 border-t px-5 py-4">
-                  <Label htmlFor="categoryId">Kategoria</Label>
-                  <Select onValueChange={setCategory} value={category}>
-                    <SelectTrigger
-                      className="w-full bg-gray-50 text-gray-600 transition duration-300
-                    focus:ring-1 focus:ring-green-500 focus:ring-offset-0"
-                    >
-                      <SelectValue
-                        placeholder="Wybierz kategorię..."
-                        aria-label={category}
-                      >
-                        {category && categories[category - 1].name}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {state.errors?.categoryId &&
-                    state.errors.categoryId.map((error) => (
-                      <InputError key={error} error={error} />
-                    ))}
-                </div>
-
-                <div className="space-y-2 border-t px-5 py-4">
-                  <Label htmlFor="title">Nazwa atrakcji</Label>
-                  <span className="block text-xs text-gray-500 italic">
-                    Podaj pełną nazwę atrakcji.
-                  </span>
-                  <Input
-                    id="title"
-                    name="title"
-                    type="text"
-                    placeholder="Zamek Ogrodzieniec"
-                    {...form.register("title")}
-                  />
-
-                  {state.errors?.title &&
-                    state.errors.title.map((error) => (
-                      <InputError key={error} error={error} />
-                    ))}
-                </div>
-
-                <div className="space-y-2 border-t px-5 py-4">
-                  <Label htmlFor="slogan">Slogan</Label>
-                  <span className="block text-xs text-gray-500 italic">
-                    Dodaj slogan najlepiej opisujący atrakcję.
-                  </span>
-
-                  <Input
-                    id="slogan"
-                    name="slogan"
-                    type="text"
-                    placeholder="IX Wieków Tajemnic"
-                  />
-                </div>
-                <div className="space-y-2 border-t px-5 py-4">
-                  <Label htmlFor="description">Opis atrakcji</Label>
-                  <span className="block text-xs text-gray-500 italic">
-                    Wpisz unikalny opis atrakcji. Twoje osobiste spostrzeżenia i
-                    oryginalne sformułowania pomogą wyróżnić to miejsce i
-                    przyciągnąć większą uwagę odwiedzających. Wymień główne
-                    udogodnienia i unikalne cechy, które wyróżniają to miejsce.
-                  </span>
-                  <span className="block text-xs italic text-red-500">
-                    Pamiętaj, że skopiowane opisy z innych stron mogą naruszać
-                    prawa autorskie i nie będą akceptowane.
-                  </span>
-                  <textarea
-                    className="outline-none bg-gray-50 w-full rounded-md border border-gray-200 py-2.5 px-4 text-sm text-gray-600 transition duration-300 focus:ring-1 focus:ring-green-500"
-                    id="description"
-                    name="description"
-                    rows="5"
-                    placeholder="Odkryj niepowtarzalne piękno i historię Tajemniczego Zamku Królewskiego, perły architektonicznej w sercu malowniczego krajobrazu. Ten majestatyczny zamek z XI wieku oferuje fascynującą podróż przez wieki, ujawniając tajemnice dawnych władców."
-                  ></textarea>
-                </div>
+                <BasicSection
+                  form={form}
+                  state={state}
+                  categories={categories}
+                />
               </AccordionContent>
             </AccordionItem>
           </Accordion>
