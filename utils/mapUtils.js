@@ -1,9 +1,27 @@
 import { categories_list } from "./categories";
 
-export const getIcon = (category) => {
+export const getIcon = (category, categories = null) => {
   const selectedCategory = categories_list.find(
     (item) => item.title === category
   );
+
+  if (selectedCategory && selectedCategory.iconPath) {
+    const iconPath = selectedCategory.iconPath;
+
+    const icon = new L.icon({
+      iconUrl: iconPath,
+      iconSize: [18, 23],
+      iconAnchor: [9, 11],
+      //iconSize: [30, 38],
+      //iconAnchor: [15, 18],
+    });
+
+    return icon;
+  }
+};
+
+export const getIconPathByCategoryId = (categoryId, categories = null) => {
+  const selectedCategory = categories.find((item) => item.id === categoryId);
 
   if (selectedCategory && selectedCategory.iconPath) {
     const iconPath = selectedCategory.iconPath;

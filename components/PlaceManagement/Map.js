@@ -6,18 +6,27 @@ import { Marker, useMap } from "react-leaflet";
 import L, { Icon } from "leaflet";
 
 import MapWrapper from "../MapWrapper/MapWrapper";
-import { getDefaultIcon, getIcon } from "@/utils/mapUtils";
+import {
+  getDefaultIcon,
+  getIcon,
+  getIconPathByCategoryId,
+} from "@/utils/mapUtils";
 
 const coordinatesOfPoland = [52.10650519075632, 19.281005859375004];
 
-const ShowMarkers = ({ onMarkerPositionMove, marker, category }) => {
+const ShowMarkers = ({
+  onMarkerPositionMove,
+  marker,
+  category,
+  categories,
+}) => {
   const map = useMap();
 
   let icon = null;
   let moveTimeout = null;
 
   if (category !== null && category) {
-    icon = getIcon(category);
+    icon = getIconPathByCategoryId(+category, categories);
   } else {
     icon = getDefaultIcon();
   }
@@ -55,7 +64,12 @@ const ShowMarkers = ({ onMarkerPositionMove, marker, category }) => {
   );
 };
 
-const MyMarkers = ({ onMarkerPositionChange, coordinates, category }) => {
+const MyMarkers = ({
+  onMarkerPositionChange,
+  coordinates,
+  category,
+  categories,
+}) => {
   const map = useMap();
   const [marker, setMarker] = useState([]);
   const [legend, setLegend] = useState();
@@ -128,11 +142,18 @@ const MyMarkers = ({ onMarkerPositionChange, coordinates, category }) => {
       key={marker}
       onMarkerPositionMove={onMarkerPositionChange}
       category={category}
+      categories={categories}
     />
   ) : null;
 };
 
-const Map = ({ onMarkerPositionChange, coordinates, category, placeId }) => {
+const Map = ({
+  onMarkerPositionChange,
+  coordinates,
+  category = null,
+  placeId = null,
+  categories,
+}) => {
   const zoom = placeId ? 18 : 6;
 
   const mapPosition = coordinates?.lat ? coordinates : coordinatesOfPoland;
@@ -148,6 +169,7 @@ const Map = ({ onMarkerPositionChange, coordinates, category, placeId }) => {
         onMarkerPositionChange={onMarkerPositionChange}
         coordinates={coordinates}
         category={category}
+        categories={categories}
       />
       {/* <Places interactiveMap={false} markerToRemove={placeId} /> */}
     </MapWrapper>

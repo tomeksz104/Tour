@@ -5047,6 +5047,28 @@ async function main() {
     });
   }
 
+  const childAmenites = [
+    "Sala zabaw",
+    "Kącik dla dzieci",
+    "Dostępne gry i zabawki",
+    "Plac zabaw",
+    "Animacje dla dzieci",
+    "Toaleta przystosowana dla dzieci",
+    "Miejsce do karmienia",
+    "Przewijak",
+    "Dostępne dla wózków",
+    "Tereny rekreacyjne",
+    "Brodzik dla małych dzieci",
+    "Basen ze zjeżdżalniami dla dzieci",
+    "Dedykowana ścieżka zwiedzania dla dzieci",
+  ];
+
+  for (const amenity of childAmenites) {
+    await prisma.childFriendlyAmenity.create({
+      data: { name: amenity },
+    });
+  }
+
   const provinceCitiesMap = {
     Dolnośląskie: cities_of_dolnoslaskie_province,
     "Kujawsko-Pomorskie": cities_of_kujawsko_pomorskie_province,
