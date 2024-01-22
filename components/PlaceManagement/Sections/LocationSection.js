@@ -99,7 +99,7 @@ const LocationSection = ({
           placeholder="https://goo.gl/maps/zrJXGuiUeER7vcJ1A"
           {...form.register("googleMapUrl")}
         />
-        {state.errors?.googleMapUrl &&
+        {state?.errors?.googleMapUrl &&
           state.errors.googleMapUrl.map((error) => (
             <InputError key={error} error={error} />
           ))}
@@ -140,13 +140,13 @@ const LocationSection = ({
         </div>
       </div>
       <div className="px-5 pb-4">
-        {state.errors?.latitude &&
+        {state?.errors?.latitude &&
           state.errors.latitude.map((error) => (
             <p className="mt-2 text-sm text-red-500" key={error}>
               {error}
             </p>
           ))}
-        {state.errors?.longitude &&
+        {state?.errors?.longitude &&
           state.errors.longitude.map((error) => (
             <p className="mt-2 text-sm text-red-500" key={error}>
               {error}

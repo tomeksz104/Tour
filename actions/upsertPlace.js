@@ -3,30 +3,35 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { z } from "zod";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-import createSlug from "@/utils/createSlug";
 import { PlaceType } from "@prisma/client";
+import { getPlaceById } from "./getPlaceById";
+import createSlug from "@/utils/createSlug";
+
+import { uploadFile, deleteFile } from "./fileManager";
 
 const timeSchema = z.string().regex(/^\d{2}:\d{2}$/, {
   message: "Invalid time format. Expected format is HH:MM.",
 });
 
-const daySchema = z.object({
-  open: timeSchema.or(z.literal("")),
-  close: timeSchema.or(z.literal("")),
-});
+const daySchema = z
+  .object({
+    open: timeSchema.optional().or(z.literal("")),
+    close: timeSchema.optional().or(z.literal("")),
+  })
+  .optional();
 
-const openingHoursSchema = z.object({
-  MONDAY: daySchema,
-  TUESDAY: daySchema,
-  WEDNESDAY: daySchema,
-  THURSDAY: daySchema,
-  FRIDAY: daySchema,
-  SATURDAY: daySchema,
-  SUNDAY: daySchema,
-});
+const openingHoursSchema = z
+  .object({
+    MONDAY: daySchema,
+    TUESDAY: daySchema,
+    WEDNESDAY: daySchema,
+    THURSDAY: daySchema,
+    FRIDAY: daySchema,
+    SATURDAY: daySchema,
+    SUNDAY: daySchema,
+  })
+  .optional();
 
 const FormSchema = z.object({
   type: z.nativeEnum(PlaceType, {
@@ -105,7 +110,7 @@ const FormSchema = z.object({
 
 const UpsertPlace = FormSchema.omit({ id: true, date: true });
 
-export async function upsertPlace(prevState, formData) {
+export async function insertPlace(prevState, formData) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -118,9 +123,6 @@ export async function upsertPlace(prevState, formData) {
       }
     );
   }
-
-  console.log(formData);
-  console.log("------------------------------");
 
   // Validate form using Zod
   const validatedFields = UpsertPlace.safeParse({
@@ -152,24 +154,44 @@ export async function upsertPlace(prevState, formData) {
     console.log(validatedFields.error.flatten().fieldErrors);
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Invoice.",
+      message: "Brakujące pola. Nie udało się utworzyć miejsca.",
     };
   }
 
-  console.log(validatedFields.data);
+  const formFileData = formData.fileData;
+
+  let mainPhotoPath;
+
+  if (formFileData.has("file")) {
+    mainPhotoPath = await uploadFile(formFileData, "file");
+
+    if (mainPhotoPath.error) {
+      return {
+        errors: "Błąd przesyłania pliku",
+        message: "Przesłany plik nie jest obrazem.",
+      };
+    }
+  }
+
+  const galleryImagePaths = [];
+
+  for (let i = 0; formFileData.has(`galleryImage${i}`); i++) {
+    const galleryImagePath = await uploadFile(formFileData, `galleryImage${i}`);
+
+    if (galleryImagePath.error) {
+      return {
+        errors: "Błąd przesyłania galerii zdjęć",
+        message: "Przesłane zdjęcia w galerii nie są obrazami.",
+      };
+    }
+
+    galleryImagePaths.push(galleryImagePath);
+  }
 
   // Insert data into the database
   try {
     const slug = createSlug(validatedFields.data.title);
     const dataFields = validatedFields.data;
-
-    // const openingHoursData = Object.entries(
-    //   validatedFields.data.openingHours
-    // ).map(([day, hours]) => ({
-    //   day: day,
-    //   openTime: hours.open,
-    //   closeTime: hours.close,
-    // }));
 
     let dataToCreate = {
       userId: session.user.id,
@@ -194,6 +216,18 @@ export async function upsertPlace(prevState, formData) {
         childFriendly: dataFields.childFriendly,
       }),
     };
+
+    if (mainPhotoPath && mainPhotoPath.filePath) {
+      dataToCreate.mainPhotoPath = mainPhotoPath.filePath;
+    }
+
+    if (galleryImagePaths && galleryImagePaths.length > 0) {
+      dataToCreate.photos = {
+        create: galleryImagePaths.map(({ filePath }) => ({
+          url: filePath,
+        })),
+      };
+    }
 
     if (
       dataFields.openingHours &&
@@ -227,51 +261,248 @@ export async function upsertPlace(prevState, formData) {
     }
 
     await db.place.create({ data: dataToCreate });
-    // await db.place.create({
-    //   data: {
-    //     userId: session.user.id,
-    //     type: validatedFields.data.type,
-    //     title: validatedFields.data.title,
-    //     slogan: validatedFields.data.slogan,
-    //     slug: slug,
-    //     description: validatedFields.data.description,
-    //     categoryId: validatedFields.data.categoryId,
-    //     provinceId: validatedFields.data.provinceId,
-    //     cityId: validatedFields.data.cityId,
-
-    //     email: validatedFields.data.email,
-    //     phone: validatedFields.data.phone,
-    //     website: validatedFields.data.website,
-    //     address: validatedFields.data.address,
-
-    //     googleMapUrl: validatedFields.data.googleMapUrl,
-    //     latitude: validatedFields.data.latitude,
-    //     longitude: validatedFields.data.longitude,
-
-    //     childFriendly: validatedFields.data.childFriendly,
-
-    //     childFriendlyAmenities: {
-    //       connect: validatedFields.data.childAmenites.map((id) => ({ id })),
-    //     },
-    //     tags: {
-    //       connect: validatedFields.data.topics.map((id) => ({ id })),
-    //     },
-    //     topics: {
-    //       connect: validatedFields.data.tags.map((id) => ({ id })),
-    //     },
-    //     openingHours: {
-    //       create: openingHoursData,
-    //     },
-    //   },
-    // });
   } catch (error) {
-    console.log(error);
     return {
-      message: "Database Error: Failed to Create Invoice.",
+      errors: "Błąd bazy danych",
+      message: "Błąd bazy danych: Nie udało się utworzyć miejsca..",
+    };
+  } finally {
+    return {
+      message: "Pomyślnie utworzono miejsce",
+    };
+  }
+}
+
+export async function updatePlace(placeId, state, formData) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return new NextResponse(
+      JSON.stringify({
+        error: "You are not logged in.",
+      }),
+      {
+        status: 401,
+      }
+    );
+  }
+
+  const existingPlace = await getPlaceById(placeId);
+  const existingPhotos = existingPlace.photos;
+
+  // Validate form using Zod
+  const validatedFields = UpsertPlace.safeParse({
+    type: formData.type,
+    latitude: formData.latitude || null,
+    longitude: formData.longitude || null,
+    // mainPhotoPath: formData.mainPhotoPath,
+    title: formData.title,
+    description: formData.description || undefined,
+    googleMapUrl: formData.googleMapUrl || undefined,
+    categoryId: formData.categoryId || null,
+    provinceId: formData.provinceId || null,
+    cityId: formData.cityId || null,
+    phone: formData.phone || undefined,
+    email: formData.email || undefined,
+    website: formData.website || undefined,
+    address: formData.address || undefined,
+    slogan: formData.slogan || undefined,
+
+    childFriendly: +formData.childFriendly,
+    childAmenites: formData.childAmenites,
+    topics: formData.topics,
+    tags: formData.tags,
+    openingHours: formData.openingHours,
+  });
+
+  // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Brakujące pola. Nie udało się utworzyć miejsca.",
     };
   }
 
-  // Revalidate the cache for the invoices page and redirect the user.
-  revalidatePath("/place/new");
-  redirect("/place/new");
+  const formFileData = formData.fileData;
+
+  let mainPhotoPath;
+  if (
+    formFileData.has("file") &&
+    typeof formFileData.get(`file`) === "object"
+  ) {
+    mainPhotoPath = await uploadFile(formFileData, "file");
+
+    if (mainPhotoPath.error) {
+      return {
+        errors: "Błąd przesyłania pliku",
+        message: "Przesłany plik nie jest obrazem.",
+      };
+    }
+  } else if (formFileData.get(`file`) === null) {
+    mainPhotoPath = formFileData.get(`file`);
+    deleteFile(existingPlace.mainPhotoPath);
+  }
+
+  const galleryImagePaths = [];
+  for (let i = 0; formFileData.has(`galleryImage${i}`); i++) {
+    const photo = formFileData.get(`galleryImage${i}`);
+
+    if (typeof photo === "object") {
+      const galleryImagePath = await uploadFile(
+        formFileData,
+        `galleryImage${i}`
+      );
+
+      if (galleryImagePath.error) {
+        return {
+          errors: "Błąd przesyłania galerii zdjęć",
+          message: "Przesłane zdjęcia w galerii nie są obrazami.",
+        };
+      }
+
+      galleryImagePaths.push(galleryImagePath);
+    } else {
+      galleryImagePaths.push({ success: false, filePath: photo });
+    }
+  }
+
+  // Insert data into the database
+  try {
+    const slug = createSlug(validatedFields.data.title);
+    const dataFields = validatedFields.data;
+
+    let dataToCreate = {
+      userId: session.user.id,
+      type: dataFields.type,
+      title: dataFields.title,
+      slug: slug,
+      categoryId: dataFields.categoryId,
+      latitude: dataFields.latitude,
+      longitude: dataFields.longitude,
+
+      ...(dataFields.slogan && { slogan: dataFields.slogan }),
+      ...(dataFields.description && { description: dataFields.description }),
+      ...(dataFields.provinceId && { provinceId: dataFields.provinceId }),
+      ...(dataFields.cityId && { cityId: dataFields.cityId }),
+
+      ...(dataFields.googleMapUrl && { googleMapUrl: dataFields.googleMapUrl }),
+      ...(dataFields.email && { email: dataFields.email }),
+      ...(dataFields.phone && { phone: dataFields.phone }),
+      ...(dataFields.website && { website: dataFields.website }),
+      ...(dataFields.address && { address: dataFields.address }),
+      ...(dataFields.childFriendly && {
+        childFriendly: dataFields.childFriendly,
+      }),
+    };
+
+    if (mainPhotoPath && mainPhotoPath.filePath) {
+      dataToCreate.mainPhotoPath = mainPhotoPath.filePath;
+    } else if (mainPhotoPath === null) {
+      dataToCreate.mainPhotoPath = null;
+    }
+
+    // Prepare a list of URLs of existing images
+    const existingPhotoUrls = existingPhotos.map((photo) => photo.url);
+
+    // Finding photos to delete
+    const photosToRemove = existingPhotos.filter(
+      (photo) =>
+        !galleryImagePaths.some((newPhoto) => newPhoto.filePath === photo.url)
+    );
+
+    // Finding new photos to add
+    const newPhotosToAdd = galleryImagePaths.filter(
+      (newPhoto) => !existingPhotoUrls.includes(newPhoto.filePath)
+    );
+
+    // Removing old photos from the database
+    if (photosToRemove.length > 0) {
+      await db.photo.deleteMany({
+        where: {
+          id: {
+            in: photosToRemove.map((photo) => photo.id),
+          },
+        },
+      });
+      await Promise.all(photosToRemove.map((file) => deleteFile(file.url)));
+    }
+
+    // Adding new photos to the database
+    if (newPhotosToAdd.length > 0) {
+      await db.photo.createMany({
+        data: newPhotosToAdd.map(({ filePath }) => ({
+          url: filePath,
+          placeId: placeId,
+        })),
+      });
+    }
+
+    if (
+      dataFields.openingHours &&
+      Object.keys(dataFields.openingHours).length > 0
+    ) {
+      dataToCreate.openingHours = {
+        create: Object.entries(dataFields.openingHours).map(([day, hours]) => ({
+          day: day,
+          openTime: hours.open,
+          closeTime: hours.close,
+        })),
+      };
+    }
+
+    if (dataFields.childAmenites && dataFields.childAmenites.length > 0) {
+      dataToCreate.childFriendlyAmenities = {}; // Initialize the object
+      dataToCreate.childFriendlyAmenities.disconnect =
+        existingPlace.childFriendlyAmenities
+          .filter((item) => !formData.childAmenites.includes(item.id))
+          .map((item) => ({ id: item.id }));
+
+      dataToCreate.childFriendlyAmenities.connect = formData.childAmenites
+        .filter(
+          (id) =>
+            !existingPlace.childFriendlyAmenities
+              .map((item) => item.id)
+              .includes(id)
+        )
+        .map((id) => ({ id }));
+    }
+
+    if (dataFields.tags && dataFields.tags.length > 0) {
+      dataToCreate.tags = {}; // Initialize the object
+      dataToCreate.tags.disconnect = existingPlace.tags
+        .filter((t) => !formData.tags.includes(t.id))
+        .map((t) => ({ id: t.id }));
+
+      dataToCreate.tags.connect = formData.tags
+        .filter((id) => !existingPlace.tags.map((t) => t.id).includes(id))
+        .map((id) => ({ id }));
+    }
+
+    if (dataFields.topics && dataFields.topics.length > 0) {
+      dataToCreate.topics = {}; // Initialize the object
+      dataToCreate.topics.connect = dataFields.topics.map((id) => ({ id }));
+
+      dataToCreate.topics.disconnect = existingPlace.topics
+        .filter((t) => !formData.topics.includes(t.id))
+        .map((t) => ({ id: t.id }));
+
+      dataToCreate.topics.connect = formData.topics
+        .filter((id) => !existingPlace.topics.map((t) => t.id).includes(id))
+        .map((id) => ({ id }));
+    }
+
+    await db.place.update({
+      where: { id: placeId },
+      data: dataToCreate,
+    });
+  } catch (error) {
+    return {
+      errors: "Błąd bazy danych",
+      message: "Błąd bazy danych: Nie udało się utworzyć miejsca..",
+    };
+  } finally {
+    return {
+      message: "Pomyślnie zaaktualizowano miejsce",
+    };
+  }
 }

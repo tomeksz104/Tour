@@ -1,14 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
 import useConfirm from "@/hooks/useConfirm";
+import { useForm } from "react-hook-form";
 import { useFormState } from "react-dom";
 
-import Input from "../Input";
-import Label from "../Label";
 import Button from "../Button";
 
 import {
@@ -17,35 +15,19 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import { useSession } from "next-auth/react";
-import { upsertPlace } from "@/actions/upsertPlace";
-import InputError from "../InputError";
-import { parseLatLngFromUrl } from "@/utils/parseLatLngFromUrl";
+import { insertPlace, updatePlace } from "@/actions/upsertPlace";
 
-import { DetailsSection, FormSchema } from "./Sections/DetailsSection";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-} from "../ui/form";
+import { DetailsSection } from "./Sections/DetailsSection";
+
+import { Form } from "../ui/form";
 import BasicSection from "./Sections/BasicSection";
 import ContactSection from "./Sections/ContactSection";
 import LocationSection from "./Sections/LocationSection";
 import OpeningHours from "./Sections/OpeningHours";
+import ImagesSection from "./Sections/ImagesSection";
+import { transformOpeningHoursToObject } from "@/utils/transformOpeningHoursToObject";
 
 const initialState = { message: null, errors: {} };
 
@@ -58,61 +40,68 @@ const PlaceForm = ({
   cities,
   childAmenites,
 }) => {
+  const { confirm } = useConfirm();
   const { session } = useSession({
     required: true,
   });
-
   const form = useForm({
     defaultValues: {
-      childAmenites: [],
-      topics: [],
-      tags: [],
+      type: place?.type,
+      categoryId: place?.categoryId,
+      title: place?.title,
+      slogan: place?.slogan,
+      description: place?.description,
+      googleMapUrl: place?.googleMapUrl,
+      latitude: place?.latitude,
+      longitude: place?.longitude,
+      provinceId: place?.provinceId,
+      cityId: place?.cityId,
+      address: place?.address,
+      phone: place?.phone,
+      email: place?.email,
+      website: place?.website,
+      childFriendly: place?.childFriendly
+        ? Number(place?.childFriendly).toString()
+        : null,
+      childAmenites: place?.childFriendlyAmenities
+        ? Object.values(place?.childFriendlyAmenities).map((item) => item.id)
+        : [],
+      topics: place?.topics
+        ? Object.values(place?.topics).map((item) => item.id)
+        : [],
+      tags: place?.tags
+        ? Object.values(place?.tags).map((item) => item.id)
+        : [],
+      openingHours: place?.openingHours
+        ? transformOpeningHoursToObject(place.openingHours)
+        : {},
     },
   });
 
   const router = useRouter();
   const toast = useToast();
-  const { confirm } = useConfirm();
 
-  const [province, setProvince] = useState("");
-  const [city, setCity] = useState("");
-  const [citiesOfProvince, setCitiesOfProvince] = useState([]);
-  const [coordinates, setCoordinates] = useState({});
-  const [category, setCategory] = useState("");
-  const [googleMapUrl, setGoogleMapUrl] = useState("");
-
+  const [mainPhotoPath, setMainPhotoPath] = useState(
+    place?.mainPhotoPath ? place.mainPhotoPath : null
+  );
+  const [galleryImages, setGalleryImages] = useState(
+    place?.photos ? place.photos : []
+  );
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const upsertPlaceWithData = upsertPlace.bind(null, city, category, province);
+  //console.log(place.mainPhotoPath);
+
+  useEffect(() => {
+    console.log(mainPhotoPath);
+  }, [mainPhotoPath]);
+
+  const upsertPlace = place?.id
+    ? updatePlace.bind(null, place.id)
+    : insertPlace;
   const [state, dispatch] = useFormState(upsertPlace, initialState);
 
-  const placeId = place?._id || null;
-
-  useEffect(() => {
-    if (province) {
-      const filteredCities = cities.filter(
-        (city) => city.provinceId === +province
-      );
-      setCitiesOfProvince(filteredCities);
-    } else {
-      setCitiesOfProvince([]);
-    }
-  }, [province]);
-
-  useEffect(() => {
-    const coordinates = parseLatLngFromUrl(googleMapUrl);
-    if (coordinates) {
-      setCoordinates({
-        latitude: coordinates.lat,
-        longitude: coordinates.lng,
-      });
-    }
-  }, [googleMapUrl]);
-
-  const handleMarkerPositionChange = (latitude, longitude) => {
-    setCoordinates({ latitude, longitude });
-  };
+  const placeId = place?.id || null;
 
   const handleDelete = async () => {
     const isConfirmed = await confirm(
@@ -148,20 +137,72 @@ const PlaceForm = ({
     }
   };
 
-  const handleChangeCity = (cityId) => {
-    setCity(cityId);
+  useEffect(() => {
+    if (state.errors && state.message) {
+      toast.error(state.message);
+    } else if (state.message) {
+      toast.success(state.message);
+    }
+  }, [state]);
+
+  // async function onSubmit(data) {
+  //   if (mainPhotoPath) {
+  //     const fileData = new FormData();
+  //     fileData.append("file", mainPhotoPath);
+
+  //     dispatch({ ...data, fileData });
+  //   } else {
+  //     dispatch(data);
+  //   }
+  // }
+
+  async function onSubmit(data) {
+    const fileData = new FormData();
+
+    if (mainPhotoPath) {
+      fileData.append("file", mainPhotoPath);
+    }
+
+    if (galleryImages.length > 0) {
+      galleryImages.forEach((image, index) => {
+        fileData.append(
+          `galleryImage${index}`,
+          image.file ? image.file : image.url
+        );
+      });
+    }
+
+    dispatch({ ...data, fileData });
+
+    // const fileData = new FormData();
+    // fileData.append("file", file);
+
+    // dispatch({ ...data, fileData });
+  }
+
+  const handleGalleryImageChange = (event) => {
+    const selectedFiles = event.target.files;
+
+    if (selectedFiles) {
+      const imagesArray = Array.from(selectedFiles).map((file) => ({
+        url: URL.createObjectURL(file),
+        file,
+      }));
+
+      setGalleryImages((prevImages) => [...prevImages, ...imagesArray]);
+    }
   };
 
-  function onSubmit(data) {
-    console.log(data);
-    dispatch(data);
-    //upsertPlaceWithData(data);
-  }
+  const handleRemoveGalleryImage = (index) => {
+    const updatedGallery = [...galleryImages];
+    updatedGallery.splice(index, 1);
+    setGalleryImages(updatedGallery);
+  };
 
   return (
     <div className="w-full sm:max-w-3xl m-auto py-20 px-6">
       <h2 className="mb-5 text-center text-2xl font-semibold text-gray-800 md:text-4xl">
-        {placeId ? "Update the place" : "Dodaj atrakcję"}
+        {placeId ? "Aktualizuj atrakcję" : "Dodaj atrakcję"}
       </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -244,7 +285,34 @@ const PlaceForm = ({
             </AccordionItem>
           </Accordion>
 
-          <div className="space-y-1">
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue="item-6"
+            className="my-5"
+          >
+            <AccordionItem value="item-1" className="bg-white rounded-md">
+              <AccordionTrigger className="px-5 hover:no-underline group">
+                <div className="flex items-center space-x-2">
+                  <div className="group-hover:underline">Zdjęcia</div>
+                  <span className="text-gray-500 text-xs italic font-normal hover:no-underline">
+                    (Opcjonalne)
+                  </span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="border-t">
+                <ImagesSection
+                  mainPhotoPath={mainPhotoPath}
+                  onChangeMainPhotoPath={setMainPhotoPath}
+                  galleryImages={galleryImages}
+                  handleGalleryImageChange={handleGalleryImageChange}
+                  handleRemoveGalleryImage={handleRemoveGalleryImage}
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          {/* <div className="space-y-1">
             <Label htmlFor="image">Image</Label>
             <Input
               id="mainPhotoPath"
@@ -252,7 +320,7 @@ const PlaceForm = ({
               type="text"
               placeholder="https://URL-to-best-photo.com"
             />
-          </div>
+          </div> */}
 
           <div
             className={`flex items-center gap-5 ${
@@ -272,7 +340,7 @@ const PlaceForm = ({
               isLoading={isLoading}
               className={`${placeId ? "px-10" : "w-full"}`}
             >
-              {placeId ? "Update" : "Create"}
+              {placeId ? "Aktualizuj" : "Utwórz"}
             </Button>
           </div>
         </form>

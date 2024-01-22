@@ -55,7 +55,7 @@ const BasicSection = ({ form, state, categories }) => {
                   ))}
                 </SelectContent>
               </Select>
-              {state.errors?.type &&
+              {state?.errors?.type &&
                 state.errors.type.map((error) => (
                   <p className="mt-2 text-sm text-red-500" key={error}>
                     {error}
@@ -100,7 +100,7 @@ const BasicSection = ({ form, state, categories }) => {
                   ))}
                 </SelectContent>
               </Select>
-              {state.errors?.categoryId &&
+              {state?.errors?.categoryId &&
                 state.errors.categoryId.map((error) => (
                   <p className="mt-2 text-sm text-red-500" key={error}>
                     {error}
@@ -125,7 +125,7 @@ const BasicSection = ({ form, state, categories }) => {
           {...form.register("title")}
         />
 
-        {state.errors?.title &&
+        {state?.errors?.title &&
           state.errors.title.map((error) => (
             <p className="mt-2 text-sm text-red-500" key={error}>
               {error}

@@ -1,28 +1,16 @@
 import "server-only";
 
-export const getPlaceById = async (id) => {
-  const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:3000";
+import { db } from "@/lib/db";
 
-  // const response = await fetch(
-  //   `https://tour-fn48fza9i-tomeksz104.vercel.app/api/place/${id}`,
-  //   {
-  //     cache: "no-store",
-  //   }
-  // );
-
-  const response = await fetch(`${apiUrl}/api/place/${id}`, {
-    cache: "no-store",
+export async function getPlaceById(id) {
+  return await db.place.findUnique({
+    where: { id: parseInt(id) },
+    include: {
+      tags: true,
+      topics: true,
+      openingHours: true,
+      childFriendlyAmenities: true,
+      photos: true,
+    },
   });
-
-  if (!response.ok) {
-    throw new Error("Error fetching place by ID");
-  }
-
-  const data = await response.json();
-
-  if (!data) {
-    throw new Error("Empty response from server");
-  }
-
-  return data;
-};
+}
