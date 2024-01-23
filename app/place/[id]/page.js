@@ -16,15 +16,13 @@ const PlaceDetailsMap = dynamic(() => import("@/components/PlaceDetails/Map"), {
 });
 
 export default async function PlaceDetailsPage({ params }) {
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
-
   const place = await getPlaceById(params?.id);
   const session = await getServerSession(authOptions);
 
   const isUserAdmin = session?.user?.role === "admin";
-  const isCreator = session?.user?._id === place.userId;
+  const isCreator = session?.user?.id === place.userId;
 
-  let gallery = [{ url: place.image, accepted: true }, ...place.images];
+  let gallery = [{ url: place.mainPhotoPath, accepted: true }, ...place.photos];
   gallery = gallery.filter((item) => item.accepted !== false);
 
   return (
@@ -33,7 +31,7 @@ export default async function PlaceDetailsPage({ params }) {
         <div
           className="absolute w-full h-56 sm:h-[480px] bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url(${place.image})`,
+            backgroundImage: `url(${place.mainPhotoPath})`,
           }}
         >
           <div className="w-full h-full backdrop-blur-md"></div>
@@ -54,7 +52,7 @@ export default async function PlaceDetailsPage({ params }) {
                 <WatchlistButton id={place._id} />
 
                 {isUserAdmin || isCreator ? (
-                  <Link href={`/place/update/${place._id}`}>
+                  <Link href={`/place/update/${place.id}`}>
                     <CircleButton className="ml-3 hover:bg-blue-50">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +90,7 @@ export default async function PlaceDetailsPage({ params }) {
           </div>
           <div className="col-span-2 space-y-3">
             <p className="text-center text-gray-700">{place.title} map</p>
-            {/*  <PlaceDetailsMap place={place} /> */}
+            {/* <PlaceDetailsMap place={place} /> */}
           </div>
         </div>
       </div>
