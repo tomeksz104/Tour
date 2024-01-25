@@ -25,7 +25,7 @@ export async function uploadFile(data: any, formField: any) {
 
   const generatedFileName = `${uuidv4()}.${fileExtension}`;
 
-  const path = `public/tmp/${generatedFileName}`;
+  const path = `public/upload/${generatedFileName}`;
 
   await writeFile(path, buffer);
 
