@@ -40,7 +40,7 @@ const FormSchema = z.object({
     },
   }),
 
-  latitude: z
+  latitude: z.coerce
     .number({
       invalid_type_error: "Nieprawidłowa szerokość geograficzna",
       message: "Nieprawidłowa szerokość geograficzna",
@@ -57,7 +57,7 @@ const FormSchema = z.object({
     .refine((val) => val >= -90 && val <= 90, {
       message: "Szerokość geograficzna musi wynosić od -90 do 90",
     }),
-  longitude: z
+  longitude: z.coerce
     .number({
       invalid_type_error: "Nieprawidłowa długość geograficzna",
       message: "Nieprawidłowa długość geograficzna",
@@ -74,7 +74,6 @@ const FormSchema = z.object({
     .refine((val) => val >= -180 && val <= 180, {
       message: "Długość geograficzna musi wynosić od -180 do 180",
     }),
-  // mainPhotoPath: z.string().optional(),
   title: z.string().min(5, { message: "Tytuł musi mieć minimum 5 znaków" }),
   description: z.string().optional().or(z.literal("")),
   googleMapUrl: z
@@ -114,14 +113,10 @@ export async function insertPlace(prevState, formData) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return new NextResponse(
-      JSON.stringify({
-        error: "You are not logged in.",
-      }),
-      {
-        status: 401,
-      }
-    );
+    return {
+      errors: "",
+      message: "Nie jesteś zalogowany",
+    };
   }
 
   // Validate form using Zod
