@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useFieldArray } from "react-hook-form";
 
-const daysInEnglishToPolish = {
+export const daysInEnglishToPolish = {
   MONDAY: "Poniedziałek",
   TUESDAY: "Wtorek",
   WEDNESDAY: "Środa",

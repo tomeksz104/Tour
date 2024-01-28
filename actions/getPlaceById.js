@@ -11,6 +11,7 @@ export async function getPlaceById(id) {
       openingHours: true,
       childFriendlyAmenities: true,
       photos: true,
+      user: true,
     },
   });
 }
