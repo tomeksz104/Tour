@@ -436,13 +436,44 @@ export async function updatePlace(placeId, state, formData) {
       dataFields.openingHours &&
       Object.keys(dataFields.openingHours).length > 0
     ) {
-      dataToCreate.openingHours = {
-        create: Object.entries(dataFields.openingHours).map(([day, hours]) => ({
-          day: day,
-          openTime: hours.open,
-          closeTime: hours.close,
-        })),
-      };
+      const newOpeningHours = dataFields.openingHours;
+      const existingOpeningHours = existingPlace.openingHours;
+
+      // Find days that need to be updated or deleted
+      for (const existing of existingOpeningHours) {
+        if (newOpeningHours[existing.day]) {
+          // Update if opening hours have been changed
+          if (
+            newOpeningHours[existing.day].open !== existing.openTime ||
+            newOpeningHours[existing.day].close !== existing.closeTime
+          ) {
+            await db.openingHours.update({
+              where: { id: existing.id },
+              data: {
+                openTime: newOpeningHours[existing.day].open,
+                closeTime: newOpeningHours[existing.day].close,
+              },
+            });
+          }
+          // Remove the day from the new data to avoid adding it again
+          delete newOpeningHours[existing.day];
+        } else {
+          // Remove days that are no longer needed
+          await db.openingHours.delete({ where: { id: existing.id } });
+        }
+      }
+
+      // Add new days
+      for (const [day, hours] of Object.entries(newOpeningHours)) {
+        await db.openingHours.create({
+          data: {
+            day: day,
+            openTime: hours.open,
+            closeTime: hours.close,
+            placeId: placeId,
+          },
+        });
+      }
     }
 
     if (dataFields.childAmenites && dataFields.childAmenites.length > 0) {
