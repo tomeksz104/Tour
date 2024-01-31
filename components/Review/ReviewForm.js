@@ -1,0 +1,183 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { useFormState } from "react-dom";
+import { useToast } from "@/hooks/useToast";
+
+import Button from "../Button";
+import { Ratings } from "@/components/ui/ratings";
+import { Form } from "../ui/form";
+
+import { insertReview, updateReview } from "@/actions/reviewManager";
+
+import "./review.css";
+
+const initialState = { message: null, errors: {} };
+
+const ReviewForm = ({
+  comment,
+  placeId,
+  onCommentAdd,
+  onCancelEdit,
+  totalComments,
+}) => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const toast = useToast();
+  const form = useForm({
+    defaultValues: {
+      rating: comment?.rating ? comment.rating : null,
+      content: comment?.content ? comment.content : null,
+    },
+  });
+  const commentTextareaRef = useRef(null);
+  const [isCommentButtonClicked, setIsCommentButtonClicked] = useState(false);
+
+  const upsertReview = comment?.id
+    ? updateReview.bind(null, comment.id)
+    : insertReview.bind(null, placeId);
+  const [state, dispatch] = useFormState(upsertReview, initialState);
+
+  const watchRatingField = form.watch("rating");
+
+  const handleCommentButtonCliked = () => {
+    if (session) {
+      setIsCommentButtonClicked(true);
+    } else {
+      router.push("/signin");
+    }
+  };
+
+  useEffect(() => {
+    if (state.errors && state.message) {
+      toast.error(state.message);
+    } else if (state.message) {
+      if (comment?.id) onCommentAdd();
+      form.setValue("rating", null);
+      form.setValue("content", null);
+      toast.success(state.message);
+    }
+  }, [state]);
+
+  useEffect(() => {
+    if (isCommentButtonClicked && commentTextareaRef.current) {
+      commentTextareaRef.current.focus();
+    }
+  }, [isCommentButtonClicked]);
+
+  const handleRatingChange = (rating) => {
+    form.setValue("rating", rating);
+  };
+
+  return (
+    <>
+      {!isCommentButtonClicked && totalComments === 0 && (
+        <div className="flex justify-center border border-gray-200 mb-6 py-6 rounded-md">
+          <div className="flex flex-col space-y-3 px-4">
+            <div className="commentTeaser relative mx-auto bg-green-500">
+              <div className="commentTeaser-icon commentTeaser-icon--ask absolute"></div>
+              <div className="commentTeaser-icon commentTeaser-icon--like absolute"></div>
+              <div className="commentTeaser-icon commentTeaser-icon--check absolute"></div>
+            </div>
+            <div>
+              <p className="text-gray-700 text-xl font-semibold text-center">
+                Byłeś już w tym miejscu?
+              </p>
+              <p className="text-sm">
+                Dodaj swoją opinię i daj znać innym co sądzisz o tym miejscu!
+              </p>
+            </div>
+
+            <Button onClick={handleCommentButtonCliked} className={`text-sm`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="mr-3 w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                />
+              </svg>
+              Bądź pierwszym recenzentem
+            </Button>
+          </div>
+        </div>
+      )}
+      {(isCommentButtonClicked || totalComments > 0 || comment?.id) && (
+        <>
+          <div className="flex">
+            {!comment?.id && (
+              <div className="mr-3 shrink-0 hidden sm:block">
+                <img
+                  className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100"
+                  src={
+                    session?.user.avatar ? session.user.avatar : "/avatar.svg"
+                  }
+                  alt={
+                    session?.user.username
+                      ? session?.user.username
+                      : session?.user.email
+                  }
+                />
+              </div>
+            )}
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(dispatch)}
+                className="mb-6 w-full"
+              >
+                <div className="mb-4">
+                  <label htmlFor="comment" className="sr-only">
+                    Twoja opinia
+                  </label>
+                  <textarea
+                    ref={commentTextareaRef}
+                    {...form.register("content")}
+                    rows="6"
+                    className="outline-none w-full rounded-md border border-gray-200 py-2.5 px-4 text-sm text-gray-600 transition duration-300 focus:ring-1 focus:ring-green-500"
+                    placeholder="Napisz opinię..."
+                    required
+                  ></textarea>
+                </div>
+
+                <div className="space-y-2 mb-5">
+                  <p className="font-medium text-sm">Twoja ocena:</p>
+                  <Ratings
+                    rating={watchRatingField}
+                    variant="yellow"
+                    onRatingChange={handleRatingChange}
+                  />
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <Button className={`text-sm`}>
+                    {comment?.id ? "Zaaktualizuj opinię" : "Prześlij opinię"}
+                  </Button>
+                  {comment?.id && (
+                    <button
+                      type="button"
+                      onClick={onCancelEdit}
+                      className="text-red-500 font-bold text-xs uppercase"
+                    >
+                      Anuluj
+                    </button>
+                  )}
+                </div>
+              </form>
+            </Form>
+          </div>
+        </>
+      )}
+    </>
+  );
+};
+
+export default ReviewForm;

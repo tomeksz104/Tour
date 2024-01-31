@@ -33,6 +33,7 @@ model User {
   sessions    Session[]
   places      Place[]
   Comment     Comment[]
+  Review      Review[]
   Post        Post[]
 }
 
@@ -115,9 +116,11 @@ model Post {
 model Comment {
   id        Int      @id @default(autoincrement())
   content   String
-  createdAt DateTime @default(now())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   postId    Int
   userId    Int
+
 
   user User  @relation(fields: [userId], references: [id])
   Post Post? @relation(fields: [postId], references: [id])
@@ -125,14 +128,16 @@ model Comment {
 
 model Review {
   id          Int            @id @default(autoincrement())
-  overall     Int            @default(0)
-  price       Int            @default(0)
-  hospitality Int            @default(0)
-  cleanliness Int            @default(0)
-  content     String?        @db.Text
+  userId      Int
+  rating      Float?           
+  content     String         @db.Text
   photos      ReviewPhotos[]
   placeId     Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
   place       Place          @relation(fields: [placeId], references: [id])
+  author    User      @relation(fields: [userId], references: [id])
 }
 
 model SocialMediaPlatform {

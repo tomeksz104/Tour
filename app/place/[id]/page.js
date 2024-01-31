@@ -2,7 +2,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { getPlaceById } from "@/actions/getPlaceById";
 
-import CommentCard from "@/components/Comment/CommentCard";
+import ReviewCard from "@/components/Review/ReviewCard";
 import Slideshow from "@/components/Slideshow/Slideshow";
 
 import { getServerSession } from "next-auth";
@@ -20,6 +20,7 @@ import {
   AlertCircle,
   Navigation,
   Share2,
+  Heart,
 } from "lucide-react";
 
 import OpeningHours from "@/components/PlaceDetails/OpeningHours";
@@ -169,7 +170,7 @@ export default async function PlaceDetailsPage({ params }) {
                 </div>
               </div>
             )}
-            <CommentCard place={place} />
+            <ReviewCard place={place} />
           </div>
           <div className="col-span-2 space-y-3">
             <OpeningHours openingHours={place.openingHours} />
