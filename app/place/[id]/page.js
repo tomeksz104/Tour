@@ -137,7 +137,11 @@ export default async function PlaceDetailsPage({ params }) {
               <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
                 Opis
               </h2>
-              <p className="text-gray-700">{place.description}</p>
+
+              <div
+                className="prose text-gray-700"
+                dangerouslySetInnerHTML={{ __html: place.description }}
+              ></div>
             </div>
             {place.topics.length > 0 && (
               <div className="space-y-3 bg-white rounded-md p-5">

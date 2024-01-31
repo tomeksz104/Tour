@@ -145,17 +145,6 @@ const PlaceForm = ({
     }
   }, [state]);
 
-  // async function onSubmit(data) {
-  //   if (mainPhotoPath) {
-  //     const fileData = new FormData();
-  //     fileData.append("file", mainPhotoPath);
-
-  //     dispatch({ ...data, fileData });
-  //   } else {
-  //     dispatch(data);
-  //   }
-  // }
-
   async function onSubmit(data) {
     const fileData = new FormData();
 
@@ -173,11 +162,6 @@ const PlaceForm = ({
     }
 
     dispatch({ ...data, fileData });
-
-    // const fileData = new FormData();
-    // fileData.append("file", file);
-
-    // dispatch({ ...data, fileData });
   }
 
   const handleGalleryImageChange = (event) => {
@@ -216,6 +200,7 @@ const PlaceForm = ({
                   form={form}
                   state={state}
                   categories={categories}
+                  placeDescription={place?.description}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -236,7 +221,6 @@ const PlaceForm = ({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-
           <Accordion type="single" collapsible className="mt-5">
             <AccordionItem value="item-3" className="bg-white rounded-md">
               <AccordionTrigger className="px-5">
@@ -247,7 +231,6 @@ const PlaceForm = ({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-
           <Accordion
             type="single"
             collapsible
@@ -268,7 +251,6 @@ const PlaceForm = ({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-
           <Accordion
             type="single"
             collapsible
@@ -284,7 +266,6 @@ const PlaceForm = ({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-
           <Accordion
             type="single"
             collapsible
@@ -311,7 +292,6 @@ const PlaceForm = ({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-
           {/* <div className="space-y-1">
             <Label htmlFor="image">Image</Label>
             <Input
@@ -321,7 +301,6 @@ const PlaceForm = ({
               placeholder="https://URL-to-best-photo.com"
             />
           </div> */}
-
           <div
             className={`flex items-center gap-5 ${
               placeId ? "float-right" : ""

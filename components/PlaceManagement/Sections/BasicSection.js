@@ -1,8 +1,6 @@
 import Input from "@/components/Input";
-import InputError from "@/components/InputError";
 import Label from "@/components/Label";
 import {
-  Form,
   FormField,
   FormItem,
   FormLabel,
@@ -21,7 +19,13 @@ import {
 
 import { PlaceType as placeTypes } from "@prisma/client";
 
-const BasicSection = ({ form, state, categories }) => {
+import TextEditor from "../../TextEditor/TextEditor";
+
+const BasicSection = ({ form, state, categories, placeDescription }) => {
+  const handleChangeContent = (content) => {
+    form.setValue("description", content);
+  };
+
   return (
     <>
       <div className="space-y-2 px-5 py-4">
@@ -159,14 +163,12 @@ const BasicSection = ({ form, state, categories }) => {
           Pamiętaj, że skopiowane opisy z innych stron mogą naruszać prawa
           autorskie i nie będą akceptowane.
         </span>
-        <textarea
-          {...form.register("description")}
-          className="outline-none bg-gray-50 w-full rounded-md border border-gray-200 py-2.5 px-4 text-sm text-gray-600 transition duration-300 focus:ring-1 focus:ring-green-500"
-          id="description"
-          name="description"
-          rows="5"
+
+        <TextEditor
+          onContentChange={handleChangeContent}
+          content={placeDescription}
           placeholder="Odkryj niepowtarzalne piękno i historię Tajemniczego Zamku Królewskiego, perły architektonicznej w sercu malowniczego krajobrazu. Ten majestatyczny zamek z XI wieku oferuje fascynującą podróż przez wieki, ujawniając tajemnice dawnych władców."
-        ></textarea>
+        />
       </div>
     </>
   );
