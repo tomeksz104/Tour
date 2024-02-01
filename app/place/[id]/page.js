@@ -10,20 +10,11 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import WatchlistButton from "@/components/WatchlistButton";
 import CircleButton from "@/components/CircleButton";
 import { Button } from "@/components/ui/button";
-import {
-  AtSign,
-  Check,
-  Phone,
-  Link as LinkIcon,
-  MessageCircle,
-  AlertOctagon,
-  AlertCircle,
-  Navigation,
-  Share2,
-  Heart,
-} from "lucide-react";
+
+import { AtSign, Check, Phone, Link as LinkIcon } from "lucide-react";
 
 import OpeningHours from "@/components/PlaceDetails/OpeningHours";
+import QuickListingActions from "@/components/PlaceDetails/QuickListingActions";
 
 const PlaceDetailsMap = dynamic(() => import("@/components/PlaceDetails/Map"), {
   loading: () => <p>loading...</p>,
@@ -92,42 +83,8 @@ export default async function PlaceDetailsPage({ params }) {
         </div>
       </div>
 
-      <div className="mx-auto flex items-center mt-5 space-x-3">
-        <Button
-          variant="outline"
-          className="flex items-center rounded-full hover:bg-white hover:border-gray-500"
-        >
-          <MessageCircle size={12} className="mr-2" />
-          Dodaj opinię
-        </Button>
-        <Button
-          variant="outline"
-          className="flex items-center rounded-full hover:bg-white hover:border-gray-500"
-        >
-          <Navigation size={12} className="mr-2" />
-          Nawiguj
-        </Button>
-        <Button
-          variant="outline"
-          className="flex items-center rounded-full hover:bg-white hover:border-gray-500"
-        >
-          <Phone size={12} className="mr-2" />
-          Zadzwoń
-        </Button>
-        <Button
-          variant="outline"
-          className="flex items-center rounded-full hover:bg-white hover:border-gray-500"
-        >
-          <Share2 size={12} className="mr-2" />
-          Udostępnij
-        </Button>
-        <Button
-          variant="outline"
-          className="flex items-center rounded-full hover:bg-white hover:border-gray-500"
-        >
-          <AlertCircle size={12} className="mr-2" />
-          Zgłoś błąd
-        </Button>
+      <div className="mx-auto mt-5">
+        <QuickListingActions className="mx-auto" />
       </div>
 
       <div className="relative mx-auto max-w-7xl w-full px-3 xl:px-0">
