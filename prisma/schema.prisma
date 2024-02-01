@@ -35,6 +35,7 @@ model User {
   Comment     Comment[]
   Review      Review[]
   Post        Post[]
+  ErrorReport ErrorReport[]
 }
 
 model Place {
@@ -74,8 +75,8 @@ model Place {
   country                Country?               @relation(fields: [countryId], references: [id])
   accommodation          Accommodation?
   restaurant             Food?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
 }
 
 model ChildFriendlyAmenity {
@@ -116,28 +117,27 @@ model Post {
 model Comment {
   id        Int      @id @default(autoincrement())
   content   String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   postId    Int
   userId    Int
-
 
   user User  @relation(fields: [userId], references: [id])
   Post Post? @relation(fields: [postId], references: [id])
 }
 
 model Review {
-  id          Int            @id @default(autoincrement())
-  userId      Int
-  rating      Float?           
-  content     String         @db.Text
-  photos      ReviewPhotos[]
-  placeId     Int
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        Int            @id @default(autoincrement())
+  userId    Int
+  rating    Float?
+  content   String         @db.Text
+  photos    ReviewPhotos[]
+  placeId   Int
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 
-  place       Place          @relation(fields: [placeId], references: [id])
-  author    User      @relation(fields: [userId], references: [id])
+  place  Place @relation(fields: [placeId], references: [id])
+  author User  @relation(fields: [userId], references: [id])
 }
 
 model SocialMediaPlatform {
@@ -296,6 +296,19 @@ model VerificationRequest {
   @@unique([identifier, token])
 }
 
+
+model ErrorReport {
+  id        Int               @id @default(autoincrement())
+  userId    Int
+  content   String            @db.Text
+  pageUrl   String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  status    ErrorReportStatus @default(NEW) 
+
+  user      User              @relation(fields: [userId], references: [id])
+}
+
 enum Role {
   ADMIN
   EDITOR
@@ -323,4 +336,10 @@ enum PlaceStatus {
   IN_MODERATION
   REJECTED
   PENDING_PAYMENT
+}
+
+enum ErrorReportStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
 }
