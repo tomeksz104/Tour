@@ -11,7 +11,7 @@ export default async function ReviewCard({ place }) {
   });
 
   return (
-    <section className="bg-white rounded-md p-5 antialiased">
+    <section id="reviews" className="bg-white rounded-md p-5 antialiased">
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
           Opinie ({comments.length})

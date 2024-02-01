@@ -1,7 +1,12 @@
 "use client";
 
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useState } from "react";
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import ErrorReportDialog from "@/components/ErrorReportDialog";
+import ShareDialog from "@/components/ShareDialog";
 
 import {
   Phone,
@@ -11,40 +16,55 @@ import {
   Share2,
 } from "lucide-react";
 
-import { useState } from "react";
-import ErrorReportDialog from "@/components/ErrorReportDialog";
-
-const QuickListingActions = () => {
+const QuickListingActions = ({ phone, googleMapUrl }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const [isShareDialogOpen, setShareDialogOpen] = useState(false);
 
   const toggleDialog = () => setDialogOpen(!isDialogOpen);
+  const toggleShareDialog = () => setShareDialogOpen(!isShareDialogOpen);
 
   return (
     <>
       <ScrollArea className="w-full whitespace-nowrap ">
         <div className="flex items-center space-x-3">
           <Button
+            asChild
             variant="outline"
             className="flex items-center rounded-full hover:bg-white hover:border-gray-500"
           >
-            <MessageCircle size={12} className="mr-2" />
-            Dodaj opinię
+            <Link href={"#reviews"}>
+              <MessageCircle size={12} className="mr-2" />
+              Dodaj opinię
+            </Link>
           </Button>
+
+          {googleMapUrl && (
+            <Button
+              asChild
+              variant="outline"
+              className="flex items-center rounded-full hover:bg-white hover:border-gray-500"
+            >
+              <Link href={googleMapUrl} target="_blank">
+                <Navigation size={12} className="mr-2" />
+                Nawiguj
+              </Link>
+            </Button>
+          )}
+
+          {phone && (
+            <Button
+              asChild
+              variant="outline"
+              className="flex items-center rounded-full hover:bg-white hover:border-gray-500"
+            >
+              <Link href={`tel:${phone}`}>
+                <Phone size={12} className="mr-2" />
+                Zadzwoń
+              </Link>
+            </Button>
+          )}
           <Button
-            variant="outline"
-            className="flex items-center rounded-full hover:bg-white hover:border-gray-500"
-          >
-            <Navigation size={12} className="mr-2" />
-            Nawiguj
-          </Button>
-          <Button
-            variant="outline"
-            className="flex items-center rounded-full hover:bg-white hover:border-gray-500"
-          >
-            <Phone size={12} className="mr-2" />
-            Zadzwoń
-          </Button>
-          <Button
+            onClick={toggleShareDialog}
             variant="outline"
             className="flex items-center rounded-full hover:bg-white hover:border-gray-500"
           >
@@ -65,6 +85,8 @@ const QuickListingActions = () => {
       </ScrollArea>
 
       <ErrorReportDialog isOpen={isDialogOpen} onClose={toggleDialog} />
+
+      <ShareDialog isOpen={isShareDialogOpen} onClose={toggleShareDialog} />
     </>
   );
 };

@@ -58,7 +58,7 @@ const ErrorReportDialog = ({ isOpen, onClose }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Zgłoś błąd</DialogTitle>
           <DialogDescription>
