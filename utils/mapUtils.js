@@ -1,23 +1,15 @@
 import { categories_list } from "./categories";
 
-export const getIcon = (category, categories = null) => {
-  const selectedCategory = categories_list.find(
-    (item) => item.title === category
-  );
+export const getIcon = (category) => {
+  const icon = new L.icon({
+    iconUrl: category.iconPath,
+    iconSize: [18, 23],
+    iconAnchor: [9, 11],
+    //iconSize: [30, 38],
+    //iconAnchor: [15, 18],
+  });
 
-  if (selectedCategory && selectedCategory.iconPath) {
-    const iconPath = selectedCategory.iconPath;
-
-    const icon = new L.icon({
-      iconUrl: iconPath,
-      iconSize: [18, 23],
-      iconAnchor: [9, 11],
-      //iconSize: [30, 38],
-      //iconAnchor: [15, 18],
-    });
-
-    return icon;
-  }
+  return icon;
 };
 
 export const getIconPathByCategoryId = (categoryId, categories = null) => {
@@ -62,10 +54,9 @@ export const getDefaultIcon = () => {
 
 export const getVisibleMarkers = (map, places) => {
   if (map) {
+    console.log(places);
     const visiblePlaces = places.filter((place) =>
-      map
-        .getBounds()
-        .contains(L.latLng(place.coordinates.lat, place.coordinates.lng))
+      map.getBounds().contains(L.latLng(place.latitude, place.longitude))
     );
     return visiblePlaces;
   }

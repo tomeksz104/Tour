@@ -63,7 +63,7 @@ const Sidebar = memo(
         </button>
 
         <section
-          className={`flex flex-col z-20 w-full max-w-xl bg-white focus:outline-none ease-in-out duration-300
+          className={`flex flex-col z-20 w-full max-w-2xl bg-gray-100 focus:outline-none ease-in-out duration-300
             ${showSidebar ? "translate-x-0 " : "-translate-x-full"}`}
         >
           <div className="flex items-center justify-between px-5 py-3">

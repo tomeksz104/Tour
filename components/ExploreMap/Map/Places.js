@@ -173,18 +173,16 @@ const Places = memo((props) => {
       const popupContent = document.createElement("div");
       popupContent.style.width = "301px";
 
-      const marker = L.canvasMarker(
-        [place.coordinates.lat, place.coordinates.lng],
-        {
-          radius: 0,
-          img: {
-            url: getIconPath(place.category), //image link
-            size: [18, 23], //image size
-            rotate: 0, //image base rotate
-            offset: { x: 0, y: 0 }, //image offset
-          },
-        }
-      ).addTo(map);
+      const marker = L.canvasMarker([place.latitude, place.longitude], {
+        radius: 0,
+        img: {
+          //url: getIconPath(place.category), //image link
+          url: place.category.iconPath,
+          size: [18, 23], //image size
+          rotate: 0, //image base rotate
+          offset: { x: 0, y: 0 }, //image offset
+        },
+      }).addTo(map);
 
       marker
         .on("popupopen", () => {
@@ -215,18 +213,12 @@ const Places = memo((props) => {
     return (
       <>
         <Marker
-          position={[
-            props.hoveredPlace.coordinates.lat,
-            props.hoveredPlace.coordinates.lng,
-          ]}
+          position={[props.hoveredPlace.latitude, props.hoveredPlace.longitude]}
           icon={animatedCircleIcon}
           key={1}
         ></Marker>
         <Marker
-          position={[
-            props.hoveredPlace.coordinates.lat,
-            props.hoveredPlace.coordinates.lng,
-          ]}
+          position={[props.hoveredPlace.latitude, props.hoveredPlace.longitude]}
           icon={getIcon(props.hoveredPlace.category)}
           key={2}
         ></Marker>

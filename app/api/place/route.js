@@ -1,15 +1,62 @@
 import Place from "@/models/place";
-import dbConnect from "@/libs/dbConnect";
+import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+
+import { isOpenNow } from "@/utils/openingHours";
+
+const getWeekDay = () => {
+  const currentDay = new Date().getDay();
+  const days = [
+    "SUNDAY",
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    "SATURDAY",
+  ];
+  return days[currentDay];
+};
 
 export const GET = async (request) => {
   try {
-    await dbConnect();
+    const currentWeekDay = getWeekDay();
+    const places = await db.place.findMany({
+      include: {
+        category: true, // Załączenie kategorii
+        reviews: true,
+        openingHours: {
+          where: {
+            day: currentWeekDay, // Filtruj godziny otwarcia na podstawie obecnego dnia tygodnia
+          },
+        },
+      },
+    });
 
-    const places = await Place.find({});
+    const placesWithDetails = places.map((place) => {
+      // Oblicz średnią ocen i liczbę recenzji
+      const totalRatings = place.reviews.reduce(
+        (acc, review) => acc + (review.rating || 0),
+        0
+      );
+      const averageRating =
+        place.reviews.length > 0 ? totalRatings / place.reviews.length : 0;
+      const reviewsCount = place.reviews.length;
 
-    return new Response(JSON.stringify(places), { status: 200 });
+      const isOpen = isOpenNow(place.openingHours);
+
+      return {
+        ...place,
+        averageRating,
+        reviewsCount,
+        isOpen,
+      };
+    });
+    return new Response(JSON.stringify(placesWithDetails), {
+      status: 200,
+    });
   } catch (error) {
+    console.error("Failed to fetch places with details", error);
     return new Response("Failed to fetch all places", { status: 500 });
   }
 };
