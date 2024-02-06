@@ -25,8 +25,8 @@ const QuickListingActions = ({ phone, googleMapUrl }) => {
 
   return (
     <>
-      <ScrollArea className="w-full whitespace-nowrap ">
-        <div className="flex items-center space-x-3">
+      <ScrollArea className="whitespace-nowrap px-3">
+        <div className="flex items-center space-x-3 justify-center">
           <Button
             asChild
             variant="outline"

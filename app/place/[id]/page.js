@@ -83,7 +83,7 @@ export default async function PlaceDetailsPage({ params }) {
         </div>
       </div>
 
-      <div className="mx-auto mt-5">
+      <div className="w-full mx-auto mt-5">
         <QuickListingActions
           phone={place.phone || null}
           googleMapUrl={place.googleMapUrl || null}
