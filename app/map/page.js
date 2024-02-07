@@ -8,7 +8,7 @@ import Map from "@/components/ExploreMap/Map/Map";
 export default function Home() {
   return (
     <>
-      <ScrollableTabsSlider />
+      {/* <ScrollableTabsSlider /> */}
       <div className="relative flex flex-1 h-full overflow-hidden">
         <Map />
       </div>

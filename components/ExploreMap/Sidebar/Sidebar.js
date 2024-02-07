@@ -1,7 +1,20 @@
 import { memo, useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useLoadMore from "@/hooks/useLoadMore";
 
 import PlacesList from "./PlacesList";
+import { Button } from "@/components/ui/button";
+import FiltersDialog from "../FiltersDialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import { Clock3, MapPin } from "lucide-react";
 
 const mobileMediaQuery = "(min-width: 768px)";
 
@@ -13,10 +26,18 @@ const Sidebar = memo(
     onToggleWatchlist,
     isLoading,
   }) => {
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+    const router = useRouter();
     const { data: visiblePlaces, handleScroll } = useLoadMore(places, 10);
     const [showSidebar, setShowSidebar] = useState(
       window.matchMedia(mobileMediaQuery).matches
     );
+    const [isFiltersDialogOpen, setFiltersDialogOpen] = useState(false);
+
+    const nearMeParamsValue = searchParams.get("nearMe");
+
+    const isOpenParamsValue = searchParams.get("open");
 
     const handleToggleSidebar = () => {
       setShowSidebar((current) => !current);
@@ -35,6 +56,47 @@ const Sidebar = memo(
         query.removeEventListener("change", handleQueryChange);
       };
     }, []);
+
+    const toggleFiltersDialog = () =>
+      setFiltersDialogOpen((current) => !current);
+
+    const handleNearMeClick = () => {
+      const currentParams = new URLSearchParams(searchParams);
+
+      if (nearMeParamsValue === "true") {
+        currentParams.set("nearMe", "false");
+      } else {
+        currentParams.set("nearMe", "true");
+      }
+
+      router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
+        shallow: true,
+      });
+    };
+
+    const handleOpenClick = () => {
+      const currentParams = new URLSearchParams(searchParams);
+
+      if (isOpenParamsValue === "true") {
+        currentParams.set("open", "false");
+      } else {
+        currentParams.set("open", "true");
+      }
+
+      router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
+        shallow: true,
+      });
+    };
+
+    const handleSortChange = (selectedValue) => {
+      const currentParams = new URLSearchParams(searchParams);
+
+      currentParams.set("sortBy", selectedValue);
+
+      router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
+        shallow: true,
+      });
+    };
 
     return (
       <>
@@ -150,6 +212,56 @@ const Sidebar = memo(
               </button>
             </div>
           </div>
+          <div className="flex flex-wrap items-center gap-2 px-5 pb-3">
+            <Button
+              onClick={handleNearMeClick}
+              variant="outline"
+              className={`rounded-full hover:bg-white hover:border-gray-500 text-xs px-3 py-1 gap-1 ${
+                nearMeParamsValue === "true" && "border-gray-500"
+              }`}
+            >
+              <MapPin size={12} />
+              Blisko mnie
+            </Button>
+            <Button
+              onClick={handleOpenClick}
+              variant="outline"
+              className={`rounded-full hover:bg-white hover:border-gray-500 text-xs px-3 py-1 gap-1 ${
+                isOpenParamsValue === "true" && "border-gray-500"
+              }`}
+            >
+              <Clock3 size={12} />
+              Otwarte
+            </Button>
+            <Select onValueChange={handleSortChange}>
+              <SelectTrigger className="max-w-[120px] rounded-full font-medium hover:bg-white hover:border-gray-500 text-xs px-3 py-1 hidden md:flex gap-1">
+                <SelectValue placeholder="Sortowanie" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="most_reviewed">
+                    Najczęściej oceniane
+                  </SelectItem>
+                  <SelectItem value="highest_rated">
+                    Najwyżej oceniane
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <Button
+              variant="outline"
+              className="rounded-full hover:bg-white hover:border-gray-500 text-xs px-3 py-1 hidden md:flex"
+            >
+              Wszystkie kategorie
+            </Button>
+            <Button
+              onClick={toggleFiltersDialog}
+              variant="link"
+              className="text-xs px-3 py-1 ml-auto"
+            >
+              Więcej filtrów
+            </Button>
+          </div>
 
           <div
             onScroll={handleScroll}
@@ -163,6 +275,11 @@ const Sidebar = memo(
             />
           </div>
         </section>
+
+        <FiltersDialog
+          isOpen={isFiltersDialogOpen}
+          onClose={toggleFiltersDialog}
+        />
       </>
     );
   }
