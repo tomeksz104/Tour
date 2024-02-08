@@ -68,7 +68,7 @@ const Card = ({ place, onMouseEnter, onMouseLeave }) => {
           </Badge>
         </div>
       </div>
-      <div className="flex flex-col w-full py-3 pr-3">
+      <div className="flex flex-col w-full py-3 px-3 lg:pl-0 lg:pr-3">
         <div className="flex items-center gap-x-4 text-xs">
           <span
             href={place.category.href}
