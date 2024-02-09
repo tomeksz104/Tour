@@ -12,6 +12,7 @@ export async function getPlaceById(id) {
       childFriendlyAmenities: true,
       photos: true,
       user: true,
+      category: true,
     },
   });
 }

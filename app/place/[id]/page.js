@@ -163,7 +163,7 @@ export default async function PlaceDetailsPage({ params }) {
                 </h2>
                 {place.website !== null && (
                   <div className="flex items-center space-x-3">
-                    <LinkIcon size={16} />
+                    <LinkIcon size={16} className="text-green-600" />
                     <Link href={place.website} className="hover:underline">
                       {place.website}
                     </Link>
@@ -171,13 +171,13 @@ export default async function PlaceDetailsPage({ params }) {
                 )}
                 {place.phone !== null && (
                   <div className="flex items-center space-x-3">
-                    <Phone size={16} />
+                    <Phone size={16} className="text-green-600" />
                     <p>{place.phone}</p>
                   </div>
                 )}
                 {place.email !== null && (
                   <div className="flex items-center space-x-3">
-                    <AtSign size={16} />
+                    <AtSign size={16} className="text-green-600" />
                     <p>{place.email}</p>
                   </div>
                 )}
