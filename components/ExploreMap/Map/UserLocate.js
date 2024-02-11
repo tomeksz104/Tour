@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import { useMap } from "react-leaflet";
 
 import Locate from "leaflet.locatecontrol";
@@ -7,26 +7,24 @@ import * as L from "leaflet";
 
 const UserLocate = memo(() => {
   const map = useMap();
-  let locateControl;
+  const [locateControl, setLocateControl] = useState(null);
 
-  useEffect(() => {
-    locateControl = L.control
-      .locate({
-        position: "topright",
-        strings: {
-          title: "Show me where I am, yo!",
-        },
-        icon: "leaflet-control-locate-location-icon",
-        flyTo: true,
-      })
-      .addTo(map);
+  if (locateControl === null) {
+    const locate = L.control.locate({
+      position: "topright",
+      strings: {
+        title: "Show me where I am, yo!",
+      },
+      icon: "leaflet-control-locate-location-icon",
+      showPopup: false,
+      //flyTo: true,
+      setView: false,
+    });
 
-    // return () => {
-    //   if (locateControl) {
-    //     locateControl.remove();
-    //   }
-    // };
-  }, [map]);
+    locate.addTo(map);
+
+    setLocateControl(locate);
+  }
 
   return null;
 });

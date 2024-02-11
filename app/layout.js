@@ -2,6 +2,7 @@ import { ToastContextProvider } from "@/contexts/ToastContext";
 import { ConfirmContextProvider } from "@/contexts/ConfirmContext";
 import { PlacesContextProvider } from "@/contexts/PlacesContext";
 import { WatchlistContextProvider } from "@/contexts/WatchlistContext";
+import { LocateContextProvider } from "@/contexts/LocateContext";
 
 import Provider from "@/components/Provider";
 import Navigation from "@/components/Navigation/Navigation";
@@ -24,17 +25,19 @@ export default async function RootLayout({ children }) {
         {/* <body className={`${inter.className} m-auto min-h-screen flex flex-col`}> */}
         <Provider>
           <WatchlistContextProvider>
-            <PlacesContextProvider>
-              <ConfirmContextProvider>
-                <ToastContextProvider>
-                  <div className="flex h-screen flex-col">
-                    <Navigation />
-                    {children}
-                  </div>
-                  <ConfirmDialog />
-                </ToastContextProvider>
-              </ConfirmContextProvider>
-            </PlacesContextProvider>
+            <LocateContextProvider>
+              <PlacesContextProvider>
+                <ConfirmContextProvider>
+                  <ToastContextProvider>
+                    <div className="flex h-screen flex-col">
+                      <Navigation />
+                      {children}
+                    </div>
+                    <ConfirmDialog />
+                  </ToastContextProvider>
+                </ConfirmContextProvider>
+              </PlacesContextProvider>
+            </LocateContextProvider>
           </WatchlistContextProvider>
         </Provider>
       </body>

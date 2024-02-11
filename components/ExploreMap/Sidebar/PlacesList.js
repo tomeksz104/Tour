@@ -23,7 +23,7 @@ const PlacesList = ({ places, onMarkerHover, isLoading }) => {
 
   const handleMouseLeave = () => {
     clearTimeout(hoverTimeout);
-    //onMarkerHover(null);
+    onMarkerHover(null);
   };
 
   if (isLoadingParams || isLoading) {

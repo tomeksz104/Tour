@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useLoadMore from "@/hooks/useLoadMore";
 
@@ -14,7 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Clock3, MapPin } from "lucide-react";
+import { Clock3, Heart, MapPin } from "lucide-react";
+import { LocateContext } from "@/contexts/LocateContext";
 
 const mobileMediaQuery = "(min-width: 768px)";
 
@@ -30,6 +31,7 @@ const Sidebar = memo(
     const pathname = usePathname();
     const router = useRouter();
     const { data: visiblePlaces, handleScroll } = useLoadMore(places, 10);
+    const locateCtx = useContext(LocateContext);
     const [showSidebar, setShowSidebar] = useState(
       window.matchMedia(mobileMediaQuery).matches
     );
@@ -64,9 +66,17 @@ const Sidebar = memo(
       const currentParams = new URLSearchParams(searchParams);
 
       if (nearMeParamsValue === "true") {
-        currentParams.set("nearMe", "false");
+        currentParams.delete("nearMe");
+        currentParams.delete("nearMeDistance");
       } else {
+        if (
+          locateCtx.coordinates.latitude === undefined ||
+          locateCtx.coordinates.longitude === undefined
+        )
+          locateCtx.getLocation();
+
         currentParams.set("nearMe", "true");
+        currentParams.set("nearMeDistance", "50");
       }
 
       router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
@@ -78,7 +88,7 @@ const Sidebar = memo(
       const currentParams = new URLSearchParams(searchParams);
 
       if (isOpenParamsValue === "true") {
-        currentParams.set("open", "false");
+        currentParams.delete("open");
       } else {
         currentParams.set("open", "true");
       }
@@ -91,7 +101,11 @@ const Sidebar = memo(
     const handleSortChange = (selectedValue) => {
       const currentParams = new URLSearchParams(searchParams);
 
-      currentParams.set("sortBy", selectedValue);
+      if (selectedValue === "default") {
+        currentParams.delete("sortBy");
+      } else {
+        currentParams.set("sortBy", selectedValue);
+      }
 
       router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
         shallow: true,
@@ -135,60 +149,23 @@ const Sidebar = memo(
               <span className="hidden sm:inline-block"> on the map</span>
             </div>
             <div className="flex items-center gap-3">
-              <div className="inline-flex rounded-md shadow-sm" role="group">
-                <button
-                  onClick={onToggleWatchlist}
-                  type="button"
-                  className={`inline-flex items-center px-4 py-1.5 text-sm font-medium border border-gray-900 rounded-l-full hover:bg-gray-900 hover:text-white ${
-                    !isShowWatchlist
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-900 bg-transparent"
-                  }`}
-                  aria-label="Toggle watchlist"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-4 h-4 mr-2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
-                    />
-                  </svg>
-                  <span className="text-xs font-medium">All</span>
-                </button>
-                <button
-                  onClick={onToggleWatchlist}
-                  type="button"
-                  className={`inline-flex items-center px-4 py-1.5 text-sm font-medium border-t border-b border-r border-gray-900 rounded-r-full hover:bg-gray-900 hover:text-white focus:z-10  ${
-                    isShowWatchlist
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-900 bg-transparent"
-                  }`}
-                  aria-label="Toggle watchlist"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    className="h-4 w-4 mr-2"
-                  >
-                    <path
-                      d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></path>
-                  </svg>
-                  <span className="text-xs font-medium">Watchlist</span>
-                </button>
-              </div>
+              <Select onValueChange={handleSortChange}>
+                <SelectTrigger className="max-w-auto rounded-full font-medium hover:bg-white hover:border-gray-500 text-xs px-3 py-1 hidden md:flex gap-1">
+                  <SelectValue placeholder="Sortowanie" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="default">Domyślnie</SelectItem>
+                    <SelectItem value="most_reviewed">
+                      Najczęściej oceniane
+                    </SelectItem>
+                    <SelectItem value="highest_rated">
+                      Najwyżej oceniane
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
 
               <button
                 onClick={handleToggleSidebar}
@@ -233,26 +210,17 @@ const Sidebar = memo(
               <Clock3 size={12} />
               Otwarte
             </Button>
-            <Select onValueChange={handleSortChange}>
-              <SelectTrigger className="max-w-[120px] rounded-full font-medium hover:bg-white hover:border-gray-500 text-xs px-3 py-1 hidden md:flex gap-1">
-                <SelectValue placeholder="Sortowanie" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="most_reviewed">
-                    Najczęściej oceniane
-                  </SelectItem>
-                  <SelectItem value="highest_rated">
-                    Najwyżej oceniane
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+
             <Button
+              onClick={onToggleWatchlist}
               variant="outline"
-              className="rounded-full hover:bg-white hover:border-gray-500 text-xs px-3 py-1 hidden md:flex"
+              className={`rounded-full hover:bg-white hover:border-gray-500 text-xs px-3 py-1 gap-1 `}
             >
-              Wszystkie kategorie
+              <Heart
+                size={12}
+                className={`${isShowWatchlist && "text-red-500 fill-red-500"}`}
+              />
+              Ulubione
             </Button>
             <Button
               onClick={toggleFiltersDialog}

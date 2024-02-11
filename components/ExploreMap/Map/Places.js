@@ -4,11 +4,16 @@ import { createRoot } from "react-dom/client";
 import { Marker, useMap } from "react-leaflet";
 import { PlacesContext } from "@/contexts/PlacesContext";
 import { WatchlistContext } from "@/contexts/WatchlistContext";
+import { LocateContext } from "@/contexts/LocateContext";
 import L from "leaflet";
 
 import "leaflet-canvas-markers";
 
-import { getIcon, getIconPath, getVisibleMarkers } from "@/utils/mapUtils";
+import {
+  getIcon,
+  getVisibleMarkers,
+  haversineDistance,
+} from "@/utils/mapUtils";
 
 import PlacePopup from "./PlacePupup";
 import { useDebouncedCallback } from "use-debounce";
@@ -20,12 +25,24 @@ const Places = memo((props) => {
   const map = useMap();
   const placesCtx = useContext(PlacesContext);
   const watchlistCtx = useContext(WatchlistContext);
+  const locateCtx = useContext(LocateContext);
   const [placesToRender, setPlacesToRender] = useState([]);
 
   const markersRef = useRef([]);
 
   const idToZoom = searchParams.get("id");
   const selectedCategories = searchParams.getAll("category");
+  const placeTypeParamsValue = searchParams.getAll("placeType");
+  const provinceParamsValue = searchParams.get("province");
+  const cityParamsValue = searchParams.get("city");
+  const nearMeParamsValue = searchParams.get("nearMe");
+  const nearMeDistanceParamsValue = searchParams.get("nearMeDistance");
+  const familyFriendlyParamsValue = searchParams.get("familyFriendly");
+  const tagParamsValue = searchParams.getAll("tag");
+  const topicParamsValue = searchParams.getAll("topic");
+  const childAmienityParamsValue = searchParams.getAll("childAmenity");
+  const isOpenParamsValue = searchParams.get("open");
+  const sortByParamsValue = searchParams.get("sortBy");
   const isLoadingParams = searchParams.getAll("loading");
 
   // Filtering places
@@ -33,27 +50,111 @@ const Places = memo((props) => {
     if (placesCtx.places.length > 0) {
       let newPlacesToRender = placesCtx.places;
 
+      if (nearMeParamsValue !== null || nearMeDistanceParamsValue !== null) {
+        newPlacesToRender = newPlacesToRender.filter((place) => {
+          const placeCoords = {
+            latitude: place.latitude,
+            longitude: place.longitude,
+          };
+          const distance = haversineDistance(
+            locateCtx.coordinates,
+            placeCoords
+          );
+          const radius = nearMeDistanceParamsValue
+            ? +nearMeDistanceParamsValue
+            : 50;
+
+          return distance <= radius;
+        });
+      }
+
       if (map && props?.markerToRemove) {
         newPlacesToRender = newPlacesToRender.filter(
-          (element) => element._id !== props.markerToRemove
+          (element) => element.id !== props.markerToRemove
         );
       }
 
       if (props.isShowWatchlist) {
         newPlacesToRender = newPlacesToRender.filter((place) =>
-          watchlistCtx.watchlist.includes(place._id)
+          watchlistCtx.watchlist.includes(place.id)
         );
       }
 
       if (selectedCategories.length > 0) {
         newPlacesToRender = newPlacesToRender.filter((place) =>
-          selectedCategories.includes(place.category)
+          selectedCategories.includes(place.categoryId.toString())
+        );
+      }
+
+      if (placeTypeParamsValue.length > 0) {
+        newPlacesToRender = newPlacesToRender.filter((place) =>
+          placeTypeParamsValue.includes(place.type)
+        );
+      }
+
+      if (familyFriendlyParamsValue !== null) {
+        newPlacesToRender = newPlacesToRender.filter(
+          (place) =>
+            place.childFriendly.toString() === familyFriendlyParamsValue
+        );
+      }
+
+      if (provinceParamsValue !== null) {
+        newPlacesToRender = newPlacesToRender.filter(
+          (place) => place.provinceId?.toString() === provinceParamsValue
+        );
+      }
+
+      if (provinceParamsValue !== null && cityParamsValue !== null) {
+        newPlacesToRender = newPlacesToRender.filter(
+          (place) => place.cityId?.toString() === cityParamsValue
+        );
+      }
+
+      if (tagParamsValue.length > 0) {
+        newPlacesToRender = newPlacesToRender.filter((place) =>
+          place.tags.some((tag) => tagParamsValue.includes(tag.id.toString()))
+        );
+      }
+
+      if (topicParamsValue.length > 0) {
+        newPlacesToRender = newPlacesToRender.filter((place) =>
+          place.topics.some((topic) =>
+            topicParamsValue.includes(topic.id.toString())
+          )
+        );
+      }
+
+      if (childAmienityParamsValue.length > 0) {
+        newPlacesToRender = newPlacesToRender.filter((place) =>
+          place.childFriendlyAmenities.some((amenity) =>
+            childAmienityParamsValue.includes(amenity.id.toString())
+          )
+        );
+      }
+
+      if (isOpenParamsValue !== null) {
+        newPlacesToRender = newPlacesToRender.filter(
+          (place) => place.isOpen === true
+        );
+      }
+
+      if (sortByParamsValue !== null && sortByParamsValue === "most_reviewed") {
+        newPlacesToRender = newPlacesToRender.sort(
+          (a, b) => b.reviewsCount - a.reviewsCount
+        );
+      }
+
+      if (sortByParamsValue !== null && sortByParamsValue === "highest_rated") {
+        newPlacesToRender = newPlacesToRender.sort(
+          (a, b) => b.averageRating - a.averageRating
         );
       }
 
       setPlacesToRender(newPlacesToRender);
-      const newVisiblePlaces = getVisibleMarkers(map, newPlacesToRender);
+
       if (props.interactiveMap === true) {
+        const newVisiblePlaces = getVisibleMarkers(map, newPlacesToRender);
         props.onChangeVisiblePlaces(newVisiblePlaces);
       }
     }
@@ -64,6 +165,7 @@ const Places = memo((props) => {
     watchlistCtx.watchlist,
     map,
     props.interactiveMap,
+    nearMeDistanceParamsValue,
   ]);
 
   // Using useDebouncedCallback to delay handleMoveEnd function

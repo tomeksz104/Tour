@@ -105,6 +105,14 @@ const FiltersDialog = ({ isOpen, onClose }) => {
         setProvinces(filtersData.provinces);
         setCities(filtersData.cities);
         setChildAmenities(filtersData.childAmenities);
+
+        if (provinceParamsValue !== null) {
+          const filteredCities = filtersData.cities.filter(
+            (city) => city.provinceId === +provinceParamsValue
+          );
+
+          setCitiesOfProvince(filteredCities);
+        }
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
@@ -117,7 +125,7 @@ const FiltersDialog = ({ isOpen, onClose }) => {
     const currentParams = new URLSearchParams(searchParams);
 
     if (nearMeParamsValue === "true") {
-      currentParams.set("nearMe", false);
+      currentParams.delete("nearMe");
     } else {
       currentParams.set("nearMe", true);
     }
@@ -269,6 +277,8 @@ const FiltersDialog = ({ isOpen, onClose }) => {
       const filteredCities = cities.filter(
         (city) => city.provinceId === +province
       );
+      currentParams.delete("city");
+
       setCitiesOfProvince(filteredCities);
     } else {
       setCitiesOfProvince([]);
@@ -422,7 +432,10 @@ const FiltersDialog = ({ isOpen, onClose }) => {
                       >
                         Województwo
                       </Label>
-                      <Select onValueChange={handleChangeProvince}>
+                      <Select
+                        value={provinceParamsValue ? +provinceParamsValue : ""}
+                        onValueChange={handleChangeProvince}
+                      >
                         <SelectTrigger id="province" className="w-full">
                           <SelectValue placeholder="Wybierz województwo" />
                         </SelectTrigger>
@@ -651,7 +664,7 @@ const FiltersDialog = ({ isOpen, onClose }) => {
           >
             Zresetuj filtry
           </Button>
-          <Button>Zakończ</Button>
+          <Button onClick={onClose}>Zakończ</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

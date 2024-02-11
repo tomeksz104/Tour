@@ -23,11 +23,26 @@ export const GET = async (request) => {
     const currentWeekDay = getWeekDay();
     const places = await db.place.findMany({
       include: {
-        category: true, // Załączenie kategorii
+        category: true,
         reviews: true,
         openingHours: {
           where: {
-            day: currentWeekDay, // Filtruj godziny otwarcia na podstawie obecnego dnia tygodnia
+            day: currentWeekDay,
+          },
+        },
+        tags: {
+          select: {
+            id: true,
+          },
+        },
+        topics: {
+          select: {
+            id: true,
+          },
+        },
+        childFriendlyAmenities: {
+          select: {
+            id: true,
           },
         },
       },
