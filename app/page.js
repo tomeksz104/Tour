@@ -3,14 +3,28 @@ import Image from "next/image";
 import Link from "next/link";
 
 import Button from "@/components/Button";
+import { Button as ButtonShadcn } from "@/components/ui/button";
 import ExploreCategories from "@/components/HomePage/ExploreCategories";
+import SearchBar from "@/components/HomePage/SearchBar";
+import { db } from "@/lib/db";
 
 const RandomPlaces = lazy(() => import("@/components/HomePage/RandomPlaces"));
 
 export default async function Home() {
+  const categories = await db.category.findMany();
+  const provinces = await db.province.findMany();
+
   return (
     <Fragment>
-      <section className="pb-20 2xl:pb-28 pt-10 2xl:pt-20 relative">
+      <section className="pt-10 relative">
+        <div
+          class="absolute left-0 top-0 lg:-top-20 h-full w-full bg-cover bg-repeat-x bg-bottom-left opacity-70 "
+          style={{
+            backgroundImage:
+              "url('https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/07/bg-03.png')",
+            mixBlendMode: "multiply",
+          }}
+        ></div>
         <div className="absolute -bottom-52 left-0 -z-10">
           <Image
             priority
@@ -44,7 +58,7 @@ export default async function Home() {
             <Image
               width="101"
               height="75"
-              src="/home-icons/rectangular-pattern-green.svg"
+              src="/home-icons/rectangular-pattern-yellow.svg"
               alt=""
               style={{
                 maxWidth: "100%",
@@ -138,20 +152,23 @@ export default async function Home() {
           </span>
         </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
-          <div className="grid items-center grid-cols-1 lg:grid-cols-5 gap-8">
-            <div className="hero-content xl:pr-20 lg:col-span-3">
-              <h2 className="text-3xl lg:text-4xl 2xl:text-6xl leading-tight font-bold text-gray-900">
-                Find the <span className="bg-yellow-100">BEST</span> Place
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            {/* <div className="grid items-center grid-cols-1 lg:grid-cols-5 gap-8"> */}
+            <div className="xl:pr-20 lg:col-span-3 mt-0 md:mt-20">
+              <h2 className="font-primary text-3xl lg:text-4xl 2xl:text-6xl leading-tight font-extrabold	 text-gray-900">
+                Znajdź miejsca{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-green-600 inline-block">
-                  on our interactive map
+                  które pokochasz
                 </span>
               </h2>
-              <p className="text-lg md:text-xl leading-tight font-medium text-gray-600 my-6 2xl:my-12">
+              {/* <p className="text-lg md:text-xl leading-tight font-medium text-gray-600 my-6 2xl:my-12">
                 Our collection of more than 1,500 remarkable places will take
                 your trip to the next level. Look for illustrations on our maps
                 and visit unique places!
-              </p>
-              <div className="flex flex-wrap items-center">
+              </p> */}
+              <SearchBar categories={categories} provinces={provinces} />
+
+              {/* <div className="flex flex-wrap items-center">
                 <Link href="/map">
                   <Button type="button" className="w-64">
                     Explore the map
@@ -171,9 +188,9 @@ export default async function Home() {
                     </svg>
                   </Button>
                 </Link>
-              </div>
+              </div> */}
             </div>
-            <div className="lg:col-span-2 aos-init aos-animate">
+            <div className="lg:col-span-2">
               <Image
                 width={16}
                 height={9}
@@ -187,6 +204,75 @@ export default async function Home() {
                   objectFit: "cover",
                 }}
               />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative bg-green-500 lg:-mt-20 mb-16 pt-10 lg:pt-0">
+        <div
+          class="absolute left-0 top-0 h-full w-full bg-cover bg-no-repeat bg-top-right opacity-20 transition-all duration-300"
+          style={{
+            backgroundImage:
+              "url('https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/08/bg-21.png')",
+            mixBlendMode: "multiply",
+          }}
+        ></div>
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+          <div className="flex flex-col-reverse lg:flex-row space-x-8 items-center">
+            <img
+              className="-mb-24 "
+              width="510"
+              height="440"
+              src="https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/08/image-album.png"
+            />
+            <div className="w-[175px] h-[175px] hidden lg:block">
+              <div className="relative mx-auto max-w-[175px]">
+                <div className="box-border	">
+                  <svg
+                    className="uppercase font-semibold tracking-widest text-white text-xs animate-[spin_5s_linear_infinite]"
+                    viewBox="0 0 100 100"
+                  >
+                    <path
+                      id="textPath"
+                      d="M 15, 50 a 33,33 0 1,1 66,0 33,33 0 1,1 -66,0"
+                      stroke=""
+                      fill="none"
+                      stroke-width="0"
+                    ></path>
+                    <text text-anchor="start">
+                      <textPath
+                        className="font-primary fill-white"
+                        href="#textPath"
+                      >
+                        PONAD 1500 miejsc
+                      </textPath>
+                    </text>
+                  </svg>
+                </div>
+                <div className="absolute max-w-[45px] top-1/2 left-1/2 -translate-x-1/2	-translate-y-1/2	">
+                  <img
+                    width="44"
+                    height="53"
+                    src="https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/07/logo-white-2.png"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col font-primary space-y-3">
+              <h2 className="text-3xl lg:text-4xl font-bold text-white">
+                Znajdź coś w pobliżu
+              </h2>
+              <span className="text-white text-lg">
+                Nasza kolekcja ponad 1500 niezwykłych miejsc przeniesie Twoją
+                podróż na wyższy poziom.
+              </span>
+              <div>
+                <ButtonShadcn asChild className="h-12 px-10">
+                  <Link href={"/map"}>Przeglądaj mapę</Link>
+                </ButtonShadcn>
+              </div>
             </div>
           </div>
         </div>
