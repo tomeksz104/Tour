@@ -216,7 +216,7 @@ const Places = memo((props) => {
   useEffect(() => {
     if (idToZoom && placesToRender) {
       const placeToFlyTo = placesToRender.find(
-        (place) => place._id === idToZoom
+        (place) => place.id.toString() === idToZoom
       );
 
       if (placeToFlyTo) {
@@ -235,7 +235,12 @@ const Places = memo((props) => {
   }, [idToZoom, placesToRender]);
 
   const handleZoomToPlace = (placeToFlyTo) => {
-    map.setView(placeToFlyTo.coordinates, 18);
+    const coordinates = {
+      lat: placeToFlyTo.latitude,
+      lng: placeToFlyTo.longitude,
+    };
+
+    map.setView(coordinates, 18);
     const newVisiblePlaces = getVisibleMarkers(map, placesToRender);
     if (props.interactiveMap === true)
       props.onChangeVisiblePlaces(newVisiblePlaces);
