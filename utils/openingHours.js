@@ -57,3 +57,17 @@ export function isOpenNow(openingHours) {
 
   return now >= currentDayHours.openTime && now <= currentDayHours.closeTime;
 }
+
+export const getWeekDay = () => {
+  const currentDay = new Date().getDay();
+  const days = [
+    "SUNDAY",
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    "SATURDAY",
+  ];
+  return days[currentDay];
+};

@@ -21,7 +21,8 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gray-100`}>
+      <body className={`font-primary bg-gray-100`}>
+        {/* <body className={`${inter.className} bg-gray-100`}> */}
         {/* <body className={`${inter.className} m-auto min-h-screen flex flex-col`}> */}
         <Provider>
           <WatchlistContextProvider>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Button from "@/components/Button";
 import { Button as ButtonShadcn } from "@/components/ui/button";
 import ExploreCategories from "@/components/HomePage/ExploreCategories";
+import RandomCategories from "@/components/HomePage/RandomCategories";
 import SearchBar from "@/components/HomePage/SearchBar";
 import { db } from "@/lib/db";
 
