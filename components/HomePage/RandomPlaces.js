@@ -6,7 +6,7 @@ const RandomPlaces = async () => {
   const randomPlaces = await getRandomPlaces(9);
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-32">
       <p className="text-center tracking-widest text-sm text-green-500 font-bold">
         STARANNIE WYBRANE
       </p>

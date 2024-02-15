@@ -5,7 +5,7 @@ import Link from "next/link";
 import Button from "@/components/Button";
 import { Button as ButtonShadcn } from "@/components/ui/button";
 import ExploreCategories from "@/components/HomePage/ExploreCategories";
-import RandomCategories from "@/components/HomePage/RandomCategories";
+import ExploreProvinces from "@/components/HomePage/ExploreProvinces/ExploreProvinces";
 import SearchBar from "@/components/HomePage/SearchBar";
 import { db } from "@/lib/db";
 
@@ -13,7 +13,17 @@ const RandomPlaces = lazy(() => import("@/components/HomePage/RandomPlaces"));
 
 export default async function Home() {
   const categories = await db.category.findMany();
-  const provinces = await db.province.findMany();
+  const provinces = await db.province.findMany({
+    select: {
+      id: true,
+      name: true,
+      _count: {
+        select: {
+          places: true,
+        },
+      },
+    },
+  });
 
   return (
     <Fragment>
@@ -279,6 +289,8 @@ export default async function Home() {
         </div>
       </section>
 
+      <ExploreProvinces provinces={provinces} />
+
       {/* Random places section */}
       {/* <div class="mx-auto px-4 sm:px-6 lg:px-8 md:w-3/5 mb-10">
         <h2 class="text-center text-3xl font-bold text-gray-900 dark:text-white md:text-4xl lg:text-5xl">
@@ -301,7 +313,7 @@ export default async function Home() {
       <ExploreCategories />
 
       {/* On all your devices section */}
-      <div className="bg-green-50 py-16">
+      {/* <div className="bg-green-50 py-16">
         <div className="container m-auto space-y-8 px-4 md:px-12 lg:px-20">
           <div className="items-center justify-center gap-16 text-center md:flex md:text-left">
             <div className="order-last mb-6 space-y-6 md:mb-0 md:w-7/12 lg:w-6/12">
@@ -327,7 +339,7 @@ export default async function Home() {
             />
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Ready to start section */}
       <section className="py-24 sm:py-32">
