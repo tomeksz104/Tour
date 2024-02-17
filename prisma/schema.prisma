@@ -239,6 +239,7 @@ model Category {
   description String?
   imagePath   String?
   iconPath    String?
+  svgIconPath String? @db.Text
   places      Place[]
 }
 

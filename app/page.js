@@ -10,9 +10,12 @@ import SearchBar from "@/components/HomePage/SearchBar";
 import { db } from "@/lib/db";
 
 const RandomPlaces = lazy(() => import("@/components/HomePage/RandomPlaces"));
+import ExploreCategory from "./../components/HomePage/ExploreCategories/ExploreCategory";
+import { getPlacesForCategories } from "@/actions/getPlacesForCategories";
 
 export default async function Home() {
   const categories = await db.category.findMany();
+  const categoriesWithPlaces = await getPlacesForCategories(categories);
   const provinces = await db.province.findMany({
     select: {
       id: true,
@@ -291,6 +294,12 @@ export default async function Home() {
 
       <ExploreProvinces provinces={provinces} />
 
+      <ExploreCategory
+        categories={categories}
+        categoriesWithPlaces={categoriesWithPlaces}
+        provinces={provinces}
+      />
+
       {/* Random places section */}
       {/* <div class="mx-auto px-4 sm:px-6 lg:px-8 md:w-3/5 mb-10">
         <h2 class="text-center text-3xl font-bold text-gray-900 dark:text-white md:text-4xl lg:text-5xl">
@@ -310,7 +319,7 @@ export default async function Home() {
       </Suspense>
 
       {/* Categories section */}
-      <ExploreCategories />
+      {/* <ExploreCategories /> */}
 
       {/* On all your devices section */}
       {/* <div className="bg-green-50 py-16">

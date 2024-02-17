@@ -45,6 +45,7 @@ const ExploreProvinces = async ({ provinces }) => {
 
         {randomIndices.map((provinceId) => (
           <Card
+            key={provinceId}
             photoPath={provinceImages[provinceId]}
             provinceName={provinces[provinceId].name}
             provinceCount={provinces[provinceId]._count.places}
