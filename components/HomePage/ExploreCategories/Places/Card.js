@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const Card = ({ place, category, province }) => {
   return (
-    <article class="h-full relative isolate flex flex-col justify-end overflow-hidden rounded-md bg-gray-900 px-8 pb-3 pt-36 group">
+    <article class="h-full relative isolate flex flex-col justify-end overflow-hidden rounded-md bg-gray-900 px-5 pb-3 pt-36 group">
       <Image
         fill
         src={place.mainPhotoPath ? place.mainPhotoPath : "/images/noImage.jpg"}
@@ -54,26 +54,26 @@ const Card = ({ place, category, province }) => {
         </Link>
       </h3>
       <span className="text-sm text-gray-300 line-clamp-1	">{place.slogan}</span>
-      <div className="flex items-center justify-between text-xs text-white">
+      <div className="flex items-center justify-between text-xs text-white border-t border-white/20 pt-1 mt-2">
         <span>woj. {province}</span>
         <div className="space-x-2 mt-2">
           <Button
             variant="secondary"
-            className="bg-white/10 backdrop-blur-md rounded-full h-8 w-8 p-1 hover:bg-green-500 text-gray-100 hover:text-white "
+            className="bg-transparent group-hover:bg-white/10 backdrop-blur-md rounded-full h-8 w-8 p-1 hover:bg-green-500 text-gray-300 hover:text-white "
           >
-            <ZoomIn strokeWidth={2.5} size={14} />
+            <ZoomIn strokeWidth={1.75} size={14} />
           </Button>
           <Button
             variant="secondary"
-            className="bg-white/10 backdrop-blur-md rounded-full h-8 w-8 p-1 hover:bg-green-500 text-gray-100 hover:text-white"
+            className="bg-transparent group-hover:bg-white/10 backdrop-blur-md rounded-full h-8 w-8 p-1 hover:bg-green-500 text-gray-300 hover:text-white"
           >
-            <Camera strokeWidth={2.5} size={14} />
+            <Camera strokeWidth={1.75} size={14} />
           </Button>
           <Button
             variant="secondary"
-            className={`bg-white/10 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-100 hover:text-red-500 `}
+            className={`bg-transparent group-hover:bg-white/10 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-red-500 `}
           >
-            <Heart strokeWidth={2.5} size={14} />
+            <Heart strokeWidth={1.75} size={14} />
           </Button>
         </div>
       </div>

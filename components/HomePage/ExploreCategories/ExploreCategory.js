@@ -8,7 +8,7 @@ const ExploreCategory = ({ categories, categoriesWithPlaces, provinces }) => {
   const [selectedCategory, setSelectedCategory] = useState(1);
 
   const handleChangeCategory = (category) => {
-    setSelectedCategory(category);
+    setSelectedCategory(category - 1);
   };
 
   return (
