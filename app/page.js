@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import Button from "@/components/Button";
 import { Button as ButtonShadcn } from "@/components/ui/button";
-import ExploreCategories from "@/components/HomePage/ExploreCategories";
 import ExploreProvinces from "@/components/HomePage/ExploreProvinces/ExploreProvinces";
 import SearchBar from "@/components/HomePage/SearchBar";
 import { db } from "@/lib/db";
@@ -12,6 +11,7 @@ import { db } from "@/lib/db";
 const RandomPlaces = lazy(() => import("@/components/HomePage/RandomPlaces"));
 import ExploreCategory from "./../components/HomePage/ExploreCategories/ExploreCategory";
 import { getPlacesForCategories } from "@/actions/getPlacesForCategories";
+import Footer from "@/components/Footer";
 
 export default async function Home() {
   const categories = await db.category.findMany();
@@ -351,8 +351,8 @@ export default async function Home() {
       </div> */}
 
       {/* Ready to start section */}
-      <section className="py-24 sm:py-32">
-        <div className="max-w-screen-xl px-4 mx-auto sm:px-6 lg:px-8">
+      <section className="relative py-24 sm:py-32 mt-20">
+        <div className="relative max-w-screen-xl px-4 mx-auto sm:px-6 lg:px-8 z-10">
           <Image
             alt="Sunrise icon"
             width="295"
@@ -365,28 +365,28 @@ export default async function Home() {
             }}
           />
           <h2 className="max-w-screen-md mx-auto mt-6 text-center text-gray-900 text-3xl lg:text-4xl 2xl:text-6xl font-bold">
-            <span className="block">Ready to start </span>
+            <span className="block">Gotowy na rozpoczęcie </span>
             <span className="relative block">
               <span className="relative">
                 <Image
-                  alt="Underline simple light purple icon"
+                  alt="Underline simple light green icon"
                   width="1126"
                   height="64"
                   className="absolute inset-0 transform translate-y-9 sm:translate-y-11 xl:translate-y-14"
-                  src="/underline-simple-light-purple.svg"
+                  src="/underline-simple-light-green.svg"
                   style={{
                     maxWidth: "100%",
                     height: "auto",
                   }}
                 />
-                <span className="relative">your adventure?</span>
+                <span className="relative">swojej przygody?</span>
               </span>
             </span>
           </h2>
           <div className="flex justify-center mt-12 xl:mt-14">
             <Link href="/map">
               <Button type="button" className="w-64">
-                Explore the map
+                Przeglądaj mapę
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -405,7 +405,23 @@ export default async function Home() {
             </Link>
           </div>
         </div>
+        <div
+          className="absolute top-0 left-0 w-full h-full z-[2]"
+          style={{
+            backgroundImage:
+              "linear-gradient(0deg, transparent 60%, #FFFFFF 95%)",
+          }}
+        ></div>
+        <div
+          class="absolute left-0 top-0 h-full w-full bg-cover bg-repeat-x bg-bottom-left z-[1]"
+          style={{
+            backgroundImage:
+              "url('https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/07/bg-03.png')",
+            mixBlendMode: "multiply",
+          }}
+        ></div>
       </section>
+      <Footer />
     </Fragment>
   );
 }
