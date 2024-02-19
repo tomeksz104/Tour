@@ -42,7 +42,6 @@
     "leaflet.locatecontrol": "^0.79.0",
     "lucide-react": "^0.305.0",
     "mime": "^4.0.1",
-    "mongoose": "^7.3.1",
     "next": "^14.0.4",
     "next-auth": "^4.22.1",
     "next-themes": "^0.2.1",

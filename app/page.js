@@ -8,7 +8,9 @@ import ExploreProvinces from "@/components/HomePage/ExploreProvinces/ExploreProv
 import SearchBar from "@/components/HomePage/SearchBar";
 import { db } from "@/lib/db";
 
-const RandomPlaces = lazy(() => import("@/components/HomePage/RandomPlaces"));
+const LatestPlaces = lazy(() =>
+  import("@/components/HomePage/LatestPlaces/LatestPlaces")
+);
 import ExploreCategory from "./../components/HomePage/ExploreCategories/ExploreCategory";
 import { getPlacesForCategories } from "@/actions/getPlacesForCategories";
 import Footer from "@/components/Footer";
@@ -30,9 +32,9 @@ export default async function Home() {
 
   return (
     <Fragment>
-      <section className="pt-10 relative">
+      <section className="bg-gray-100 pt-10 relative">
         <div
-          class="absolute left-0 top-0 lg:-top-20 h-full w-full bg-cover bg-repeat-x bg-bottom-left opacity-70 "
+          className="absolute left-0 top-0 lg:-top-20 h-full w-full bg-cover bg-repeat-x bg-bottom-left opacity-70 "
           style={{
             backgroundImage:
               "url('https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/07/bg-03.png')",
@@ -225,7 +227,7 @@ export default async function Home() {
 
       <section className="relative bg-green-500 lg:-mt-20 mb-16 pt-10 lg:pt-0">
         <div
-          class="absolute left-0 top-0 h-full w-full bg-cover bg-no-repeat bg-top-right opacity-20 transition-all duration-300"
+          className="absolute left-0 top-0 h-full w-full bg-cover bg-no-repeat bg-top-right opacity-20 transition-all duration-300"
           style={{
             backgroundImage:
               "url('https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/08/bg-21.png')",
@@ -253,9 +255,9 @@ export default async function Home() {
                       d="M 15, 50 a 33,33 0 1,1 66,0 33,33 0 1,1 -66,0"
                       stroke=""
                       fill="none"
-                      stroke-width="0"
+                      strokeWidth="0"
                     ></path>
-                    <text text-anchor="start">
+                    <text textAnchor="start">
                       <textPath
                         className="font-primary fill-white"
                         href="#textPath"
@@ -315,7 +317,7 @@ export default async function Home() {
       </div> */}
       {/* <CardSlider places={randomPlaces} /> */}
       <Suspense>
-        <RandomPlaces />
+        <LatestPlaces />
       </Suspense>
 
       {/* Categories section */}
@@ -364,20 +366,17 @@ export default async function Home() {
               height: "auto",
             }}
           />
-          <h2 className="max-w-screen-md mx-auto mt-6 text-center text-gray-900 text-3xl lg:text-4xl 2xl:text-6xl font-bold">
+          <h2 className="max-w-screen-md mx-auto mt-6 text-center text-gray-900 text-3xl lg:text-4xl 2xl:text-5xl font-bold">
             <span className="block">Gotowy na rozpoczęcie </span>
-            <span className="relative block">
+            <span className="relative block mt-3">
               <span className="relative">
                 <Image
                   alt="Underline simple light green icon"
-                  width="1126"
-                  height="64"
-                  className="absolute inset-0 transform translate-y-9 sm:translate-y-11 xl:translate-y-14"
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  className="w-full h-auto absolute inset-0 transform translate-y-9 sm:translate-y-11 xl:translate-y-14"
                   src="/underline-simple-light-green.svg"
-                  style={{
-                    maxWidth: "100%",
-                    height: "auto",
-                  }}
                 />
                 <span className="relative">swojej przygody?</span>
               </span>
@@ -413,7 +412,7 @@ export default async function Home() {
           }}
         ></div>
         <div
-          class="absolute left-0 top-0 h-full w-full bg-cover bg-repeat-x bg-bottom-left z-[1]"
+          className="absolute left-0 top-0 h-full w-full bg-cover bg-repeat-x bg-bottom-left z-[1]"
           style={{
             backgroundImage:
               "url('https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/07/bg-03.png')",

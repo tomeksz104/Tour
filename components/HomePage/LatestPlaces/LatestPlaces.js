@@ -1,7 +1,7 @@
 import { getRandomPlaces } from "@/actions/getRandomPlaces";
 import CardSlider from "./CardSlider";
 
-const RandomPlaces = async () => {
+const LatestPlaces = async () => {
   // await new Promise((resolve) => setTimeout(resolve, 5000));
   const randomPlaces = await getRandomPlaces(9);
 
@@ -18,4 +18,4 @@ const RandomPlaces = async () => {
   );
 };
 
-export default RandomPlaces;
+export default LatestPlaces;

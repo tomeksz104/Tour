@@ -1,6 +1,4 @@
-import Place from "@/models/place";
 import { db } from "@/lib/db";
-import { NextResponse } from "next/server";
 
 import { isOpenNow } from "@/utils/openingHours";
 

@@ -27,6 +27,7 @@ export default async function PlaceDetailsPage({ params }) {
 
   const isUserAdmin = session?.user?.role === "admin";
   const isCreator = session?.user?.id === place.userId;
+  const hasPermission = isUserAdmin || isCreator;
 
   let gallery = [{ url: place.mainPhotoPath, accepted: true }, ...place.photos];
   gallery = gallery.filter((item) => item.accepted !== false);
@@ -43,18 +44,23 @@ export default async function PlaceDetailsPage({ params }) {
           <div className="w-full h-full backdrop-blur-md"></div>
         </div>
         <div className="mx-auto max-w-7xl w-full h-56 sm:h-[480px]">
-          <div className="relative flex flex-col group overflow-hidden z-0 max-w-7xl h-56 sm:h-[480px]">
+          <div className="relative flex flex-col group z-0 max-w-7xl h-56 sm:h-[480px]">
             <div className="flex items-start relative w-full h-full">
-              <div className="absolute inset-0 overflow-hidden z-0 overflow-hidden z-0 select-none	">
-                <Slideshow images={gallery} placeTitle={place.title} />
+              <div className="absolute inset-0 z-0 select-none">
+                <Slideshow
+                  placeId={place.id}
+                  hasPermission={hasPermission}
+                  images={gallery}
+                  placeTitle={place.title}
+                />
               </div>
             </div>
-            <div className="absolute w-full content-[''] bg-gradient-to-b from-[rgba(0,0,0,0.75)] to-transparent h-[200px] pointer-events-none"></div>
+            {/* <div className="absolute w-full content-[''] bg-gradient-to-b from-[rgba(0,0,0,0.75)] to-transparent h-[200px] pointer-events-none"></div> */}
             <div className="absolute flex justify-between items-start sm:items-center top-2 inset-x-4 sm:inset-x-5 pointer-events-none">
               <h3 className="block text-xl sm:text-2xl font-semibold text-white line-clamp-2">
                 {place.title}
               </h3>
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <WatchlistButton id={place.id} />
 
                 {isUserAdmin || isCreator ? (
@@ -77,13 +83,13 @@ export default async function PlaceDetailsPage({ params }) {
                     </CircleButton>
                   </Link>
                 ) : null}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full mx-auto mt-5">
+      <div className="w-full mx-auto mt-12">
         <QuickListingActions
           phone={place.phone || null}
           googleMapUrl={place.googleMapUrl || null}
@@ -147,7 +153,7 @@ export default async function PlaceDetailsPage({ params }) {
               <div className="flex items-center justify-between">
                 <p className="text-gray-700">{place.address}</p>
                 {place.googleMapUrl && (
-                  <Button variant="link">
+                  <Button asChild variant="link">
                     <Link href={place.googleMapUrl} target="_blank">
                       Nawiguj
                     </Link>

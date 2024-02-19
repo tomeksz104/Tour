@@ -144,7 +144,7 @@ const Review = ({ comment }) => {
                     </button>
 
                     <AlertDialog>
-                      <AlertDialogTrigger>
+                      <AlertDialogTrigger asChild>
                         <button
                           type="button"
                           className="flex w-full items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100"

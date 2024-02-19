@@ -1,5 +1,3 @@
-import { categories_list } from "./categories";
-
 export const getIcon = (category) => {
   const icon = new L.icon({
     iconUrl: category.iconPath,
@@ -27,16 +25,6 @@ export const getIconPathByCategoryId = (categoryId, categories = null) => {
     });
 
     return icon;
-  }
-};
-
-export const getIconPath = (category) => {
-  const selectedCategory = categories_list.find(
-    (item) => item.title === category
-  );
-
-  if (selectedCategory && selectedCategory.iconPath) {
-    return selectedCategory.iconPath;
   }
 };
 

@@ -72,7 +72,7 @@ const SearchBar = ({ onHideLogo }) => {
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   type="search"
-                  placeholder="What are you looking..."
+                  placeholder="Czego szukasz..."
                   onChange={(e) => setSearchWord(e.target.value)}
                   className="mr-2 outline-none w-full rounded-md bg-slate-100 border border-gray-200 py-2.5 pl-16 text-sm text-gray-600  transition-all duration-300 focus:bg-white focus:ring-1 focus:ring-green-500"
                 />

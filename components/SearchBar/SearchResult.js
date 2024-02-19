@@ -7,7 +7,7 @@ const SearchResult = ({ place }) => {
   const router = useRouter();
 
   const handleFlyToPlace = () => {
-    router.push(`/map?id=${place._id}`);
+    router.push(`/map?id=${place.id}`);
   };
 
   return (
@@ -16,16 +16,19 @@ const SearchResult = ({ place }) => {
         <div className="relative h-8 w-8 overflow-hidden rounded">
           <Image
             className="h-full w-full object-cover"
-            src={place.image}
+            src={
+              place.mainPhotoPath ? place.mainPhotoPath : "/images/noImage.jpg"
+            }
             alt={place.title}
             fill
             sizes="100vw"
             style={{
-              objectFit: "cover"
-            }} />
+              objectFit: "cover",
+            }}
+          />
         </div>
         <Link
-          href={`/place/${place._id}`}
+          href={`/place/${place.id}`}
           className="text-sm font-semibold text-heading ml-3"
         >
           {place.title}

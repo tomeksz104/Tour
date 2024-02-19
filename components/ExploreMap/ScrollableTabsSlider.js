@@ -3,8 +3,6 @@
 import React, { useState, useRef } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { categories_list } from "@/utils/categories";
-
 const ScrollableTabsSlider = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();

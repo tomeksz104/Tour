@@ -59,7 +59,7 @@ const ExploreCategories = () => {
               </div>
             </div>
           </div>
-          <p class="max-w-5xl mx-auto text-lg leading-tight text-justify text-gray-600 p-2 my-6 2xl:my-12">
+          <p className="max-w-5xl mx-auto text-lg leading-tight text-justify text-gray-600 p-2 my-6 2xl:my-12">
             Our collection of more than 1,500 remarkable places will take your
             trip to the next level. <br />
             Look for illustrations on our maps and visit unique places!

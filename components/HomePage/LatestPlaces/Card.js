@@ -71,17 +71,20 @@ const Card = ({ place }) => {
       key={place.id}
       className="relative isolate flex flex-col w-full h-full border bg-white rounded-md"
     >
-      <div className="relative h-full aspect-[16/9] sm:aspect-[2/1]">
+      <div className="relative h-48 aspect-[16/9] sm:aspect-[2/1]">
         <Image
-          fill
           src={
             place.mainPhotoPath ? place.mainPhotoPath : "/images/noImage.jpg"
           }
+          width="0"
+          height="0"
+          sizes="100vw"
           alt={place.title}
+          style={{ objectFit: "cover" }}
           className="h-full w-full rounded-t-md bg-gray-50 object-cover"
         />
         <div className="absolute inset-0 rounded-t-md ring-1 ring-inset ring-gray-900/10" />
-        <div className="absolute m-2">
+        <div className="absolute left-0 top-0 m-2">
           <Badge
             className={`${
               place.isOpen

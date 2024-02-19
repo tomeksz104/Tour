@@ -61,7 +61,7 @@ const UserMenu = ({ user }) => {
                 />
               </svg>
 
-              <span className="mx-1">Add place</span>
+              <span className="mx-1">Dodaj miejsce</span>
             </Link>
             <Link
               href="/user/settings"
@@ -79,7 +79,7 @@ const UserMenu = ({ user }) => {
                 ></path>
               </svg>
 
-              <span className="mx-1">Settings</span>
+              <span className="mx-1">Ustawienia</span>
             </Link>
           </div>
           <button
@@ -97,7 +97,7 @@ const UserMenu = ({ user }) => {
                 fill="currentColor"
               ></path>
             </svg>
-            <span className="mx-1">Sign Out</span>
+            <span className="mx-1">Wyloguj się</span>
           </button>
         </div>
       </div>

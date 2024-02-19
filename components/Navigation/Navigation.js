@@ -12,8 +12,8 @@ import "./Navigation.css";
 import { useSession } from "next-auth/react";
 
 const navigationMenuItems = [
-  { name: "Home", url: "/" },
-  { name: "Map", url: "/map" },
+  { name: "Strona Główna", url: "/" },
+  { name: "Mapa", url: "/map" },
 ];
 
 const Navigation = () => {
@@ -91,8 +91,8 @@ const Navigation = () => {
                         <div
                           className={`relative before:absolute before:-bottom-2 md:before:-bottom-5 before:w-full before:mt-auto ${
                             currentRoute === menuItem.url
-                              ? "text-green-600 before:h-1 before:mx-auto before:rounded-t-full before:bg-green-500"
-                              : "text-gray-600 before:h-0.5 before:origin-left before:rounded-full before:bg-green-800 before:transition before:scale-x-0 group-hover:before:scale-x-100"
+                              ? "text-green-600 before:h-0.5 before:mx-auto before:rounded-full before:bg-green-500"
+                              : "text-gray-600 before:h-0.5 before:origin-left before:rounded-full before:bg-green-500 before:transition before:scale-x-0 group-hover:before:scale-x-100"
                           }`}
                         >
                           <span
@@ -151,7 +151,7 @@ const Navigation = () => {
                           />
                         </svg>
 
-                        <span className="mx-1">Login</span>
+                        <span className="mx-1">Logowanie</span>
                       </Link>
                       <Link
                         href="/signup"
@@ -169,7 +169,7 @@ const Navigation = () => {
                           ></path>
                         </svg>
 
-                        <span className="mx-1">Register</span>
+                        <span className="mx-1">Rejestracja</span>
                       </Link>
                     </div>
                   </div>

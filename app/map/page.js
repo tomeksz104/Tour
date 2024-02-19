@@ -1,9 +1,10 @@
 import ScrollableTabsSlider from "@/components/ExploreMap/ScrollableTabsSlider";
-import Map from "@/components/ExploreMap/Map/Map";
+import dynamic from "next/dynamic";
+// import Map from "@/components/ExploreMap/Map/Map";
 
-// const Map = dynamic(() => import("@/components/ExploreMap/Map/Map"), {
-//   ssr: false,
-// });
+const Map = dynamic(() => import("@/components/ExploreMap/Map/Map"), {
+  ssr: false,
+});
 
 export default function Home() {
   return (

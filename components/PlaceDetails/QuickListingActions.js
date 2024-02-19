@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import ErrorReportDialog from "@/components/ErrorReportDialog";
-import ShareDialog from "@/components/ShareDialog";
+
+const ShareDialog = lazy(() => import("@/components/ShareDialog"));
+const ErrorReportDialog = lazy(() => import("@/components/ErrorReportDialog"));
 
 import {
   Phone,
@@ -84,9 +85,13 @@ const QuickListingActions = ({ phone, googleMapUrl }) => {
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 
-      <ErrorReportDialog isOpen={isDialogOpen} onClose={toggleDialog} />
+      <Suspense>
+        <ErrorReportDialog isOpen={isDialogOpen} onClose={toggleDialog} />
+      </Suspense>
 
-      <ShareDialog isOpen={isShareDialogOpen} onClose={toggleShareDialog} />
+      <Suspense>
+        <ShareDialog isOpen={isShareDialogOpen} onClose={toggleShareDialog} />
+      </Suspense>
     </>
   );
 };

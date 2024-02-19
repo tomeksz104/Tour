@@ -25,7 +25,8 @@ const Card = ({ photoPath, provinceName, provinceCount, linkToMap }) => {
         </div>
       </Link>
       <Image
-        fill
+        width="0"
+        height="0"
         sizes="100vw"
         className="object-cover h-full w-full rounded-md"
         src={photoPath}

@@ -48,7 +48,10 @@ const Card = ({ place, onMouseEnter, onMouseLeave }) => {
     >
       <div className="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
         <Image
-          fill
+          priority={place.mainPhotoPath ? false : true}
+          width="0"
+          height="0"
+          sizes="100vw"
           src={
             place.mainPhotoPath ? place.mainPhotoPath : "/images/noImage.jpg"
           }

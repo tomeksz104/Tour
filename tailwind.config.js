@@ -11,7 +11,6 @@ module.exports = {
       fontFamily: {
         primary: ["Manrope"],
       },
-
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

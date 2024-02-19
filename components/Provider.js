@@ -6,7 +6,8 @@ import { Next13ProgressBar } from "next13-progressbar";
 
 const Provider = ({ children, session }) => (
   <SessionProvider session={session}>
-    <ThemeProvider enableSystem={false}>{children}</ThemeProvider>
+    {/* <ThemeProvider enableSystem={false}>{children}</ThemeProvider> */}
+    {children}
     <Next13ProgressBar
       color="#22c55e"
       options={{ showSpinner: false }}

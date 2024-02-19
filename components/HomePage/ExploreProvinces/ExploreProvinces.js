@@ -35,10 +35,10 @@ const ExploreProvinces = async ({ provinces }) => {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20 my-20">
       <div className="grid md:grid-cols-4 gap-4">
         <div className="col-span-2 max-h-48">
-          <p className="tracking-widest text-sm text-green-500 font-bold">
+          <p className="text-center md:text-left tracking-widest text-sm text-green-500 font-bold">
             POPULARNE LOKALIZACJE
           </p>
-          <h3 className="text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl font-extrabold pt-5 mb-10">
+          <h3 className="text-center md:text-left text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl font-extrabold pt-5 mb-10">
             Poznawaj piękne miejsca w Polsce
           </h3>
         </div>

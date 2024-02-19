@@ -5,6 +5,7 @@ const Logo = ({ classes, imgClasses }) => {
   return (
     <Link href="/" className={classes} aria-label="logo">
       <Image
+        priority
         width={233}
         height={83}
         className={imgClasses}

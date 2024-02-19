@@ -1,4 +1,4 @@
-// import { CopyIcon } from "@radix-ui/react-icons";
+"use client";
 
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 
@@ -15,9 +15,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Copy } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const ShareDialog = ({ isOpen, onClose }) => {
+  const [link, setLink] = useState("");
   const [value, copy] = useCopyToClipboard();
+
+  useEffect(() => {
+    setLink(window.location.href);
+  }, []);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -33,10 +39,10 @@ const ShareDialog = ({ isOpen, onClose }) => {
             <Label htmlFor="link" className="sr-only">
               Link
             </Label>
-            <Input id="link" defaultValue={window.location.href} readOnly />
+            <Input id="link" defaultValue={link} readOnly />
           </div>
           <Button
-            onClick={() => copy(window.location.href)}
+            onClick={() => copy(link)}
             type="submit"
             size="sm"
             className="px-3"

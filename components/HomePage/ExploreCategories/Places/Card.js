@@ -8,17 +8,19 @@ import Link from "next/link";
 
 const Card = ({ place, category, province }) => {
   return (
-    <article class="h-full relative isolate flex flex-col justify-end overflow-hidden rounded-md bg-gray-900 px-5 pb-3 pt-36 group">
+    <article className="h-full relative isolate flex flex-col justify-end overflow-hidden rounded-md bg-gray-900 px-5 pb-3 pt-36 group">
       <Image
-        fill
+        width="0"
+        height="0"
+        sizes="100vw"
         src={place.mainPhotoPath ? place.mainPhotoPath : "/images/noImage.jpg"}
         alt={place.title}
-        class="absolute inset-0 -z-10 h-full w-full object-cover transition duration-300 group-hover:scale-105"
+        className="absolute inset-0 -z-10 h-full w-full object-cover transition duration-300 group-hover:scale-105"
       />
 
-      <div class="absolute inset-0 -z-10 bg-gradient-to-t from-black/90 via-gray-900/40"></div>
-      <div class="absolute inset-0 -z-10 rounded-nd ring-1 ring-inset ring-gray-900/10"></div>
-      <div class="absolute left-0 top-0 m-2 flex items-center">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/90 via-gray-900/40"></div>
+      <div className="absolute inset-0 -z-10 rounded-nd ring-1 ring-inset ring-gray-900/10"></div>
+      <div className="absolute left-0 top-0 m-2 flex items-center">
         <Badge
           className={`${
             place.isOpen
@@ -48,7 +50,7 @@ const Card = ({ place, category, province }) => {
           </>
         )}
       </div>
-      <h3 class="mt-3 text-lg font-semibold leading-6 text-white">
+      <h3 className="mt-3 text-lg font-semibold leading-6 text-white">
         <Link href={`place/${place.id}`} className="group-hover:text-green-500">
           {place.title}
         </Link>
@@ -59,13 +61,13 @@ const Card = ({ place, category, province }) => {
         <div className="space-x-2 mt-2">
           <Button
             variant="secondary"
-            className="bg-transparent group-hover:bg-white/10 backdrop-blur-md rounded-full h-8 w-8 p-1 hover:bg-green-500 text-gray-300 hover:text-white "
+            className="bg-transparent group-hover:bg-white/10 group-hover:hover:bg-green-500 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-white "
           >
             <ZoomIn strokeWidth={1.75} size={14} />
           </Button>
           <Button
             variant="secondary"
-            className="bg-transparent group-hover:bg-white/10 backdrop-blur-md rounded-full h-8 w-8 p-1 hover:bg-green-500 text-gray-300 hover:text-white"
+            className="bg-transparent group-hover:bg-white/10 group-hover:hover:bg-green-500 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-white"
           >
             <Camera strokeWidth={1.75} size={14} />
           </Button>

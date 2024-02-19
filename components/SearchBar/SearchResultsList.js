@@ -15,12 +15,12 @@ const SeatchResultList = ({ results, hideSuggestions, searchWordLength }) => {
     >
       {results.length === 0 && searchWordLength >= 3 && (
         <h3 className="flex h-full w-full items-center justify-center py-10 font-semibold text-gray-400">
-          No places found
+          Nie znaleziono miejsc
         </h3>
       )}
       {searchWordLength < 3 && (
         <h3 className="flex h-full w-full items-center justify-center py-10 font-semibold text-gray-400">
-          Type min. 3 characters
+          Wpisz min. 3 znaki
         </h3>
       )}
       {results.length > 0 &&
