@@ -14,7 +14,7 @@ export const WatchlistContextProvider = ({ children }) => {
   const [watchlist, setWatchlist] = useState([]);
 
   useEffect(() => {
-    const watchlistData = JSON.parse(localStorage.getItem("watchlist"));
+    const watchlistData = JSON.parse(localStorage.getItem("watchlist")) || [];
 
     if (watchlistData.length > 0) {
       setWatchlist(watchlistData);
