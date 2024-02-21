@@ -6,7 +6,7 @@ import ReviewCard from "@/components/Review/ReviewCard";
 import Slideshow from "@/components/Slideshow/Slideshow";
 
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import WatchlistButton from "@/components/WatchlistButton";
 import CircleButton from "@/components/CircleButton";
 import { Button } from "@/components/ui/button";
