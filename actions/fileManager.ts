@@ -34,14 +34,12 @@ export async function uploadFile(data: any, formField: any) {
   // Return the path of the saved file
   return {
     success: true,
-    filePath: `${process.env.REACT_APP_API_URL}${filePathWithoutPublic}`,
+    filePath: `/${filePathWithoutPublic}`,
   };
 }
 
 export async function deleteFile(fileUrl: any) {
-  // Convert URL to file path
-  const filePath = fileUrl.replace(`${process.env.REACT_APP_API_URL}`, "");
-  const fullPath = path.join("public", filePath);
+  const fullPath = path.join("public", fileUrl);
 
   try {
     // Delete file
