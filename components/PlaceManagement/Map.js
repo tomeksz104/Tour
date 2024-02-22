@@ -1,16 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import ReactDom from "next/dist/compiled/react-dom/cjs/react-dom-server-legacy.browser.development";
+import { useState, useEffect, useRef } from "react";
 import { Marker, useMap } from "react-leaflet";
 import L, { Icon } from "leaflet";
 
 import MapWrapper from "../MapWrapper/MapWrapper";
-import {
-  getDefaultIcon,
-  getIcon,
-  getIconPathByCategoryId,
-} from "@/utils/mapUtils";
+import { getDefaultIcon, getIconPathByCategoryId } from "@/utils/mapUtils";
 
 const coordinatesOfPoland = [52.10650519075632, 19.281005859375004];
 
@@ -58,9 +53,7 @@ const ShowMarkers = ({
       eventHandlers={{
         moveend: handleMoveEnd,
       }}
-    >
-      {/* <Popup>MyMarker</Popup> */}
-    </Marker>
+    ></Marker>
   );
 };
 
@@ -72,48 +65,34 @@ const MyMarkers = ({
 }) => {
   const map = useMap();
   const [marker, setMarker] = useState([]);
-  const [legend, setLegend] = useState();
+  const legendAddedRef = useRef(false);
 
   useEffect(() => {
-    if (!map) return;
+    if (!map || legendAddedRef.current) return;
 
     const legend = L.control({ position: "bottomleft" });
 
-    legend.onAdd = () => {
-      const info = L.DomUtil.create(
+    legend.onAdd = function () {
+      const div = L.DomUtil.create(
         "div",
         "flex items-center bg-white rounded-md px-3 py-2 border border-green-500"
       );
 
-      const jsxString = ReactDom.renderToString(
-        <>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-4 h-4 mr-3"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-            />
-          </svg>
-          Click on the map, move the marker
-        </>
-      );
-      info.innerHTML = jsxString;
-      return info;
+      const svgHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-3">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+        </svg>
+        Kliknij na mapę, przesuwaj znacznik
+      `;
+
+      div.innerHTML = svgHTML;
+
+      return div;
     };
 
     legend.addTo(map);
+    legendAddedRef.current = true;
 
     map.on("click", (e) => {
       const { lat, lng } = e.latlng;
