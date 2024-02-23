@@ -1,13 +1,18 @@
 import SidebarImageSkeleton from "@/components/Skeletons/SidebarImageSkeleton";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import Card from "./Card";
+const Lightbox = lazy(() => import("@/components/FsLightbox/Lightbox"));
+
+import createLightboxSources from "@/utils/createLightboxSources";
 
 const placesPerPage = 10;
 
 const PlacesList = ({ places, onMarkerHover, isLoading }) => {
   const searchParams = useSearchParams();
   const [hoverTimeout, setHoverTimeout] = useState(null);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxSources, setLightboxSources] = useState([]);
 
   const isLoadingParams = searchParams.get("loading");
 
@@ -26,6 +31,14 @@ const PlacesList = ({ places, onMarkerHover, isLoading }) => {
     onMarkerHover(null);
   };
 
+  const handleOpenLightbox = (place) => {
+    const sources = createLightboxSources(place.mainPhotoPath, place.photos);
+
+    setLightboxSources(sources);
+
+    if (sources.length > 0) setIsLightboxOpen((prevState) => !prevState);
+  };
+
   if (isLoadingParams || isLoading) {
     return <SidebarImageSkeleton count={placesPerPage} />;
   }
@@ -40,12 +53,16 @@ const PlacesList = ({ places, onMarkerHover, isLoading }) => {
 
   return (
     <>
+      <Suspense>
+        <Lightbox images={lightboxSources} isOpen={isLightboxOpen} />
+      </Suspense>
       {places.map((place, index) => (
         <Card
           key={index}
           place={place}
           onMouseLeave={handleMouseLeave}
           onMouseEnter={() => handleMouseEnter(place)}
+          onOpenLightbox={() => handleOpenLightbox(place)}
         />
       ))}
     </>

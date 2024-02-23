@@ -41,6 +41,7 @@ export default async function RootLayout({ children }) {
             </LocateContextProvider>
           </WatchlistContextProvider>
         </Provider>
+        <div id="fslightbox"></div>
       </body>
     </html>
   );

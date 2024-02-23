@@ -6,7 +6,7 @@ import { Camera, Heart, ZoomIn } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-const Card = ({ place, category, province }) => {
+const Card = ({ place, category, province, onOpenLightbox }) => {
   return (
     <article className="h-full relative isolate flex flex-col justify-end overflow-hidden rounded-md bg-gray-900 px-5 pb-3 pt-36 group">
       <Image
@@ -66,6 +66,7 @@ const Card = ({ place, category, province }) => {
             <ZoomIn strokeWidth={1.75} size={14} />
           </Button>
           <Button
+            onClick={onOpenLightbox}
             variant="secondary"
             className="bg-transparent group-hover:bg-white/10 group-hover:hover:bg-green-500 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-white"
           >

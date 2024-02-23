@@ -15,7 +15,7 @@ import { Camera, Heart, MapPin, Phone, ZoomIn } from "lucide-react";
 
 import formatReviewWord from "@/utils/formatWord";
 
-const Card = ({ place }) => {
+const Card = ({ place, onOpenLightbox }) => {
   const router = useRouter();
   const watchlistCtx = useContext(WatchlistContext);
 
@@ -152,6 +152,7 @@ const Card = ({ place }) => {
                 <ZoomIn strokeWidth={2.5} size={16} />
               </Button>
               <Button
+                onClick={onOpenLightbox}
                 variant="secondary"
                 className="rounded-full h-8 w-8 p-1 hover:bg-green-500 hover:text-white"
               >

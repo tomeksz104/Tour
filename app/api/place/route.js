@@ -23,6 +23,7 @@ export const GET = async (request) => {
       include: {
         category: true,
         reviews: true,
+        photos: true,
         openingHours: {
           where: {
             day: currentWeekDay,

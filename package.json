@@ -36,6 +36,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^0.2.0",
     "eslint-config-next": "^14.0.4",
+    "fslightbox-react": "^1.7.6",
     "leaflet-canvas-marker": "github:tomeksz104/Leaflet.Canvas-Markers",
     "leaflet-canvas-markers": "git@github.com:lipton-ice-tea/leaflet-canvas-markers.git",
     "leaflet-easybutton": "^2.4.0",

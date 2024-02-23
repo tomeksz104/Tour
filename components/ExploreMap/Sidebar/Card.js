@@ -19,7 +19,7 @@ function formatReviewWord(count) {
     return "opinii";
   }
 }
-const Card = ({ place, onMouseEnter, onMouseLeave }) => {
+const Card = ({ place, onMouseEnter, onMouseLeave, onOpenLightbox }) => {
   const router = useRouter();
   const watchlistCtx = useContext(WatchlistContext);
 
@@ -132,6 +132,7 @@ const Card = ({ place, onMouseEnter, onMouseLeave }) => {
                 <ZoomIn strokeWidth={2.5} size={16} />
               </Button>
               <Button
+                onClick={onOpenLightbox}
                 variant="secondary"
                 className="rounded-full h-8 w-8 p-1 hover:bg-green-500 hover:text-white"
               >
