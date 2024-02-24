@@ -1,5 +1,5 @@
 import Input from "@/components/Input";
-import Label from "@/components/Label";
+import { Label } from "@/components/ui/label";
 import {
   FormField,
   FormItem,
@@ -117,7 +117,9 @@ const BasicSection = ({ form, state, categories, placeDescription }) => {
       </div>
 
       <div className="space-y-2 border-t px-5 py-4">
-        <Label htmlFor="title">Nazwa atrakcji</Label>
+        <Label htmlFor="title" className="text-sm font-semibold text-gray-600">
+          Nazwa atrakcji
+        </Label>
         <span className="block text-xs text-gray-500 italic">
           Podaj pełną nazwę atrakcji.
         </span>
@@ -125,6 +127,7 @@ const BasicSection = ({ form, state, categories, placeDescription }) => {
           id="title"
           name="title"
           type="text"
+          className="bg-gray-50"
           placeholder="Zamek Ogrodzieniec"
           {...form.register("title")}
         />
@@ -138,7 +141,9 @@ const BasicSection = ({ form, state, categories, placeDescription }) => {
       </div>
 
       <div className="space-y-2 border-t px-5 py-4">
-        <Label htmlFor="slogan">Slogan</Label>
+        <Label htmlFor="slogan" className="text-sm font-semibold text-gray-600">
+          Slogan
+        </Label>
         <span className="block text-xs text-gray-500 italic">
           Dodaj slogan najlepiej opisujący atrakcję.
         </span>
@@ -147,12 +152,18 @@ const BasicSection = ({ form, state, categories, placeDescription }) => {
           id="slogan"
           name="slogan"
           type="text"
+          className="bg-gray-50"
           placeholder="IX Wieków Tajemnic"
           {...form.register("slogan")}
         />
       </div>
       <div className="space-y-2 border-t px-5 py-4">
-        <Label htmlFor="description">Opis atrakcji</Label>
+        <Label
+          htmlFor="description"
+          className="text-sm font-semibold text-gray-600"
+        >
+          Opis atrakcji
+        </Label>
         <span className="block text-xs text-gray-500 italic">
           Wpisz unikalny opis atrakcji. Twoje osobiste spostrzeżenia i
           oryginalne sformułowania pomogą wyróżnić to miejsce i przyciągnąć

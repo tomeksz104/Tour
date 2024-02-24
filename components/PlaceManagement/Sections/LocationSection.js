@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { parseLatLngFromUrl } from "@/utils/parseLatLngFromUrl";
 import dynamic from "next/dynamic";
+
+import { parseLatLngFromUrl } from "@/utils/parseLatLngFromUrl";
 
 const Map = dynamic(() => import("@/components/PlaceManagement/Map"), {
   loading: () => <p>loading...</p>,
@@ -9,7 +10,7 @@ const Map = dynamic(() => import("@/components/PlaceManagement/Map"), {
 
 import { Button } from "@/components/ui/button";
 import Input from "@/components/Input";
-import Label from "@/components/Label";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -91,11 +92,17 @@ const LocationSection = ({
   return (
     <>
       <div className="space-y-2 px-5 pt-4">
-        <Label htmlFor="googleMapUrl">Google Maps URL</Label>
+        <Label
+          htmlFor="googleMapUrl"
+          className="text-sm font-semibold text-gray-600"
+        >
+          Google Maps URL
+        </Label>
         <Input
           id="googleMapUrl"
           name="googleMapUrl"
           type="text"
+          className="bg-gray-50"
           placeholder="https://goo.gl/maps/zrJXGuiUeER7vcJ1A"
           {...form.register("googleMapUrl")}
         />
@@ -119,21 +126,33 @@ const LocationSection = ({
 
       <div className="flex items-center space-x-3 px-5 py-4">
         <div className="w-1/2 space-y-2">
-          <Label htmlFor="latitude">Latitude</Label>
+          <Label
+            htmlFor="latitude"
+            className="text-sm font-semibold text-gray-600"
+          >
+            Szerokość
+          </Label>
           <Input
             id="latitude"
             name="latitude"
             type="text"
+            className="bg-gray-50"
             {...form.register("latitude")}
             placeholder="50.452781171479266"
           />
         </div>
         <div className="w-1/2 space-y-2">
-          <Label htmlFor="longitude">Longitude</Label>
+          <Label
+            htmlFor="longitude"
+            className="text-sm font-semibold text-gray-600"
+          >
+            Długość
+          </Label>
           <Input
             id="longitude"
             name="longitude"
             type="text"
+            className="bg-gray-50"
             {...form.register("longitude")}
             placeholder="19.526675280239367"
           />
@@ -293,11 +312,18 @@ const LocationSection = ({
       </div>
 
       <div className="space-y-2 border-t px-5 py-4">
-        <Label htmlFor="address">Adres</Label>
+        <Label
+          htmlFor="address"
+          className="text-sm font-semibold text-gray-600"
+        >
+          Adres
+        </Label>
+
         <Input
           id="address"
           name="address"
           type="text"
+          className="bg-gray-50"
           placeholder="ul. Polna 23/4"
           {...form.register("address")}
         />

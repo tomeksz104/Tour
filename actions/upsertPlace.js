@@ -91,11 +91,15 @@ const FormSchema = z.object({
   cityId: z.coerce.number().optional().or(z.literal("")),
   phone: z
     .string()
-    .min(9, { message: "Must be a valid mobile number" })
-    .max(14, { message: "Must be a valid mobile number" })
+    .min(9, { message: "Nieprawidłowy numer telefonu" })
+    .max(14, { message: "Nieprawidłowy numer telefonu" })
     .optional()
     .or(z.literal("")),
-  email: z.string().email().optional().or(z.literal("")),
+  email: z
+    .string()
+    .email("Nieprawidłowy adres email")
+    .optional()
+    .or(z.literal("")),
   website: z.string().url().optional().or(z.literal("")),
   address: z.string().optional().or(z.literal("")),
   slogan: z.string().optional().or(z.literal("")),

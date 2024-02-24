@@ -1,5 +1,4 @@
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
 
 import { Trash2 } from "lucide-react";
 
@@ -13,7 +12,9 @@ const ImagesSection = ({
   return (
     <>
       <div className="space-y-2 border-t px-5 py-4">
-        <Label htmlFor="slogan">Zdjęcie główne</Label>
+        <Label htmlFor="slogan" className="text-sm font-semibold text-gray-600">
+          Zdjęcie główne
+        </Label>
         <span className="block text-xs text-gray-500 italic">
           Jeśli zdjęcie główne nie zostanie dodane, zastosujemy domyślny obraz z
           naszym brandingiem.
@@ -85,7 +86,9 @@ const ImagesSection = ({
       </div>
 
       <div className="space-y-2 border-t px-5 py-4">
-        <Label htmlFor="slogan">Galeria zdjęć</Label>
+        <Label htmlFor="slogan" className="text-sm font-semibold text-gray-600">
+          Galeria zdjęć
+        </Label>
         <span className="block text-xs text-gray-500 italic">
           Jeśli zdjęcie główne nie zostanie dodane, zastosujemy domyślny obraz z
           naszym brandingiem.

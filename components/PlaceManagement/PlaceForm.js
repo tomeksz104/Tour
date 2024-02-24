@@ -227,7 +227,7 @@ const PlaceForm = ({
                 Informacje kontaktowe
               </AccordionTrigger>
               <AccordionContent className="border-t">
-                <ContactSection form={form} />
+                <ContactSection form={form} state={state} />
               </AccordionContent>
             </AccordionItem>
           </Accordion>

@@ -1,21 +1,11 @@
-import { useRef, useState } from "react";
+import { useFieldArray } from "react-hook-form";
 
-import Label from "@/components/Label";
-import { Clock, ClockIcon } from "lucide-react";
+import { FormLabel } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
+import { CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 import { WeekDay as weekDay } from "@prisma/client";
-import { FormLabel } from "@/components/ui/form";
-
-import {
-  CardTitle,
-  CardDescription,
-  CardHeader,
-  CardContent,
-  CardFooter,
-  Card,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { useFieldArray } from "react-hook-form";
 
 export const daysInEnglishToPolish = {
   MONDAY: "Poniedziałek",
@@ -60,7 +50,6 @@ const OpeningHours = ({ form }) => {
                     className="w-full"
                     type="time"
                     {...form.register(`openingHours.${weekDay[key]}.open`)}
-                    // ref={form.register(`openingHours.${weekDay[key]}.open`)}
                   />
                 </div>
               </div>
@@ -86,7 +75,6 @@ const OpeningHours = ({ form }) => {
                     className="w-full"
                     type="time"
                     {...form.register(`openingHours.${weekDay[key]}.close`)}
-                    // ref={form.register(`openingHours.${weekDay[key]}.close`)}
                   />
                 </div>
               </div>

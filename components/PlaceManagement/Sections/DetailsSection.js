@@ -1,10 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   FormControl,
@@ -15,7 +10,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useEffect } from "react";
 
 export function DetailsSection({ form, topics, tags, childAmenites }) {
   const watchChildFriendlyField = form.watch("childFriendly");
@@ -28,7 +22,9 @@ export function DetailsSection({ form, topics, tags, childAmenites }) {
           name="childFriendly"
           render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel>Miejsce przyjazne dla rodzin z dziećmi?</FormLabel>
+              <FormLabel className="text-sm font-semibold text-gray-600">
+                Miejsce przyjazne dla rodzin z dziećmi?
+              </FormLabel>
               <FormDescription className="block text-xs text-gray-500 italic">
                 Zaznaczyć opcję "nie", jeśli uważasz, że dane miejsce nie jest
                 odpowiednie dla dzieci lub rodzin z dziećmi. Opcja ta powinna
