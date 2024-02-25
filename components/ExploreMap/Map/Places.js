@@ -166,6 +166,7 @@ const Places = memo((props) => {
     map,
     props.interactiveMap,
     nearMeDistanceParamsValue,
+    locateCtx.coordinates,
   ]);
 
   // Using useDebouncedCallback to delay handleMoveEnd function

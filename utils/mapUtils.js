@@ -51,12 +51,12 @@ export const getVisibleMarkers = (map, places) => {
   return [];
 };
 
-export const haversineDistance = (map, places) => {
+export const haversineDistance = (coords1, coords2) => {
   function toRad(x) {
     return (x * Math.PI) / 180;
   }
 
-  const R = 6371; // Promień Ziemi w kilometrach
+  const R = 6371;
   const dLat = toRad(coords2.latitude - coords1.latitude);
   const dLon = toRad(coords2.longitude - coords1.longitude);
 
