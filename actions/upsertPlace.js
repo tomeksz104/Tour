@@ -16,6 +16,7 @@ const timeSchema = z.string().regex(/^\d{2}:\d{2}$/, {
 
 const daySchema = z
   .object({
+    isOpen: z.boolean().optional().or(z.literal("")),
     open: timeSchema.optional().or(z.literal("")),
     close: timeSchema.optional().or(z.literal("")),
   })
@@ -235,6 +236,7 @@ export async function insertPlace(prevState, formData) {
       dataToCreate.openingHours = {
         create: Object.entries(dataFields.openingHours).map(([day, hours]) => ({
           day: day,
+          isOpen: hours.isOpen,
           openTime: hours.open,
           closeTime: hours.close,
         })),
@@ -449,11 +451,13 @@ export async function updatePlace(placeId, state, formData) {
           // Update if opening hours have been changed
           if (
             newOpeningHours[existing.day].open !== existing.openTime ||
-            newOpeningHours[existing.day].close !== existing.closeTime
+            newOpeningHours[existing.day].close !== existing.closeTime ||
+            newOpeningHours[existing.day].isOpen !== existing.isOpen
           ) {
             await db.openingHours.update({
               where: { id: existing.id },
               data: {
+                isOpen: newOpeningHours[existing.day].isOpen,
                 openTime: newOpeningHours[existing.day].open,
                 closeTime: newOpeningHours[existing.day].close,
               },

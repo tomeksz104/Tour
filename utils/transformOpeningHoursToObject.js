@@ -3,6 +3,7 @@ export function transformOpeningHoursToObject(openingHoursArray) {
 
   openingHoursArray.forEach((item) => {
     transformedObject[item.day] = {
+      isOpen: item.isOpen,
       open: item.openTime,
       close: item.closeTime,
     };

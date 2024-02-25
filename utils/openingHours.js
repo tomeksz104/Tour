@@ -42,7 +42,7 @@ export function isOpenNow(openingHours) {
 
   const currentDayHours = openingHours.find((day) => day.day === dayOfWeek);
 
-  if (!currentDayHours) {
+  if (!currentDayHours || currentDayHours.isOpen === false) {
     return false;
   }
 
