@@ -253,6 +253,7 @@ model Tag {
 model OpeningHours {
   id        Int     @id @default(autoincrement())
   day       WeekDay
+  isOpen    Boolean? @default(false)  @db.TinyInt
   openTime  String
   closeTime String
   placeId   Int

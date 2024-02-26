@@ -8,22 +8,19 @@ export const daysInEnglishToPolish = {
   SUNDAY: "Niedziela",
 };
 
-// export function isOpenNow(openingHours) {
-//   const now = new Date();
-//   const dayOfWeek = now
-//     .toLocaleDateString("en-US", { weekday: "long" })
-//     .toUpperCase();
-//   const currentTime = now.toTimeString().substr(0, 5);
+export function initializeWeekDays() {
+  const weekDays = {
+    MONDAY: { isOpen: false },
+    TUESDAY: { isOpen: false },
+    WEDNESDAY: { isOpen: false },
+    THURSDAY: { isOpen: false },
+    FRIDAY: { isOpen: false },
+    SATURDAY: { isOpen: false },
+    SUNDAY: { isOpen: false },
+  };
 
-//   const todayHours = openingHours.find((day) => day.day === dayOfWeek);
-
-//   if (!todayHours) {
-//     return false; // Zamknięte, jeśli nie znaleziono godzin dla dzisiaj
-//   }
-
-//   const { openTime, closeTime } = todayHours;
-//   return currentTime >= openTime && currentTime <= closeTime;
-// }
+  return weekDays;
+}
 
 export function getCurrentDayOpeningHours(openingHours) {
   const today = new Date();

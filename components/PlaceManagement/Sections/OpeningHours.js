@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 
 import { WeekDay as weekDay } from "@prisma/client";
 
@@ -33,6 +34,12 @@ const OpeningHours = ({ form }) => {
     return false;
   };
 
+  const selectAll = () => {
+    Object.keys(weekDay).forEach((key) => {
+      const currentValue = watchIsOpen?.[weekDay[key]]?.isOpen || false;
+      form.setValue(`openingHours.${weekDay[key]}.isOpen`, !currentValue);
+    });
+  };
   return (
     <div className="py-4">
       <div className="px-5 pb-3">
@@ -48,18 +55,20 @@ const OpeningHours = ({ form }) => {
           </li>
         </ul>
       </div>
-
+      <Button variant="link" onClick={selectAll} type="button">
+        Zaznacz wszystko
+      </Button>
       {Object.keys(weekDay).map((key) => (
         <div key={key} className="grid grid-cols-3 px-5 items-center">
           <div className="flex items-center gap-x-3">
             <Checkbox
               id={`${weekDay[key]}-isOpen`}
               defaultChecked={check(watchIsOpen?.[weekDay[key]])}
-              onCheckedChange={(isChecked) =>
-                form.setValue(`openingHours.${weekDay[key]}.isOpen`, isChecked)
-              }
-              name={`openingHours.${weekDay[key]}.isOpen`}
-              key={`${weekDay[key]}-isOpen`}
+              checked={check(watchIsOpen?.[weekDay[key]])}
+              onCheckedChange={(isChecked) => {
+                console.log(isChecked);
+                form.setValue(`openingHours.${weekDay[key]}.isOpen`, isChecked);
+              }}
               {...form.register(`openingHours.${weekDay[key]}.isOpen`)}
             />
 

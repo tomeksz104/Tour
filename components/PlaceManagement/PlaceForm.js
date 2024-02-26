@@ -28,6 +28,7 @@ import LocationSection from "./Sections/LocationSection";
 import OpeningHours from "./Sections/OpeningHours";
 import ImagesSection from "./Sections/ImagesSection";
 import { transformOpeningHoursToObject } from "@/utils/transformOpeningHoursToObject";
+import { initializeWeekDays } from "@/utils/openingHours";
 
 const initialState = { message: null, errors: {} };
 
@@ -74,7 +75,7 @@ const PlaceForm = ({
         : [],
       openingHours: place?.openingHours
         ? transformOpeningHoursToObject(place.openingHours)
-        : {},
+        : initializeWeekDays(),
     },
   });
 
