@@ -139,9 +139,9 @@ const PlaceForm = ({
   };
 
   useEffect(() => {
-    if (state.errors && state.message) {
+    if (state?.errors && state?.message) {
       toast.error(state.message);
-    } else if (state.message) {
+    } else if (state?.message) {
       toast.success(state.message);
     }
   }, [state]);

@@ -1,4 +1,4 @@
-import Settings from "@/components/User/Settings";
+import Settings from "@/components/User/Sections/Settings/Settings";
 
 import { db } from "@/lib/db";
 
