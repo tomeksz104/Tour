@@ -145,8 +145,8 @@ const Sidebar = memo(
           <div className="flex items-center justify-between px-5 py-3">
             <div className="flex text-slate-500 text-xs gap-1">
               <span className="font-semibold">{places.length}</span>
-              <span>places</span>
-              <span className="hidden sm:inline-block"> on the map</span>
+              <span className="hidden sm:inline-block"> widocznych </span>
+              <span>miejsc</span>
             </div>
             <div className="flex items-center gap-3">
               <Select onValueChange={handleSortChange}>
