@@ -8,13 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface DataTablePaginationProps<TData> {
-  table: Table<TData>;
-}
-
-export function DataTablePerPage<TData>({
-  table,
-}: DataTablePaginationProps<TData>) {
+export function DataTablePerPage({ table }) {
   return (
     <div className="flex items-center justify-between px-2 mb-5">
       <div className="flex w-[100px] items-center justify-center text-sm font-medium">

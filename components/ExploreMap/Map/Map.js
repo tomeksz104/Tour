@@ -52,7 +52,7 @@ const Map = () => {
         className="absolute top-0 right-0 left-auto h-full "
       >
         <ZoomControl position="topright" />
-        <UserLocate />
+        {/* <UserLocate /> */}
 
         <Suspense>
           <Places

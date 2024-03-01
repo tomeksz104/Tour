@@ -11,7 +11,7 @@ import { db } from "@/lib/db";
 const LatestPlaces = lazy(() =>
   import("@/components/HomePage/LatestPlaces/LatestPlaces")
 );
-import ExploreCategory from "./../components/HomePage/ExploreCategories/ExploreCategory";
+import ExploreCategory from "@/components/HomePage/ExploreCategories/ExploreCategory";
 import { getPlacesForCategories } from "@/actions/getPlacesForCategories";
 import Footer from "@/components/Footer";
 

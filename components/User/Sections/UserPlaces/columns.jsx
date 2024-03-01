@@ -73,6 +73,9 @@ export const columns = [
           color={statusToColor[row.original.status]}
           size={10}
         />
+        {/* <div class="flex-none rounded-full p-1 text-red-400 bg-red-400/20">
+          <div class="h-2 w-2 rounded-full bg-current"></div>
+        </div> */}
 
         <span className="whitespace-nowrap">
           {statusEnglishToPolish[row.original.status]}
