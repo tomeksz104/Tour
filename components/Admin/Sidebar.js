@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
+
 import {
   HomeIcon,
   Users,
@@ -11,8 +14,6 @@ import {
   GanttChartSquare,
 } from "lucide-react";
 
-import { useState } from "react";
-
 import Logo from "@/components/Logo";
 
 const navigation = [
@@ -23,7 +24,7 @@ const navigation = [
   { name: "Miejsca", href: "#", icon: GanttChartSquare, current: false },
   { name: "Kategorie", href: "#", icon: PieChart, current: false },
   { name: "Tematy", href: "#", icon: Dices, current: false },
-  { name: "Tagi", href: "#", icon: Tag, current: false },
+  { name: "Tagi", href: "/admin/tags", icon: Tag, current: false },
   {
     name: "Udogodnienia dla dzieci",
     href: "#",
@@ -89,7 +90,7 @@ const Sidebar = () => {
                     <ul role="list" className="-mx-2 space-y-1">
                       {navigation.map((item) => (
                         <li key={item.name}>
-                          <a
+                          <Link
                             href={item.href}
                             className={` ${
                               item.current
@@ -111,14 +112,14 @@ const Sidebar = () => {
                               aria-hidden="true"
                             />
                             {item.name}
-                          </a>
+                          </Link>
                         </li>
                       ))}
                     </ul>
                   </li>
                   <li>
                     <div className="text-xs font-semibold leading-6 text-gray-400">
-                      Your teams
+                      Your teams ZARZĄDZAJ
                     </div>
                     <ul role="list" className="-mx-2 mt-2 space-y-1">
                       <li>
@@ -175,7 +176,7 @@ const Sidebar = () => {
                 <ul role="list" className="-mx-2 space-y-1">
                   {navigation.map((item) => (
                     <li key={item.name}>
-                      <a
+                      <Link
                         href={item.href}
                         className={` ${
                           item.current
@@ -197,14 +198,14 @@ const Sidebar = () => {
                           aria-hidden="true"
                         />
                         {item.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
               </li>
               <li>
                 <div className="text-xs font-semibold leading-6 text-gray-400">
-                  Your teams
+                  Your teams ZARZĄDZAJ
                 </div>
                 <ul role="list" className="-mx-2 mt-2 space-y-1">
                   <li>
