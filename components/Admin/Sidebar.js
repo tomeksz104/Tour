@@ -21,9 +21,14 @@ const navigation = [
   { name: "Zgłoszenia", href: "#", icon: Files, current: false },
   { name: "Użytkownicy", href: "#", icon: Users, current: false },
 
-  { name: "Miejsca", href: "#", icon: GanttChartSquare, current: false },
+  {
+    name: "Miejsca",
+    href: "/admin/places",
+    icon: GanttChartSquare,
+    current: false,
+  },
   { name: "Kategorie", href: "#", icon: PieChart, current: false },
-  { name: "Tematy", href: "#", icon: Dices, current: false },
+  { name: "Tematy", href: "/admin/topics", icon: Dices, current: false },
   { name: "Tagi", href: "/admin/tags", icon: Tag, current: false },
   {
     name: "Udogodnienia dla dzieci",
