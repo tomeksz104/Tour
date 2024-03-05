@@ -9,11 +9,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { MoreHorizontal, Trash2 } from "lucide-react";
+import Image from "next/image";
 
-export const columns = (
-  openDialogWithRowData,
-  handleDeleteChildFriendlyAmenity
-) => [
+export const columns = (openDialogWithRowData, handleDeleteCategory) => [
   {
     accessorKey: "id",
     header: "ID",
@@ -21,6 +19,38 @@ export const columns = (
   {
     accessorKey: "name",
     header: "Nazwa",
+    cell: ({ row }) => (
+      <div className="w-full flex items-center gap-x-5">
+        <div className="">
+          <Image
+            width="0"
+            height="0"
+            sizes="100vw"
+            src={
+              row.original.iconPath
+                ? row.original.iconPath
+                : "/images/noImage.jpg"
+            }
+            alt={row.original.name}
+            className="rounded-md h-6 w-6 object-contain	"
+          />
+        </div>
+        <div className="flex flex-col">
+          <p className="font-semibold">{row.original.name}</p>
+          <span className="text-xs"> {row.original.description}</span>
+        </div>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "icon",
+    header: "Ikona SVG",
+    cell: ({ row }) => (
+      <div
+        className="text-gray-700"
+        dangerouslySetInnerHTML={{ __html: row.original.svgIconPath }}
+      ></div>
+    ),
   },
 
   {
@@ -58,7 +88,7 @@ export const columns = (
             </DropdownMenuItem>
 
             <DropdownMenuItem
-              onClick={() => handleDeleteChildFriendlyAmenity(row.original.id)}
+              onClick={() => handleDeleteCategory(row.original.id)}
             >
               <Trash2 className="mr-2 h-4 w-4" /> <span>Usuń</span>
             </DropdownMenuItem>
