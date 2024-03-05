@@ -3,7 +3,7 @@ import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import mime from "mime";
 
-export async function uploadFile(data: any, formField: any) {
+export async function uploadFile(data: any, formField: any, savePath: string) {
   const file = data.get(formField);
   if (!file) {
     throw new Error("No file uploaded");
@@ -25,7 +25,7 @@ export async function uploadFile(data: any, formField: any) {
 
   const generatedFileName = `${uuidv4()}.${fileExtension}`;
 
-  const path = `public/upload/${generatedFileName}`;
+  const path = `${savePath}${generatedFileName}`;
 
   await writeFile(path, buffer);
 

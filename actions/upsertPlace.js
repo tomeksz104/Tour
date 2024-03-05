@@ -163,7 +163,7 @@ export async function insertPlace(prevState, formData) {
   let mainPhotoPath;
 
   if (formFileData.has("file")) {
-    mainPhotoPath = await uploadFile(formFileData, "file");
+    mainPhotoPath = await uploadFile(formFileData, "file", "public/upload/");
 
     if (mainPhotoPath.error) {
       return {
@@ -176,7 +176,11 @@ export async function insertPlace(prevState, formData) {
   const galleryImagePaths = [];
 
   for (let i = 0; formFileData.has(`galleryImage${i}`); i++) {
-    const galleryImagePath = await uploadFile(formFileData, `galleryImage${i}`);
+    const galleryImagePath = await uploadFile(
+      formFileData,
+      `galleryImage${i}`,
+      "public/upload/"
+    );
 
     if (galleryImagePath.error) {
       return {
@@ -331,7 +335,7 @@ export async function updatePlace(placeId, state, formData) {
     formFileData.has("file") &&
     typeof formFileData.get(`file`) === "object"
   ) {
-    mainPhotoPath = await uploadFile(formFileData, "file");
+    mainPhotoPath = await uploadFile(formFileData, "file", "public/upload/");
 
     if (mainPhotoPath.error) {
       return {
@@ -351,7 +355,8 @@ export async function updatePlace(placeId, state, formData) {
     if (typeof photo === "object") {
       const galleryImagePath = await uploadFile(
         formFileData,
-        `galleryImage${i}`
+        `galleryImage${i}`,
+        "public/upload/"
       );
 
       if (galleryImagePath.error) {
