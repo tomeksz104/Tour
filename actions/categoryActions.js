@@ -48,7 +48,7 @@ export async function createCategory(prevState, formData) {
 
     if (mainPhotoPath.error) {
       return {
-        errors: "Błąd przesyłania pliku",
+        success: false,
         message: "Przesłany plik nie jest obrazem.",
       };
     }
@@ -117,7 +117,7 @@ export async function updateCategory(id, prevState, formData) {
 
     if (mainPhotoPath.error) {
       return {
-        errors: "Błąd przesyłania pliku",
+        success: false,
         message: "Przesłany plik nie jest obrazem.",
       };
     }
