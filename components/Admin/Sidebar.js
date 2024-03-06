@@ -18,7 +18,7 @@ import Logo from "@/components/Logo";
 
 const navigation = [
   { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-  { name: "Zgłoszenia", href: "#", icon: Files, current: false },
+  { name: "Zgłoszenia", href: "/admin/reports", icon: Files, current: false },
   { name: "Użytkownicy", href: "#", icon: Users, current: false },
 
   {

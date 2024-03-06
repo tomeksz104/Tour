@@ -7,6 +7,7 @@ import { LocateContextProvider } from "@/contexts/LocateContext";
 import Provider from "@/components/Provider";
 import Navigation from "@/components/Navigation/Navigation";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import { Toaster } from "react-hot-toast";
 
 import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
@@ -30,6 +31,7 @@ export default async function RootLayout({ children }) {
               <PlacesContextProvider>
                 <ConfirmContextProvider>
                   <ToastContextProvider>
+                    <Toaster />
                     <div className="flex h-screen flex-col">
                       <Navigation />
                       {children}

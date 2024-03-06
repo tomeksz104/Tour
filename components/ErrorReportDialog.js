@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useFormState } from "react-dom";
-import { useToast } from "@/hooks/useToast";
+import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,11 +24,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { insertErrorReport } from "@/actions/errorReportManager";
+import { createErrorReport } from "@/actions/menage/reportActions";
 
 const ErrorReportDialog = ({ isOpen, onClose }) => {
   const pathname = usePathname();
-  const toast = useToast();
+
   const initialState = { message: null, errors: {} };
 
   const form = useForm({
@@ -37,14 +37,12 @@ const ErrorReportDialog = ({ isOpen, onClose }) => {
     },
   });
 
-  const [state, dispatch] = useFormState(insertErrorReport, initialState);
+  const [state, dispatch] = useFormState(createErrorReport, initialState);
 
-  async function onSubmit(data) {
-    const formData = new FormData();
-
+  async function handleSubmit(formData) {
     formData.append("pageUrl", pathname);
 
-    dispatch({ ...data, pageUrl: pathname });
+    dispatch(formData);
   }
 
   useEffect(() => {
@@ -67,7 +65,7 @@ const ErrorReportDialog = ({ isOpen, onClose }) => {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form action={handleSubmit}>
             <FormField
               control={form.control}
               name="content"
