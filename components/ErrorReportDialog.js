@@ -46,11 +46,12 @@ const ErrorReportDialog = ({ isOpen, onClose }) => {
   }
 
   useEffect(() => {
-    if (state.errors && state.message) {
-      toast.error(state.message);
-    } else if (state.message) {
+    if (state.success === true) {
       form.setValue("content", "");
       toast.success(state.message);
+      onClose();
+    } else if (state.success === false) {
+      toast.error(state.message);
     }
   }, [state]);
 

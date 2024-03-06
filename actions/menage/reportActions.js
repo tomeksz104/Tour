@@ -59,12 +59,13 @@ export async function createErrorReport(prevState, formData) {
     });
 
     return {
+      success: true,
       message: "Zgłoszenie zostało przesłane",
     };
   } catch (error) {
     return {
-      errors: "Błąd bazy danych",
-      message: "Błąd bazy danych: Nie udało się przesłać zgłoszenia.",
+      success: false,
+      message: "Nie udało się przesłać zgłoszenia. Spróbuj ponownie.",
     };
   }
 }
