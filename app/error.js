@@ -1,12 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-
 const Error = ({ error }) => {
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
-
   return (
     <div class="flex h-[calc(100vh-80px)] items-center justify-center p-5 w-full bg-white">
       <div class="text-center">
@@ -37,8 +31,8 @@ const Error = ({ error }) => {
           Oops...
         </h1>
         <p class="text-slate-600 mt-5 lg:text-lg">
-          Oops something went wrong. Try to refresh this page or <br /> feel
-          free to contact us if the problem presists.
+          Ups! Coś poszło nie tak. Spróbuj odświeżyć tę stronę lub skontaktuj
+          się z nami, jeśli problem będzie się powtarzał.
         </p>
       </div>
     </div>
