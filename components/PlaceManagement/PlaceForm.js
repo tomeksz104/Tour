@@ -1,34 +1,37 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/hooks/useToast";
+import { useSession } from "next-auth/react";
 import useConfirm from "@/hooks/useConfirm";
 import { useForm } from "react-hook-form";
 import { useFormState } from "react-dom";
+import toast from "react-hot-toast";
 
-import Button from "../Button";
-
+import { Button as ButtonShadcn } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
-import { useSession } from "next-auth/react";
-import { insertPlace, updatePlace } from "@/actions/upsertPlace";
-
 import { DetailsSection } from "./Sections/DetailsSection";
-
 import { Form } from "../ui/form";
 import BasicSection from "./Sections/BasicSection";
 import ContactSection from "./Sections/ContactSection";
 import LocationSection from "./Sections/LocationSection";
 import OpeningHours from "./Sections/OpeningHours";
 import ImagesSection from "./Sections/ImagesSection";
+
 import { transformOpeningHoursToObject } from "@/utils/transformOpeningHoursToObject";
 import { initializeWeekDays } from "@/utils/openingHours";
+
+import {
+  createPlace,
+  deletePlace,
+  updatePlace,
+} from "@/actions/menage/placeActions";
+
+import { RotateCw } from "lucide-react";
 
 const initialState = { message: null, errors: {} };
 
@@ -79,74 +82,51 @@ const PlaceForm = ({
     },
   });
 
-  const router = useRouter();
-  const toast = useToast();
-
   const [mainPhotoPath, setMainPhotoPath] = useState(
     place?.mainPhotoPath ? place.mainPhotoPath : null
   );
   const [galleryImages, setGalleryImages] = useState(
     place?.photos ? place.photos : []
   );
-  const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  //console.log(place.mainPhotoPath);
-
-  useEffect(() => {
-    console.log(mainPhotoPath);
-  }, [mainPhotoPath]);
 
   const upsertPlace = place?.id
     ? updatePlace.bind(null, place.id)
-    : insertPlace;
+    : createPlace;
   const [state, dispatch] = useFormState(upsertPlace, initialState);
 
   const placeId = place?.id || null;
 
-  const handleDelete = async () => {
-    const isConfirmed = await confirm(
-      "Are you sure you want to remove this attraction?"
-    );
+  useEffect(() => {
+    if (state.success === true) {
+      setIsLoading(false);
+      toast.success(state.message);
+    } else if (state.success === false) {
+      setIsLoading(false);
+
+      toast.error(state.message);
+    }
+  }, [state]);
+
+  const handleDeletePlace = async () => {
+    const isConfirmed = await confirm("Czy na pewno chcesz usunąć te miejsce?");
 
     if (isConfirmed) {
-      setError(false);
-      setIsLoading(true);
-
       try {
-        const response = await fetch(`/api/place/${placeId}`, {
-          method: "DELETE",
-        });
-
-        if (!response.ok) {
-          throw new Error(`Server responded with status: ${response.status}`);
-        }
-
-        if (response.ok) {
-          const message = await response.json();
-          toast.success(message);
-          router.replace("/");
-        } else {
-          const { error } = await response.json();
-          setError(error);
+        const result = await deletePlace(placeId);
+        if (result.success === true) {
+          toast.success(result.message);
+        } else if (result.success === false) {
+          toast.error(result.message);
         }
       } catch (error) {
-        setError(error);
-      } finally {
-        setIsLoading(false);
+        toast.error(error.message);
       }
     }
   };
 
-  useEffect(() => {
-    if (state?.errors && state?.message) {
-      toast.error(state.message);
-    } else if (state?.message) {
-      toast.success(state.message);
-    }
-  }, [state]);
-
-  async function onSubmit(data) {
+  async function handleSubmit(data) {
+    setIsLoading(true);
     const fileData = new FormData();
 
     if (mainPhotoPath) {
@@ -189,8 +169,23 @@ const PlaceForm = ({
       <h2 className="mb-5 text-center text-2xl font-semibold text-gray-800 md:text-4xl">
         {placeId ? "Aktualizuj atrakcję" : "Dodaj atrakcję"}
       </h2>
+      {state?.errors && Object.keys(state.errors).length > 0 && (
+        <div className="pb-5">
+          <p>Popraw następujące błedy:</p>
+          <ul className="list-disc">
+            {Object.keys(state.errors).map(function (key) {
+              return (
+                <li value={key} className="ml-8 mt-2 text-sm text-red-500">
+                  {state.errors[key]}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
           <Accordion type="single" collapsible defaultValue="item-1">
             <AccordionItem value="item-1" className="bg-white rounded-md">
               <AccordionTrigger className="px-5">
@@ -224,8 +219,15 @@ const PlaceForm = ({
           </Accordion>
           <Accordion type="single" collapsible className="mt-5">
             <AccordionItem value="item-3" className="bg-white rounded-md">
-              <AccordionTrigger className="px-5">
-                Informacje kontaktowe
+              <AccordionTrigger className="px-5 hover:no-underline group">
+                <div className="flex items-center space-x-2">
+                  <div className="group-hover:underline">
+                    Informacje kontaktowe
+                  </div>
+                  <span className="text-gray-500 text-xs italic font-normal hover:no-underline">
+                    (Opcjonalne)
+                  </span>
+                </div>
               </AccordionTrigger>
               <AccordionContent className="border-t">
                 <ContactSection form={form} state={state} />
@@ -239,8 +241,15 @@ const PlaceForm = ({
             className="mt-5"
           >
             <AccordionItem value="item-1" className="bg-white rounded-md">
-              <AccordionTrigger className="px-5">
-                Szczegóły atrakcji
+              <AccordionTrigger className="px-5 hover:no-underline group">
+                <div className="flex items-center space-x-2">
+                  <div className="group-hover:underline">
+                    Szczegóły atrakcjia
+                  </div>
+                  <span className="text-gray-500 text-xs italic font-normal hover:no-underline">
+                    (Opcjonalne)
+                  </span>
+                </div>
               </AccordionTrigger>
               <AccordionContent className="border-t">
                 <DetailsSection
@@ -259,8 +268,13 @@ const PlaceForm = ({
             className="mt-5"
           >
             <AccordionItem value="item-1" className="bg-white rounded-md">
-              <AccordionTrigger className="px-5">
-                Godziny otwarcia
+              <AccordionTrigger className="px-5 hover:no-underline group">
+                <div className="flex items-center space-x-2">
+                  <div className="group-hover:underline">Godziny otwarcia</div>
+                  <span className="text-gray-500 text-xs italic font-normal hover:no-underline">
+                    (Opcjonalne)
+                  </span>
+                </div>
               </AccordionTrigger>
               <AccordionContent className="border-t">
                 <OpeningHours form={form} />
@@ -308,20 +322,33 @@ const PlaceForm = ({
             }`}
           >
             {placeId && (
-              <button
-                onClick={handleDelete}
+              <ButtonShadcn
+                onClick={handleDeletePlace}
+                variant="link"
                 type="button"
-                className="text-red-500 font-bold text-xs uppercase"
+                className="text-red-500 hover:text-red-600 font-semibold"
               >
-                Delete
-              </button>
+                Usuń to miejsce
+              </ButtonShadcn>
             )}
-            <Button
-              isLoading={isLoading}
-              className={`${placeId ? "px-10" : "w-full"}`}
+            <ButtonShadcn
+              disabled={isLoading}
+              className={`text-center bg-green-500 rounded-full w-auto text-base font-semibold relative 
+              flex h-11 items-center justify-center before:absolute before:inset-0 before:rounded-full before:bg-green-500 before:transition before:duration-300 hover:bg-green-500 hover:before:scale-105 active:duration-75 active:before:scale-95
+              ${placeId ? "px-10" : "w-full"}
+              `}
             >
-              {placeId ? "Aktualizuj" : "Utwórz"}
-            </Button>
+              {isLoading && (
+                <RotateCw className="absolute mr-2 h-4 w-4 animate-spin" />
+              )}
+              <span
+                class={`relative px-10 font-semibold ${
+                  isLoading && "invisible"
+                }`}
+              >
+                {placeId ? "Aktualizuj" : "Utwórz"}
+              </span>
+            </ButtonShadcn>
           </div>
         </form>
       </Form>

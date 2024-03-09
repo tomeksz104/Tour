@@ -65,14 +65,14 @@ model Place {
   topics                 Topic[]
   reviews                Review[]
   openingHours           OpeningHours[]
-  category               Category?              @relation(fields: [categoryId], references: [id])
+  category               Category?              @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   tags                   Tag[]
   socialMedia            PlaceSocialMedia[]
   photos                 Photo[]
-  user                   User                   @relation(fields: [userId], references: [id])
-  province               Province?              @relation(fields: [provinceId], references: [id])
-  city                   City?                  @relation(fields: [cityId], references: [id])
-  country                Country?               @relation(fields: [countryId], references: [id])
+  user                   User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  province               Province?              @relation(fields: [provinceId], references: [id], onDelete: Cascade)
+  city                   City?                  @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  country                Country?               @relation(fields: [countryId], references: [id], onDelete: Cascade)
   accommodation          Accommodation?
   restaurant             Food?
   createdAt              DateTime               @default(now())
@@ -122,7 +122,7 @@ model Comment {
   postId    Int
   userId    Int
 
-  user User  @relation(fields: [userId], references: [id])
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   Post Post? @relation(fields: [postId], references: [id])
 }
 
@@ -136,7 +136,7 @@ model Review {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 
-  place  Place @relation(fields: [placeId], references: [id])
+  place  Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
   author User  @relation(fields: [userId], references: [id])
 }
 
@@ -163,7 +163,7 @@ model UserSocialMedia {
   userId     Int
   platformId Int
   user       User                @relation(fields: [userId], references: [id])
-  platform   SocialMediaPlatform @relation(fields: [platformId], references: [id])
+  platform   SocialMediaPlatform @relation(fields: [platformId], references: [id], onDelete: Cascade)
 
   @@unique([userId, platformId], name: "userId_platformId")
 }
@@ -173,7 +173,7 @@ model Photo {
   url      String
   verified Boolean @default(false)
   placeId  Int
-  place    Place   @relation(fields: [placeId], references: [id])
+  place    Place   @relation(fields: [placeId], references: [id], onDelete: Cascade)
 }
 
 model ReviewPhotos {
@@ -253,10 +253,10 @@ model OpeningHours {
   id        Int     @id @default(autoincrement())
   day       WeekDay
   isOpen    Boolean? @default(false)  @db.TinyInt
-  openTime  String
-  closeTime String
+  openTime  String?
+  closeTime String?
   placeId   Int
-  place     Place   @relation(fields: [placeId], references: [id])
+  place     Place   @relation(fields: [placeId], references: [id], onDelete: Cascade)
 }
 
 model Account {

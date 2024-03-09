@@ -1,3 +1,4 @@
+import TextEditor from "../../TextEditor/TextEditor";
 import Input from "@/components/Input";
 import { Label } from "@/components/ui/label";
 import {
@@ -8,7 +9,6 @@ import {
   FormDescription,
   FormMessage,
 } from "@/components/ui/form";
-
 import {
   Select,
   SelectContent,
@@ -18,8 +18,6 @@ import {
 } from "@/components/ui/select";
 
 import { PlaceType as placeTypes } from "@prisma/client";
-
-import TextEditor from "../../TextEditor/TextEditor";
 
 const BasicSection = ({ form, state, categories, placeDescription }) => {
   const handleChangeContent = (content) => {
@@ -35,14 +33,18 @@ const BasicSection = ({ form, state, categories, placeDescription }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-sm font-semibold text-gray-600">
-                Typ miejsca
+                Typ miejsca *
               </FormLabel>
               <FormDescription className="block text-xs text-gray-500 italic">
                 Na podstawie Twojego wyboru, pojawią się dodatkowe opcje i pola
                 do wypełnienia, dostosowane do charakterystyki wybranej
                 kategorii atrakcji.
               </FormDescription>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                name="type"
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger
                     className="w-1/2 bg-gray-50 text-gray-600 transition duration-300
@@ -78,19 +80,30 @@ const BasicSection = ({ form, state, categories, placeDescription }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-sm font-semibold text-gray-600">
-                Kategoria
+                Kategoria *
               </FormLabel>
               <FormDescription className="block text-xs text-gray-500 italic">
                 Na podstawie Twojego wyboru, pojawią się dodatkowe opcje i pola
                 do wypełnienia, dostosowane do charakterystyki wybranej
                 kategorii atrakcji.
               </FormDescription>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                name="categoryId"
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger
                     className="w-1/2 bg-gray-50 text-gray-600 transition duration-300
                     focus:ring-1 focus:ring-green-500 focus:ring-offset-0"
                   >
+                    {" "}
+                    {state?.errors?.categoryId &&
+                      state.errors.categoryId.map((error) => (
+                        <p className="mt-2 text-sm text-red-500" key={error}>
+                          {error}
+                        </p>
+                      ))}
                     <SelectValue placeholder="Wybierz kategorię...">
                       {field.value ? categories[field.value - 1].name : null}
                     </SelectValue>
@@ -104,12 +117,7 @@ const BasicSection = ({ form, state, categories, placeDescription }) => {
                   ))}
                 </SelectContent>
               </Select>
-              {state?.errors?.categoryId &&
-                state.errors.categoryId.map((error) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
+
               <FormMessage />
             </FormItem>
           )}
@@ -118,7 +126,7 @@ const BasicSection = ({ form, state, categories, placeDescription }) => {
 
       <div className="space-y-2 border-t px-5 py-4">
         <Label htmlFor="title" className="text-sm font-semibold text-gray-600">
-          Nazwa atrakcji
+          Nazwa atrakcji *
         </Label>
         <span className="block text-xs text-gray-500 italic">
           Podaj pełną nazwę atrakcji.

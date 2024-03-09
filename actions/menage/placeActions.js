@@ -2,13 +2,16 @@
 
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authOptions";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { PlaceType } from "@prisma/client";
-import { getPlaceById } from "./getPlaceById";
+import { getPlaceById } from "../getPlaceById";
 import createSlug from "@/utils/createSlug";
 
-import { uploadFile, deleteFile } from "./fileManager";
+import { PlaceStatus } from "@prisma/client";
+
+import { uploadFile, deleteFile } from "../fileManager";
 
 const timeSchema = z.string().regex(/^\d{2}:\d{2}$/, {
   message: "Invalid time format. Expected format is HH:MM.",
@@ -17,9 +20,10 @@ const timeSchema = z.string().regex(/^\d{2}:\d{2}$/, {
 const daySchema = z
   .object({
     isOpen: z.boolean().optional().or(z.literal("")),
-    open: timeSchema.optional().or(z.literal("")),
-    close: timeSchema.optional().or(z.literal("")),
+    open: timeSchema.nullable().optional().or(z.literal("")),
+    close: timeSchema.nullable().optional().or(z.literal("")),
   })
+  .nullable()
   .optional();
 
 const openingHoursSchema = z
@@ -76,10 +80,11 @@ const FormSchema = z.object({
       message: "Długość geograficzna musi wynosić od -180 do 180",
     }),
   title: z.string().min(5, { message: "Tytuł musi mieć minimum 5 znaków" }),
-  description: z.string().optional().or(z.literal("")),
+  description: z.string().nullable().optional().or(z.literal("")),
   googleMapUrl: z
     .string()
     .url({ message: "Nieprawidłowy adres url" })
+    .nullable()
     .optional()
     .or(z.literal("")),
   categoryId: z.coerce
@@ -94,32 +99,44 @@ const FormSchema = z.object({
     .string()
     .min(9, { message: "Nieprawidłowy numer telefonu" })
     .max(14, { message: "Nieprawidłowy numer telefonu" })
+    .nullable()
     .optional()
     .or(z.literal("")),
   email: z
     .string()
     .email("Nieprawidłowy adres email")
+    .nullable()
     .optional()
     .or(z.literal("")),
-  website: z.string().url().optional().or(z.literal("")),
-  address: z.string().optional().or(z.literal("")),
+  website: z.string().url().nullable().optional().or(z.literal("")),
+  address: z.string().nullable().optional().or(z.literal("")),
   slogan: z.string().optional().or(z.literal("")),
 
   childFriendly: z.coerce.boolean().optional(),
-  childAmenites: z.array(z.number().int()).optional(),
-  topics: z.array(z.number().int()).optional(),
-  tags: z.array(z.number().int()).optional(),
+  childAmenites: z.array(z.number().int()).nullable().optional(),
+  topics: z.array(z.number().int()).nullable().optional(),
+  tags: z.array(z.number().int()).nullable().optional(),
   openingHours: openingHoursSchema.optional(),
 });
 
 const UpsertPlace = FormSchema.omit({ id: true, date: true });
 
-export async function insertPlace(prevState, formData) {
+const PlaceStatusSchema = z.object({
+  status: z.nativeEnum(PlaceStatus, {
+    errorMap: () => {
+      return { message: "Status miejsca nie może być pusty" };
+    },
+  }),
+});
+
+const ChangePlaceStatus = PlaceStatusSchema.omit({ id: true, date: true });
+
+export async function createPlace(prevState, formData) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
     return {
-      errors: "",
+      success: false,
       message: "Nie jesteś zalogowany",
     };
   }
@@ -153,6 +170,7 @@ export async function insertPlace(prevState, formData) {
   if (!validatedFields.success) {
     console.log(validatedFields.error.flatten().fieldErrors);
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Brakujące pola. Nie udało się utworzyć miejsca.",
     };
@@ -163,12 +181,12 @@ export async function insertPlace(prevState, formData) {
   let mainPhotoPath;
 
   if (formFileData.has("file")) {
-    mainPhotoPath = await uploadFile(formFileData, "file", "public/upload/");
+    mainPhotoPath = await uploadFile(formFileData, "file", "public/uploads/");
 
     if (mainPhotoPath.error) {
       return {
-        errors: "Błąd przesyłania pliku",
-        message: "Przesłany plik nie jest obrazem.",
+        success: false,
+        message: "Przesłane zdjęcie główne nie jest obrazem.",
       };
     }
   }
@@ -179,12 +197,12 @@ export async function insertPlace(prevState, formData) {
     const galleryImagePath = await uploadFile(
       formFileData,
       `galleryImage${i}`,
-      "public/upload/"
+      "public/uploads/"
     );
 
     if (galleryImagePath.error) {
       return {
-        errors: "Błąd przesyłania galerii zdjęć",
+        success: false,
         message: "Przesłane zdjęcia w galerii nie są obrazami.",
       };
     }
@@ -241,8 +259,8 @@ export async function insertPlace(prevState, formData) {
         create: Object.entries(dataFields.openingHours).map(([day, hours]) => ({
           day: day,
           isOpen: hours.isOpen,
-          openTime: hours.open,
-          closeTime: hours.close,
+          openTime: hours.isOpen ? hours.open : null,
+          closeTime: hours.isOpen ? hours.close : null,
         })),
       };
     }
@@ -266,14 +284,15 @@ export async function insertPlace(prevState, formData) {
     }
 
     await db.place.create({ data: dataToCreate });
+
+    return {
+      success: true,
+      message: "Pomyślnie utworzono miejsce",
+    };
   } catch (error) {
     return {
-      errors: "Błąd bazy danych",
+      success: false,
       message: "Błąd bazy danych: Nie udało się utworzyć miejsca..",
-    };
-  } finally {
-    return {
-      message: "Pomyślnie utworzono miejsce",
     };
   }
 }
@@ -322,7 +341,9 @@ export async function updatePlace(placeId, state, formData) {
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Brakujące pola. Nie udało się utworzyć miejsca.",
     };
@@ -335,15 +356,19 @@ export async function updatePlace(placeId, state, formData) {
     formFileData.has("file") &&
     typeof formFileData.get(`file`) === "object"
   ) {
-    mainPhotoPath = await uploadFile(formFileData, "file", "public/upload/");
+    if (existingPlace.mainPhotoPath) {
+      await deleteFile(existingPlace.mainPhotoPath);
+    }
+
+    mainPhotoPath = await uploadFile(formFileData, "file", "public/uploads/");
 
     if (mainPhotoPath.error) {
       return {
-        errors: "Błąd przesyłania pliku",
-        message: "Przesłany plik nie jest obrazem.",
+        success: false,
+        message: "Przesłane zdjęcie główne nie jest obrazem.",
       };
     }
-  } else if (formFileData.get(`file`) === null) {
+  } else if (formFileData.get(`file`) === null && existingPlace.mainPhotoPath) {
     mainPhotoPath = formFileData.get(`file`);
     deleteFile(existingPlace.mainPhotoPath);
   }
@@ -356,12 +381,12 @@ export async function updatePlace(placeId, state, formData) {
       const galleryImagePath = await uploadFile(
         formFileData,
         `galleryImage${i}`,
-        "public/upload/"
+        "public/uploads/"
       );
 
       if (galleryImagePath.error) {
         return {
-          errors: "Błąd przesyłania galerii zdjęć",
+          success: false,
           message: "Przesłane zdjęcia w galerii nie są obrazami.",
         };
       }
@@ -459,12 +484,13 @@ export async function updatePlace(placeId, state, formData) {
             newOpeningHours[existing.day].close !== existing.closeTime ||
             newOpeningHours[existing.day].isOpen !== existing.isOpen
           ) {
+            const isOpen = newOpeningHours[existing.day].isOpen;
             await db.openingHours.update({
               where: { id: existing.id },
               data: {
                 isOpen: newOpeningHours[existing.day].isOpen,
-                openTime: newOpeningHours[existing.day].open,
-                closeTime: newOpeningHours[existing.day].close,
+                openTime: isOpen ? newOpeningHours[existing.day].open : null,
+                closeTime: isOpen ? newOpeningHours[existing.day].close : null,
               },
             });
           }
@@ -481,8 +507,9 @@ export async function updatePlace(placeId, state, formData) {
         await db.openingHours.create({
           data: {
             day: day,
-            openTime: hours.open,
-            closeTime: hours.close,
+            isOpen: hours.isOpen,
+            openTime: hours.isOpen ? hours.open : null,
+            closeTime: hours.isOpen ? hours.close : null,
             placeId: placeId,
           },
         });
@@ -534,14 +561,82 @@ export async function updatePlace(placeId, state, formData) {
       where: { id: placeId },
       data: dataToCreate,
     });
+
+    return {
+      success: true,
+      message: "Pomyślnie zaaktualizowano miejsce",
+    };
   } catch (error) {
     return {
-      errors: "Błąd bazy danych",
+      success: false,
       message: "Błąd bazy danych: Nie udało się utworzyć miejsca..",
     };
-  } finally {
+  }
+}
+
+export async function deletePlace(placeId) {
+  const existingPlace = await getPlaceById(placeId);
+  const existingPhotos = existingPlace.photos;
+
+  if (existingPlace.mainPhotoPath) {
+    await deleteFile(existingPlace.mainPhotoPath);
+  }
+
+  if (existingPhotos.length > 0) {
+    for (const photo of existingPhotos) {
+      await deleteFile(photo.url);
+    }
+  }
+
+  try {
+    await db.place.delete({
+      where: { id: placeId },
+    });
+
+    // Revalidate the cache for the topics page and redirect the user.
+    revalidatePath("/admin/places");
+
+    return { success: true, message: "Miejsce zostało usunięte pomyślnie." };
+  } catch (error) {
     return {
-      message: "Pomyślnie zaaktualizowano miejsce",
+      success: false,
+      message: "Nie udało się usunąć miejsca. Spróbuj ponownie.",
+    };
+  }
+}
+
+export async function changePlaceStatus(placeId, placeStatus) {
+  const validatedFields = ChangePlaceStatus.safeParse({
+    status: placeStatus,
+  });
+
+  // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Update Place.",
+    };
+  }
+
+  const { status } = validatedFields.data;
+
+  try {
+    await db.place.update({
+      where: { id: placeId },
+      data: { status },
+    });
+
+    // Revalidate the cache for the places page and redirect the user.
+    revalidatePath("/admin/places");
+
+    return {
+      success: true,
+      message: "Status został zaaktualizowany pomyślnie",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Nie udało się zaaktualizować statusu miejsca",
     };
   }
 }

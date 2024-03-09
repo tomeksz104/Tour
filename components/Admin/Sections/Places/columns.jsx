@@ -11,9 +11,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Circle, MoreHorizontal, Trash2, FilePenLine } from "lucide-react";
 import Link from "next/link";
+
+import { PlaceStatus } from "@prisma/client";
 
 export const statusEnglishToPolish = {
   PUBLISHED: "Opublikowane",
@@ -29,7 +39,7 @@ const statusToColor = {
   PENDING_PAYMENT: "#45aaf2", // Blue
 };
 
-export const columns = [
+export const columns = (handleChangePlaceStatus, handleDeletePlace) => [
   {
     accessorKey: "title",
     header: "Tytuł",
@@ -67,20 +77,34 @@ export const columns = [
     header: "Status",
 
     cell: ({ row }) => (
-      <div className="flex items-center gap-x-2">
-        <Circle
-          fill={statusToColor[row.original.status]}
-          color={statusToColor[row.original.status]}
-          size={10}
-        />
-        {/* <div class="flex-none rounded-full p-1 text-red-400 bg-red-400/20">
-          <div class="h-2 w-2 rounded-full bg-current"></div>
-        </div> */}
-
-        <span className="whitespace-nowrap">
-          {statusEnglishToPolish[row.original.status]}
-        </span>
-      </div>
+      <Select
+        onValueChange={(status) =>
+          handleChangePlaceStatus(row.original.id, status)
+        }
+        className="w-[180px]"
+        name="status"
+        defaultValue={row.original.status}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Wybierz status" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {Object.keys(PlaceStatus).map((key) => (
+              <SelectItem key={key} value={PlaceStatus[key]}>
+                <div className="flex items-center gap-x-2">
+                  <Circle
+                    fill={statusToColor[PlaceStatus[key]]}
+                    color={statusToColor[PlaceStatus[key]]}
+                    size={10}
+                  />
+                  {statusEnglishToPolish[PlaceStatus[key]]}
+                </div>
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     ),
   },
   {
@@ -117,7 +141,9 @@ export const columns = [
               </Link>
             </DropdownMenuItem>
 
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => handleDeletePlace(row.original.id)}
+            >
               <Trash2 className="mr-2 h-4 w-4" /> <span>Usuń</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

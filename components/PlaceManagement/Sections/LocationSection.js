@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
-import { parseLatLngFromUrl } from "@/utils/parseLatLngFromUrl";
-
-const Map = dynamic(() => import("@/components/PlaceManagement/Map"), {
-  loading: () => <p>loading...</p>,
-  ssr: false,
-});
-
 import { Button } from "@/components/ui/button";
 import Input from "@/components/Input";
 import { Label } from "@/components/ui/label";
@@ -39,7 +32,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import InputError from "@/components/InputError";
+
+const Map = dynamic(() => import("@/components/PlaceManagement/Map"), {
+  loading: () => <p>loading...</p>,
+  ssr: false,
+});
+
+import { parseLatLngFromUrl } from "@/utils/parseLatLngFromUrl";
+
+import { Siren } from "lucide-react";
 
 const LocationSection = ({
   form,
@@ -92,6 +93,36 @@ const LocationSection = ({
   return (
     <>
       <div className="space-y-2 px-5 pt-4">
+        <p className="flex items-center font-semibold text-gray-600">
+          <svg
+            className="w-4 h-4 mr-3 fill-yellow-500"
+            xmlns="http://www.w3.org/2000/svg"
+            x="0px"
+            y="0px"
+            width="100"
+            height="100"
+            viewBox="0 0 24 24"
+          >
+            <path d="M 11 0 L 11 3 L 13 3 L 13 0 L 11 0 z M 4.2226562 2.8085938 L 2.8085938 4.2226562 L 4.9296875 6.34375 L 6.34375 4.9296875 L 4.2226562 2.8085938 z M 19.777344 2.8085938 L 17.65625 4.9296875 L 19.070312 6.34375 L 21.191406 4.2226562 L 19.777344 2.8085938 z M 12 5 C 8.1456661 5 5 8.1456661 5 12 C 5 14.767788 6.6561188 17.102239 9 18.234375 L 9 21 C 9 22.093063 9.9069372 23 11 23 L 13 23 C 14.093063 23 15 22.093063 15 21 L 15 18.234375 C 17.343881 17.102239 19 14.767788 19 12 C 19 8.1456661 15.854334 5 12 5 z M 12 7 C 14.773666 7 17 9.2263339 17 12 C 17 14.184344 15.605334 16.022854 13.666016 16.708984 L 13 16.943359 L 13 21 L 11 21 L 11 16.943359 L 10.333984 16.708984 C 8.3946664 16.022854 7 14.184344 7 12 C 7 9.2263339 9.2263339 7 12 7 z M 0 11 L 0 13 L 3 13 L 3 11 L 0 11 z M 21 11 L 21 13 L 24 13 L 24 11 L 21 11 z M 4.9296875 17.65625 L 2.8085938 19.777344 L 4.2226562 21.191406 L 6.34375 19.070312 L 4.9296875 17.65625 z M 19.070312 17.65625 L 17.65625 19.070312 L 19.777344 21.191406 L 21.191406 19.777344 L 19.070312 17.65625 z"></path>
+          </svg>
+          Wskazówka
+        </p>
+        <ul className="ml-6 list-disc text-xs">
+          <li className="text-gray-500 italic text-justify">
+            <b>Automatyczne uzupełnienie lokalizacji:</b> Lokalizacja jest
+            niezbędna dla każdego miejsca, wymagając podania szerokości i
+            długości geograficznej. Możesz łatwo uzupełnić te dane
+            automatycznie, wklejając link do danej atrakcji w Google Maps.
+          </li>
+          <li className="text-gray-500 italic text-justify">
+            <b> Ręczne ustawienie pinezki:</b> Jeśli wolisz, możesz również
+            kliknąć bezpośrednio na mapę, aby umieścić pinezkę. Następnie
+            przesuń ją do żądanego miejsca, dokładnie określając lokalizację.
+          </li>
+        </ul>
+      </div>
+
+      <div className="space-y-2 px-5 pt-4">
         <Label
           htmlFor="googleMapUrl"
           className="text-sm font-semibold text-gray-600"
@@ -106,9 +137,12 @@ const LocationSection = ({
           placeholder="https://goo.gl/maps/zrJXGuiUeER7vcJ1A"
           {...form.register("googleMapUrl")}
         />
+
         {state?.errors?.googleMapUrl &&
           state.errors.googleMapUrl.map((error) => (
-            <InputError key={error} error={error} />
+            <p className="mt-2 text-sm text-red-500" key={error}>
+              {error}
+            </p>
           ))}
       </div>
       <div className="px-5">
@@ -123,14 +157,13 @@ const LocationSection = ({
           categories={categories}
         />
       </div>
-
       <div className="flex items-center space-x-3 px-5 py-4">
         <div className="w-1/2 space-y-2">
           <Label
             htmlFor="latitude"
             className="text-sm font-semibold text-gray-600"
           >
-            Szerokość
+            Szerokość *
           </Label>
           <Input
             id="latitude"
@@ -146,7 +179,7 @@ const LocationSection = ({
             htmlFor="longitude"
             className="text-sm font-semibold text-gray-600"
           >
-            Długość
+            Długość *
           </Label>
           <Input
             id="longitude"
@@ -172,7 +205,6 @@ const LocationSection = ({
             </p>
           ))}
       </div>
-
       <div className="flex items-center space-x-3 px-5 py-4 border-t">
         <div className="w-1/2 space-y-2">
           {/* <Select
@@ -310,7 +342,6 @@ const LocationSection = ({
           </div>
         )}
       </div>
-
       <div className="space-y-2 border-t px-5 py-4">
         <Label
           htmlFor="address"
