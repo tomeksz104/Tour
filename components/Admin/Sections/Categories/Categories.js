@@ -7,7 +7,7 @@ import MenageDialog from "./MenageDialog";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 
-import { deleteCategory } from "@/actions/categoryActions";
+import { deleteCategory } from "@/actions/menage/categoryActions";
 import useConfirm from "@/hooks/useConfirm";
 
 const Categories = ({ categories }) => {

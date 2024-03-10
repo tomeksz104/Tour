@@ -7,7 +7,6 @@ import useConfirm from "@/hooks/useConfirm";
 import { DataTable } from "@/components/Admin/DataTable/DataTable";
 import { columns } from "./columns";
 import MenageDialog from "./MenageDialog";
-import { Button } from "@/components/ui/button";
 
 import { deleteUser } from "@/actions/menage/userActions";
 

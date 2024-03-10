@@ -1,7 +1,7 @@
 "use server";
 
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
@@ -24,7 +24,7 @@ export async function insertReview(placeId, prevState, formData) {
 
   if (!session) {
     return {
-      errors: "",
+      success: false,
       message: "Nie jesteś zalogowany",
     };
   }
@@ -37,9 +37,11 @@ export async function insertReview(placeId, prevState, formData) {
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Nie udało się zaaktualizować komentarza.",
+      message: "Błąd walidacji danych. Nie udało się utworzyć opinii",
     };
   }
 
@@ -55,12 +57,13 @@ export async function insertReview(placeId, prevState, formData) {
     revalidatePath(`/place/${placeId}`);
 
     return {
-      message: "Pomyślnie zaaktualizowano komentarz",
+      success: true,
+      message: "Opinia została dodana",
     };
   } catch (error) {
     return {
-      errors: "Błąd bazy danych",
-      message: "Błąd bazy danych: Nie udało się zaaktualizować komentarza.",
+      success: false,
+      message: "Błąd bazy danych: Nie udało się dodać opinii.",
     };
   }
 }
@@ -70,7 +73,7 @@ export async function updateReview(reviewId, prevState, formData) {
 
   if (!session) {
     return {
-      errors: "",
+      success: false,
       message: "Nie jesteś zalogowany",
     };
   }
@@ -84,8 +87,9 @@ export async function updateReview(reviewId, prevState, formData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Nie udało się zaaktualizować komentarza.",
+      message: "Błąd walidacji danych. Nie udało się zaaktualizować opinii",
     };
   }
 
@@ -100,12 +104,13 @@ export async function updateReview(reviewId, prevState, formData) {
     revalidatePath(`/place`);
 
     return {
-      message: "Pomyślnie zaaktualizowano komentarz",
+      success: true,
+      message: "Pomyślnie zaaktualizowano opinię",
     };
   } catch (error) {
     return {
-      errors: "Błąd bazy danych",
-      message: "Błąd bazy danych: Nie udało się zaaktualizować komentarza.",
+      success: false,
+      message: "Błąd bazy danych: Nie udało się zaaktualizować opinii.",
     };
   }
 }
@@ -115,7 +120,7 @@ export async function deleteReview(reviewId) {
 
   if (!session) {
     return {
-      errors: "",
+      success: false,
       message: "Nie jesteś zalogowany",
     };
   }
@@ -127,14 +132,14 @@ export async function deleteReview(reviewId) {
 
     if (!review) {
       return {
-        errors: "",
+        success: false,
         message: "Nie znaleziono opinii",
       };
     }
 
     if (session.user.id !== review.userId && session.user.role !== "ADMIN") {
       return {
-        errors: "",
+        success: false,
         message: "Nie masz uprawnień do usunięcia tej opinii",
       };
     }
@@ -146,11 +151,12 @@ export async function deleteReview(reviewId) {
     revalidatePath(`/place`);
 
     return {
-      message: "Pomyślnie usunięto opinię",
+      success: true,
+      message: "Pomyślnie usunięto opinie",
     };
   } catch (error) {
     return {
-      errors: "Błąd bazy danych",
+      success: false,
       message: "Błąd bazy danych: Nie udało się usunąć opinii.",
     };
   }

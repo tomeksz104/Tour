@@ -172,7 +172,7 @@ export async function createPlace(prevState, formData) {
     return {
       success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Brakujące pola. Nie udało się utworzyć miejsca.",
+      message: "Błąd walidacji danych. Nie udało się utworzyć miejsca.",
     };
   }
 
@@ -301,14 +301,10 @@ export async function updatePlace(placeId, state, formData) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return new NextResponse(
-      JSON.stringify({
-        error: "You are not logged in.",
-      }),
-      {
-        status: 401,
-      }
-    );
+    return {
+      success: false,
+      message: "Nie jesteś zalogowany",
+    };
   }
 
   const existingPlace = await getPlaceById(placeId);
@@ -341,11 +337,10 @@ export async function updatePlace(placeId, state, formData) {
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten().fieldErrors);
     return {
       success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Brakujące pola. Nie udało się utworzyć miejsca.",
+      message: "Błąd walidacji danych. Nie udało się zaaktualizować miejsca.",
     };
   }
 

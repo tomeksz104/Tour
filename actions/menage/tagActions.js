@@ -21,8 +21,9 @@ export async function createTag(prevState, formData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Tag.",
+      message: "Błąd walidacji danych. Nie udało się dodać tagu",
     };
   }
 
@@ -53,8 +54,9 @@ export async function updateTag(tagId, prevState, formData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Update Tag.",
+      message: "Błąd walidacji danych. Nie udało się zaaktualizować tagu",
     };
   }
 

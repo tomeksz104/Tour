@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useFormState } from "react-dom";
-import { useToast } from "@/hooks/useToast";
+import toast from "react-hot-toast";
 
 import Button from "../Button";
 import { Ratings } from "@/components/ui/ratings";
 import { Form } from "../ui/form";
 
-import { insertReview, updateReview } from "@/actions/reviewManager";
+import { insertReview, updateReview } from "@/actions/menage/reviewManager";
 
 import "./review.css";
 
@@ -26,7 +26,6 @@ const ReviewForm = ({
 }) => {
   const { data: session } = useSession();
   const router = useRouter();
-  const toast = useToast();
   const form = useForm({
     defaultValues: {
       rating: comment?.rating ? comment.rating : null,
@@ -52,13 +51,13 @@ const ReviewForm = ({
   };
 
   useEffect(() => {
-    if (state.errors && state.message) {
-      toast.error(state.message);
-    } else if (state.message) {
+    if (state.success === true) {
       if (comment?.id) onCommentAdd();
       form.setValue("rating", null);
       form.setValue("content", null);
       toast.success(state.message);
+    } else if (state.success === false) {
+      toast.error(state.message);
     }
   }, [state]);
 

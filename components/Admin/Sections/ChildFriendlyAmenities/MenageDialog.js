@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import {
   createChildFriendlyAmenity,
   updateChildFriendlyAmenity,
-} from "@/actions/childFriendlyAmenityActions";
+} from "@/actions/menage/childFriendlyAmenityActions";
 
 const MenageDialog = ({ isOpen, onClose, childFriendlyAmenity = null }) => {
   const initialState = { message: null, errors: {} };

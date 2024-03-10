@@ -7,7 +7,7 @@ import MenageDialog from "./MenageDialog";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 
-import { deleteTag } from "@/actions/admin/TagActions";
+import { deleteTag } from "@/actions/menage/tagActions";
 import useConfirm from "@/hooks/useConfirm";
 
 const Tags = ({ tags }) => {

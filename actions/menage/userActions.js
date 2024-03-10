@@ -46,8 +46,10 @@ export async function updateUser(userId, prevState, formData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Nie udało się zaaktuazliwoać użytkownika",
+      message:
+        "Błąd walidacji danych. Nie udało się zaaktualizować użytkownika",
     };
   }
 

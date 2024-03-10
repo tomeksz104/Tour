@@ -7,7 +7,7 @@ import MenageDialog from "./MenageDialog";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 
-import { deleteChildFriendlyAmenity } from "@/actions/childFriendlyAmenityActions";
+import { deleteChildFriendlyAmenity } from "@/actions/menage/childFriendlyAmenityActions";
 import useConfirm from "@/hooks/useConfirm";
 
 const ChildFriendlyAmenities = ({ childFriendlyAmenities }) => {

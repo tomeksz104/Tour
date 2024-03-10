@@ -21,8 +21,9 @@ export async function createChildFriendlyAmenity(prevState, formData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create child friendly amenity.",
+      message: "Błąd walidacji danych. Nie udało się dodać udogodnienia",
     };
   }
 
@@ -56,8 +57,10 @@ export async function updateChildFriendlyAmenity(id, prevState, formData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Update Topic.",
+      message:
+        "Błąd walidacji danych. Nie udało się zaaktualizować udogodnienia.",
     };
   }
 

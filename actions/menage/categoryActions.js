@@ -4,7 +4,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { deleteFile, uploadFile } from "./fileManager";
+import { deleteFile, uploadFile } from "../fileManager";
 
 const FormSchema = z.object({
   id: z.string(),
@@ -32,8 +32,9 @@ export async function createCategory(prevState, formData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create category.",
+      message: "Błąd walidacji danych. Nie udało się dodać kategorii",
     };
   }
 
@@ -98,8 +99,9 @@ export async function updateCategory(id, prevState, formData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Update Category.",
+      message: "Błąd walidacji danych. Nie udało się zaaktualizować kategorii",
     };
   }
 

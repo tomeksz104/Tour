@@ -97,13 +97,6 @@ const BasicSection = ({ form, state, categories, placeDescription }) => {
                     className="w-1/2 bg-gray-50 text-gray-600 transition duration-300
                     focus:ring-1 focus:ring-green-500 focus:ring-offset-0"
                   >
-                    {" "}
-                    {state?.errors?.categoryId &&
-                      state.errors.categoryId.map((error) => (
-                        <p className="mt-2 text-sm text-red-500" key={error}>
-                          {error}
-                        </p>
-                      ))}
                     <SelectValue placeholder="Wybierz kategorię...">
                       {field.value ? categories[field.value - 1].name : null}
                     </SelectValue>
@@ -117,7 +110,12 @@ const BasicSection = ({ form, state, categories, placeDescription }) => {
                   ))}
                 </SelectContent>
               </Select>
-
+              {state?.errors?.categoryId &&
+                state.errors.categoryId.map((error) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
               <FormMessage />
             </FormItem>
           )}

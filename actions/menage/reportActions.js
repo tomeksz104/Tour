@@ -30,7 +30,7 @@ export async function createErrorReport(prevState, formData) {
 
   if (!session) {
     return {
-      errors: "",
+      success: false,
       message: "Nie jesteś zalogowany",
     };
   }
@@ -45,8 +45,9 @@ export async function createErrorReport(prevState, formData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Nie udało się przesłać zgłoszenia",
+      message: "Błąd walidacji danych. Nie udało się przesłać zgłoszenia",
     };
   }
 
@@ -75,7 +76,7 @@ export async function updateErrorReport(reportId, prevState, formData) {
 
   if (!session) {
     return {
-      errors: "",
+      success: false,
       message: "Nie jesteś zalogowany",
     };
   }
@@ -90,8 +91,9 @@ export async function updateErrorReport(reportId, prevState, formData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Nie udało się przesłać zgłoszenia",
+      message: "Błąd walidacji danych. Nie udało się zaaktualizować zgłoszenia",
     };
   }
 

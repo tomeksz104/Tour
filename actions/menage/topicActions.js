@@ -21,8 +21,9 @@ export async function createTopic(prevState, formData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Topic.",
+      message: "Błąd walidacji danych. Nie udało się dodać tematu",
     };
   }
 
@@ -53,8 +54,9 @@ export async function updateTopic(topicId, prevState, formData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Update Topic.",
+      message: "Błąd walidacji danych. Nie udało się zaaktualizować tematu",
     };
   }
 

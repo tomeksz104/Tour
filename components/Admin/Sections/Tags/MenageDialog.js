@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { createTag, updateTag } from "@/actions/admin/TagActions";
+import { createTag, updateTag } from "@/actions/menage/tagActions";
 
 const MenageDialog = ({ isOpen, onClose, tag = null }) => {
   const initialState = { message: null, errors: {} };

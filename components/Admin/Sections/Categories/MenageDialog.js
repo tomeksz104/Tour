@@ -17,7 +17,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
-import { createCategory, updateCategory } from "@/actions/categoryActions";
+import {
+  createCategory,
+  updateCategory,
+} from "@/actions/menage/categoryActions";
 import { Trash2 } from "lucide-react";
 
 const MenageDialog = ({ isOpen, onClose, category = null }) => {

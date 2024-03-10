@@ -9,7 +9,7 @@ import { columns } from "./columns";
 import MenageDialog from "./MenageDialog";
 import { Button } from "@/components/ui/button";
 
-import { deleteTopic } from "@/actions/topicActions";
+import { deleteTopic } from "@/actions/menage/topicActions";
 
 const Topics = ({ topics }) => {
   const { confirm } = useConfirm();
