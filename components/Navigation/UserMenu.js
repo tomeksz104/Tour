@@ -1,9 +1,12 @@
 import { useToast } from "@/hooks/useToast";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 import "./UserMenu.css";
-import Link from "next/link";
+
+import { Role } from "@prisma/client";
 
 const UserMenu = ({ user }) => {
   const router = useRouter();
@@ -15,25 +18,26 @@ const UserMenu = ({ user }) => {
     toast.success("Logged out");
   };
 
+  function removeEmailDomain(email) {
+    const atIndex = email.indexOf("@");
+    if (atIndex !== -1) {
+      return email.substring(0, atIndex);
+    }
+    return email;
+  }
+
   return (
     <div className="relative inline-block text-left dropdown z-10">
       <button className="inline-flex items-center rounded-full hover:ring-green-500 focus:ring-green-500 focus:ring-offset-4 ring-1 ring-transparent transition-all duration-300 hover:ring-offset-4">
-        <span className="h-8 w-8 bg-gray-100 rounded-full overflow-hidden">
-          {user.photoURL ? (
-            <img
-              src={user.photoURL}
-              alt="user profile photo"
-              className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100 object-cover"
-            />
-          ) : (
-            <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-amber-500">
-              <img
-                className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100"
-                src="/avatar.svg"
-                alt={user.email}
-              />
-            </div>
-          )}
+        <span className="h-9 w-9 bg-gray-100 rounded-full overflow-hidden">
+          <Image
+            src={user.image ? user.image : "/images/user-avatar.png"}
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="flex-shrink-0 object-cover rounded-full w-9 h-9"
+            alt={`${user.username ? user.username : user.email} avatar`}
+          />
         </span>
       </button>
       <div className="opacity-0 invisible dropdown-menu transition-all duration-300 transform origin-top-right -translate-y-2 scale-95">
@@ -41,6 +45,24 @@ const UserMenu = ({ user }) => {
           className="absolute right-0 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none"
           role="menu"
         >
+          <div className="flex items-center p-3 text-sm text-gray-600 transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+            <Image
+              src={user.image ? user.image : "/images/user-avatar.png"}
+              width="0"
+              height="0"
+              sizes="100vw"
+              className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
+              alt={`${user.username} avatar`}
+            />
+            <div className="mx-1">
+              <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                {user.username ? user.username : removeEmailDomain(user.email)}
+              </h1>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {user.email}
+              </p>
+            </div>
+          </div>
           <div>
             <Link
               href="/place/new"
@@ -81,10 +103,34 @@ const UserMenu = ({ user }) => {
 
               <span className="mx-1">Ustawienia</span>
             </Link>
+            {user.role === Role.ADMIN && (
+              <Link
+                href="/admin"
+                className="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-5 h-5 mx-1"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z"
+                  />
+                </svg>
+
+                <span className="mx-1">Panel administratora</span>
+              </Link>
+            )}
           </div>
+
           <button
             onClick={handleSignOut}
-            className="flex w-full items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100"
+            className="flex w-full items-center p-3 text-sm text-red-500 capitalize transition-colors duration-300 transform hover:bg-gray-100"
           >
             <svg
               className="w-5 h-5 mx-1"

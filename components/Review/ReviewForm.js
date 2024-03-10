@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useFormState } from "react-dom";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 import Button from "../Button";
 import { Ratings } from "@/components/ui/ratings";
@@ -115,7 +116,7 @@ const ReviewForm = ({
           <div className="flex">
             {!comment?.id && (
               <div className="mr-3 shrink-0 hidden sm:block">
-                <img
+                {/* <img
                   className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100"
                   src={
                     session?.user.avatar ? session.user.avatar : "/avatar.svg"
@@ -125,6 +126,24 @@ const ReviewForm = ({
                       ? session?.user.username
                       : session?.user.email
                   }
+                /> */}
+                <Image
+                  src={
+                    session?.user.image
+                      ? session?.user.image
+                      : "/images/user-avatar.png"
+                  }
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  className="flex-shrink-0 object-cover rounded-full w-8 h-8"
+                  alt={`
+                  ${
+                    session?.user.username
+                      ? session?.user.username
+                      : session?.user.email
+                  } avatar
+                `}
                 />
               </div>
             )}

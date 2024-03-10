@@ -8,6 +8,8 @@ import MapWrapper from "../../MapWrapper/MapWrapper";
 // import Places from "./Places";
 import UserLocate from "./UserLocate";
 
+import "./map.css";
+
 const Places = lazy(() => import("./Places"));
 const MobilePlacePopup = lazy(() => import("./MobilePlacePopup"));
 

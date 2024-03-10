@@ -3,13 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 import Logo from "../Logo";
 import SearchBar from "../SearchBar/SearchBar";
 import UserMenu from "./UserMenu";
 
 import "./Navigation.css";
-import { useSession } from "next-auth/react";
 
 const navigationMenuItems = [
   { name: "Strona Główna", url: "/" },
@@ -116,14 +117,15 @@ const Navigation = () => {
             {!session?.user && (
               <div className="relative inline-block text-left dropdown z-10">
                 <button className="inline-flex items-center rounded-full hover:ring-green-500 focus:ring-green-500 focus:ring-offset-4 ring-1 ring-transparent transition-all duration-300 hover:ring-offset-4">
-                  <span className="h-8 w-8 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-amber-500">
-                      <img
-                        className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100"
-                        src="/avatar.svg"
-                        alt="user menu"
-                      />
-                    </div>
+                  <span className="h-9 w-9 rounded-full overflow-hidden">
+                    <Image
+                      src="/images/user-avatar.png"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
+                      className="flex-shrink-0 object-cover rounded-full w-9 h-9"
+                      alt="user menu"
+                    />
                   </span>
                 </button>
                 <div className="opacity-0 invisible dropdown-menu transition-all duration-300 transform origin-top-right -translate-y-2 scale-95">

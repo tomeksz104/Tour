@@ -4,22 +4,12 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import useConfirm from "@/hooks/useConfirm";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import Dropdown from "../Dropdown";
 import ReviewForm from "./ReviewForm";
 import { ReviewRating } from "./ReviewRating";
 
 import { deleteReview } from "@/actions/menage/reviewManager";
+import Image from "next/image";
 
 const Review = ({ comment }) => {
   const { confirm } = useConfirm();
@@ -73,17 +63,25 @@ const Review = ({ comment }) => {
         <div className="w-full">
           <footer className="flex justify-between items-center mb-2 w-full">
             <div className="flex items-center">
-              <img
-                className="mr-2 h-6 w-6 flex-shrink-0 rounded-full bg-slate-100"
+              <Image
                 src={
-                  comment.author.image ? comment.author.image : "/avatar.svg"
+                  comment.author.image
+                    ? user.author.image
+                    : "/images/user-avatar.png"
                 }
-                alt={
-                  comment.author.username
-                    ? comment.author.username
-                    : comment.author.email
-                }
+                width="0"
+                height="0"
+                sizes="100vw"
+                className="flex-shrink-0 object-cover rounded-full w-6 h-6 mr-2"
+                alt={`
+                  ${
+                    comment.author.username
+                      ? comment.author.username
+                      : comment.author.email
+                  } avatar
+                `}
               />
+
               <p className="inline-flex flex-col md:flex-row md:items-center items-start mr-3 text-sm text-gray-900">
                 <span className="font-semibold">
                   {comment.author.username
