@@ -1,9 +1,12 @@
 "use server";
 
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/authOptions";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+
+import { Role } from "@prisma/client";
 
 const FormSchema = z.object({
   id: z.string(),
@@ -13,6 +16,23 @@ const FormSchema = z.object({
 const CreateTopic = FormSchema.omit({ id: true, date: true });
 
 export async function createTopic(prevState, formData) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return {
+      success: false,
+      message: "Nie jesteś zalogowany",
+    };
+  }
+
+  // Check if the user has the ADMIN role
+  if (session.user.role !== Role.ADMIN) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień aby wykonać tę akcję",
+    };
+  }
+
   // Validate form using Zod
   const validatedFields = CreateTopic.safeParse({
     name: formData.get("name"),
@@ -46,6 +66,23 @@ export async function createTopic(prevState, formData) {
 }
 
 export async function updateTopic(topicId, prevState, formData) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return {
+      success: false,
+      message: "Nie jesteś zalogowany",
+    };
+  }
+
+  // Check if the user has the ADMIN role
+  if (session.user.role !== Role.ADMIN) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień do wykonania tej akcji",
+    };
+  }
+
   // Validate form using Zod
   const validatedFields = CreateTopic.safeParse({
     name: formData.get("name"),
@@ -85,6 +122,23 @@ export async function updateTopic(topicId, prevState, formData) {
 }
 
 export async function deleteTopic(id) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return {
+      success: false,
+      message: "Nie jesteś zalogowany",
+    };
+  }
+
+  // Check if the user has the ADMIN role
+  if (session.user.role !== Role.ADMIN) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień do wykonania tej akcji",
+    };
+  }
+
   try {
     await db.topic.delete({
       where: { id },

@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
 
-import { ErrorReportStatus } from "@prisma/client";
+import { ErrorReportStatus, Role } from "@prisma/client";
 
 const FormSchema = z.object({
   content: z
@@ -81,6 +81,14 @@ export async function updateErrorReport(reportId, prevState, formData) {
     };
   }
 
+  // Check if the user has the ADMIN role
+  if (session.user.role !== Role.ADMIN) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień do wykonania tej akcji",
+    };
+  }
+
   // Validate form using Zod
   const validatedFields = CreateErrorReport.safeParse({
     content: formData.get("content"),
@@ -125,6 +133,23 @@ export async function updateErrorReport(reportId, prevState, formData) {
 }
 
 export async function deleteReport(id) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return {
+      success: false,
+      message: "Nie jesteś zalogowany",
+    };
+  }
+
+  // Check if the user has the ADMIN role
+  if (session.user.role !== Role.ADMIN) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień do wykonania tej akcji",
+    };
+  }
+
   try {
     await db.errorReport.delete({
       where: { id },

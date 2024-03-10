@@ -6,6 +6,8 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
+import { Role } from "@prisma/client";
+
 const FormSchema = z.object({
   content: z.string().optional().or(z.literal("")),
   rating: z.coerce.number().optional().or(z.literal("")),
@@ -70,11 +72,21 @@ export async function insertReview(placeId, prevState, formData) {
 
 export async function updateReview(reviewId, prevState, formData) {
   const session = await getServerSession(authOptions);
+  const review = await db.review.findUnique({
+    where: { id: parseInt(reviewId) },
+  });
 
   if (!session) {
     return {
       success: false,
       message: "Nie jesteś zalogowany",
+    };
+  }
+
+  if (review.userId !== session.user.id || session.user.role !== Role.ADMIN) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień do wykonania tej akcji",
     };
   }
 
@@ -137,7 +149,7 @@ export async function deleteReview(reviewId) {
       };
     }
 
-    if (session.user.id !== review.userId && session.user.role !== "ADMIN") {
+    if (session.user.id !== review.userId && session.user.role !== Role.ADMIN) {
       return {
         success: false,
         message: "Nie masz uprawnień do usunięcia tej opinii",

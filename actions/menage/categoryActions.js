@@ -1,10 +1,13 @@
 "use server";
 
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/authOptions";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { deleteFile, uploadFile } from "../fileManager";
+
+import { Role } from "@prisma/client";
 
 const FormSchema = z.object({
   id: z.string(),
@@ -22,6 +25,23 @@ export async function getCategoryById(id) {
 }
 
 export async function createCategory(prevState, formData) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return {
+      success: false,
+      message: "Nie jesteś zalogowany",
+    };
+  }
+
+  // Check if the user has the ADMIN role
+  if (session.user.role !== Role.ADMIN) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień aby wykonać tę akcję",
+    };
+  }
+
   // Validate form using Zod
   const validatedFields = CreateCategory.safeParse({
     name: formData.get("name"),
@@ -87,6 +107,23 @@ export async function createCategory(prevState, formData) {
 }
 
 export async function updateCategory(id, prevState, formData) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return {
+      success: false,
+      message: "Nie jesteś zalogowany",
+    };
+  }
+
+  // Check if the user has the ADMIN role
+  if (session.user.role !== Role.ADMIN) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień aby wykonać tę akcję",
+    };
+  }
+
   // Validate form using Zod
   const validatedFields = CreateCategory.safeParse({
     name: formData.get("name"),
@@ -168,6 +205,23 @@ export async function updateCategory(id, prevState, formData) {
 }
 
 export async function deleteCategory(id) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return {
+      success: false,
+      message: "Nie jesteś zalogowany",
+    };
+  }
+
+  // Check if the user has the ADMIN role
+  if (session.user.role !== Role.ADMIN) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień aby wykonać tę akcję",
+    };
+  }
+
   try {
     const category = await getCategoryById(id);
 

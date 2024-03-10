@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/authOptions";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { PlaceType } from "@prisma/client";
+import { PlaceType, Role } from "@prisma/client";
 import { getPlaceById } from "../getPlaceById";
 import createSlug from "@/utils/createSlug";
 
@@ -310,6 +310,20 @@ export async function updatePlace(placeId, state, formData) {
   const existingPlace = await getPlaceById(placeId);
   const existingPhotos = existingPlace.photos;
 
+  // Check if the user has the ADMIN role
+  if (
+    !(
+      session.user.role === Role.ADMIN ||
+      (existingPlace.userId === session.user.id &&
+        existingPlace.status !== PlaceStatus.PUBLISHED)
+    )
+  ) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień do wykonania tej akcji",
+    };
+  }
+
   // Validate form using Zod
   const validatedFields = UpsertPlace.safeParse({
     type: formData.type,
@@ -570,8 +584,31 @@ export async function updatePlace(placeId, state, formData) {
 }
 
 export async function deletePlace(placeId) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return {
+      success: false,
+      message: "Nie jesteś zalogowany",
+    };
+  }
+
   const existingPlace = await getPlaceById(placeId);
   const existingPhotos = existingPlace.photos;
+
+  // Check if the user has the ADMIN role
+  if (
+    !(
+      session.user.role === Role.ADMIN ||
+      (existingPlace.userId === session.user.id &&
+        existingPlace.status !== PlaceStatus.PUBLISHED)
+    )
+  ) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień do wykonania tej akcji",
+    };
+  }
 
   if (existingPlace.mainPhotoPath) {
     await deleteFile(existingPlace.mainPhotoPath);
@@ -601,6 +638,23 @@ export async function deletePlace(placeId) {
 }
 
 export async function changePlaceStatus(placeId, placeStatus) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return {
+      success: false,
+      message: "Nie jesteś zalogowany",
+    };
+  }
+
+  // Check if the user has the ADMIN role
+  if (session.user.role !== Role.ADMIN) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień do wykonania tej akcji",
+    };
+  }
+
   const validatedFields = ChangePlaceStatus.safeParse({
     status: placeStatus,
   });

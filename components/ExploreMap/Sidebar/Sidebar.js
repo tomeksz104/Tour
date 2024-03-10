@@ -208,7 +208,7 @@ const Sidebar = memo(
               }`}
             >
               <Clock3 size={12} />
-              Otwarte
+              Otwarte teraz
             </Button>
 
             <Button

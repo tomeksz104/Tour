@@ -10,10 +10,10 @@ import { Role } from "@prisma/client";
 
 const FormSchema = z.object({
   email: z.string().optional().or(z.literal("")),
-  username: z.string().optional().or(z.literal("")),
-  firstName: z.string().optional().or(z.literal("")),
-  lastName: z.string().optional().or(z.literal("")),
-  aboutme: z.string().optional().or(z.literal("")),
+  username: z.string().nullable().optional().or(z.literal("")),
+  firstName: z.string().nullable().optional().or(z.literal("")),
+  lastName: z.string().nullable().optional().or(z.literal("")),
+  aboutme: z.string().nullable().optional().or(z.literal("")),
   role: z.nativeEnum(Role, {
     errorMap: () => {
       return { message: "Rola użytkownika nie może być pusta" };
@@ -28,8 +28,16 @@ export async function updateUser(userId, prevState, formData) {
 
   if (!session) {
     return {
-      errors: "",
+      success: false,
       message: "Nie jesteś zalogowany",
+    };
+  }
+
+  // Check if the user has the ADMIN role
+  if (session.user.role !== Role.ADMIN) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień do wykonania tej akcji",
     };
   }
 
@@ -45,6 +53,7 @@ export async function updateUser(userId, prevState, formData) {
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
     return {
       success: false,
       errors: validatedFields.error.flatten().fieldErrors,
@@ -56,19 +65,22 @@ export async function updateUser(userId, prevState, formData) {
   const { email, username, firstName, lastName, aboutme, role } =
     validatedFields.data;
 
+  console.log(validatedFields.data);
+
   try {
-    await db.user.update({
+    const result = await db.user.update({
       where: { id: userId },
       data: {
         email,
-        username,
-        firstName,
-        lastName,
-        aboutme,
+        username: username ? username : null,
+        firstName: firstName,
+        lastName: lastName,
+        aboutme: aboutme,
         role,
       },
     });
 
+    console.log(result);
     // Revalidate the cache for the topics page and redirect the user.
     revalidatePath("/admin/users");
 
@@ -85,6 +97,23 @@ export async function updateUser(userId, prevState, formData) {
 }
 
 export async function deleteUser(id) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return {
+      success: false,
+      message: "Nie jesteś zalogowany",
+    };
+  }
+
+  // Check if the user has the ADMIN role
+  if (session.user.role !== Role.ADMIN) {
+    return {
+      success: false,
+      message: "Nie masz uprawnień do wykonania tej akcji",
+    };
+  }
+
   try {
     await db.user.delete({
       where: { id },
