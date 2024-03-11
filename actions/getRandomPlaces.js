@@ -1,21 +1,67 @@
 import "server-only";
 
+import { db } from "@/lib/db";
+import { getWeekDay, isOpenNow } from "@/utils/openingHours";
+
 export const getRandomPlaces = async (count) => {
-  const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:3000";
+  const currentWeekDay = getWeekDay();
 
-  const response = await fetch(`${apiUrl}/api/places/random/${count}`, {
-    cache: "no-store",
-  });
+  try {
+    const numberOfPlaces = parseInt(count, 10);
 
-  if (!response.ok) {
-    throw new Error("Error fetching places");
+    if (isNaN(numberOfPlaces)) {
+      return {
+        success: false,
+        message: "Nieprawidłowy parametr `count`",
+      };
+    }
+
+    const randomPlaces = await db.place.findMany({
+      take: numberOfPlaces,
+
+      include: {
+        photos: true,
+        category: true,
+        reviews: true,
+        openingHours: {
+          where: {
+            day: currentWeekDay,
+          },
+        },
+      },
+    });
+
+    const randomPlacesWithDetails = randomPlaces.map((place) => {
+      const totalRatings = place.reviews.reduce(
+        (acc, review) => acc + (review.rating || 0),
+        0
+      );
+      const averageRating =
+        place.reviews.length > 0 ? totalRatings / place.reviews.length : 0;
+      const reviewsCount = place.reviews.length;
+
+      const isOpen = isOpenNow(place.openingHours);
+
+      return {
+        ...place,
+        averageRating,
+        reviewsCount,
+        isOpen,
+      };
+    });
+
+    if (!randomPlacesWithDetails || randomPlacesWithDetails.length === 0) {
+      return {
+        success: false,
+        message: "Nie znaleziono miejsc do pobrania",
+      };
+    }
+
+    return randomPlacesWithDetails;
+  } catch (error) {
+    return {
+      success: false,
+      message: "Wystąpił błąd podczas pobierania losowych miejsc",
+    };
   }
-
-  const data = await response.json();
-
-  if (!data) {
-    throw new Error("Empty response from server");
-  }
-
-  return data;
 };

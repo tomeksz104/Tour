@@ -1,12 +1,14 @@
+import { Suspense, lazy } from "react";
 import { ToastContextProvider } from "@/contexts/ToastContext";
 import { ConfirmContextProvider } from "@/contexts/ConfirmContext";
 import { PlacesContextProvider } from "@/contexts/PlacesContext";
 import { WatchlistContextProvider } from "@/contexts/WatchlistContext";
 import { LocateContextProvider } from "@/contexts/LocateContext";
 
+const ConfirmDialog = lazy(() => import("@/components/ConfirmDialog"));
+
 import Provider from "@/components/Provider";
 import Navigation from "@/components/Navigation/Navigation";
-import ConfirmDialog from "@/components/ConfirmDialog";
 import { Toaster } from "react-hot-toast";
 
 import { Inter } from "next/font/google";
@@ -19,7 +21,7 @@ export const metadata = {
   description: "Find unique places to visit.",
 };
 
-export default async function RootLayout({ children }) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`font-primary bg-white`}>
@@ -31,12 +33,18 @@ export default async function RootLayout({ children }) {
               <PlacesContextProvider>
                 <ConfirmContextProvider>
                   <ToastContextProvider>
-                    <Toaster />
+                    <Suspense fallback={<></>}>
+                      <Toaster />
+                    </Suspense>
+
                     <div className="flex h-screen flex-col">
                       <Navigation />
                       {children}
                     </div>
-                    <ConfirmDialog />
+
+                    <Suspense fallback={<></>}>
+                      <ConfirmDialog />
+                    </Suspense>
                   </ToastContextProvider>
                 </ConfirmContextProvider>
               </PlacesContextProvider>

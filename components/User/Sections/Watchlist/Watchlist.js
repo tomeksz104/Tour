@@ -1,10 +1,12 @@
-import { Suspense, useContext, useState } from "react";
+"use client";
 
-import Card from "./Card";
+import { Suspense, lazy, useContext, useState } from "react";
 import { PlacesContext } from "@/contexts/PlacesContext";
 
+import Card from "./Card";
+const Lightbox = lazy(() => import("@/components/FsLightbox/Lightbox"));
+
 import createLightboxSources from "@/utils/createLightboxSources";
-import Lightbox from "@/components/FsLightbox/Lightbox";
 
 const Watchlist = ({ placesIds }) => {
   const placesCtx = useContext(PlacesContext);
