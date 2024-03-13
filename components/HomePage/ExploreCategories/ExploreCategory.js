@@ -5,7 +5,7 @@ import CategoriesList from "./Categories/List";
 import PlacesList from "./Places/List";
 
 const ExploreCategory = ({ categories, categoriesWithPlaces, provinces }) => {
-  const [selectedCategory, setSelectedCategory] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState(0);
 
   const handleChangeCategory = (category) => {
     setSelectedCategory(category - 1);
@@ -39,7 +39,7 @@ const ExploreCategory = ({ categories, categoriesWithPlaces, provinces }) => {
           />
         </div>
       </div>
-      <div className="relative bg-[url('https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/08/bg-15.jpg')] bg-fixed bg-center bg-no-repeat bg-cover -mt-56">
+      <div className="relative bg-[url('/images/bg-15.webp')] bg-fixed bg-center bg-no-repeat bg-cover -mt-56">
         <div
           className="absolute top-0 left-0 w-full h-full"
           style={{

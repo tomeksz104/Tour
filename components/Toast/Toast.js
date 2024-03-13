@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/useToast";
 
-import "./Toast.css";
+// import "./Toast.css";
 
 const toastTypes = {
   success: {

@@ -6,7 +6,7 @@ const { default: Link } = require("next/link");
 
 const Card = ({ photoPath, provinceName, provinceCount, linkToMap }) => {
   return (
-    <div className="relative group relative h-72 overflow-hidden group last:col-span-2">
+    <div className="relative group relative h-56 md:h-72 overflow-hidden group last:col-span-2">
       <Link
         href={linkToMap}
         className="absolute bottom-0 left-0 w-full p-3 -mb-20 opacity-0 group-hover:mb-0 group-hover:opacity-100 z-[2] transition-all duration-300 cursor-pointer"
@@ -27,7 +27,7 @@ const Card = ({ photoPath, provinceName, provinceCount, linkToMap }) => {
       <Image
         width="0"
         height="0"
-        sizes="100vw"
+        sizes="40vw"
         className="object-cover h-full w-full rounded-md"
         src={photoPath}
         alt={provinceName}
@@ -37,7 +37,7 @@ const Card = ({ photoPath, provinceName, provinceCount, linkToMap }) => {
           {provinceCount}{" "}
           {formatWord(provinceCount, ["atrakcja", "atrakcje", "atrakcji"])}
         </div>
-        <p className="text-white text-2xl font-bold pb-3 pl-5">
+        <p className="text-white text-md md:text-2xl font-bold pb-3 pl-3 md:pl-5">
           {provinceName}
         </p>
       </div>

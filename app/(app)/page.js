@@ -1,19 +1,19 @@
-import { Fragment, Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { db } from "@/lib/db";
 
 import Button from "@/components/Button";
 import { Button as ButtonShadcn } from "@/components/ui/button";
 import ExploreProvinces from "@/components/HomePage/ExploreProvinces/ExploreProvinces";
 import SearchBar from "@/components/HomePage/SearchBar";
-import { db } from "@/lib/db";
-
 const LatestPlaces = lazy(() =>
   import("@/components/HomePage/LatestPlaces/LatestPlaces")
 );
 import ExploreCategory from "@/components/HomePage/ExploreCategories/ExploreCategory";
-import { getPlacesForCategories } from "@/actions/getPlacesForCategories";
 import Footer from "@/components/Footer";
+
+import { getPlacesForCategories } from "@/actions/getPlacesForCategories";
 
 export default async function Home() {
   const categories = await db.category.findMany();
@@ -31,217 +31,57 @@ export default async function Home() {
   });
 
   return (
-    <Fragment>
-      <section className="bg-gray-100 pt-10 relative">
-        <div
-          className="absolute left-0 top-0 lg:-top-20 h-full w-full bg-cover bg-repeat-x bg-bottom-left opacity-70 "
-          style={{
-            backgroundImage:
-              "url('https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/07/bg-03.png')",
-            mixBlendMode: "multiply",
-          }}
-        ></div>
-        <div className="absolute -bottom-52 left-0 -z-10">
-          <Image
-            priority
-            width="301"
-            height="691"
-            className="w-full"
-            src="/home-icons/shape-left.svg"
-            alt=""
-            style={{
-              maxWidth: "100%",
-              height: "auto",
-            }}
-          />
-        </div>
-        <div className="absolute -top-40 right-0 -z-10">
-          <Image
-            priority
-            width="1262"
-            height="1356"
-            className="w-full"
-            src="/home-icons/shape-right.svg"
-            alt=""
-            style={{
-              maxWidth: "100%",
-              height: "auto",
-            }}
-          />
-        </div>
-        <div className="absolute z-10 hidden xl:block opacity-25 2xl:opacity-100 top-0 bottom-0 right-0 left-0">
-          <span className="animate-1 absolute left-16 bottom-0">
-            <Image
-              width="101"
-              height="75"
-              src="/home-icons/rectangular-pattern-yellow.svg"
-              alt=""
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-              }}
-            />
-          </span>
-          <span className="animate-2 absolute left-28 bottom-52">
-            <Image
-              width="20"
-              height="20"
-              src="/home-icons/green-dot.svg"
-              alt=""
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-              }}
-            />
-          </span>
-          <span className="animate-3 absolute left-32 top-40">
-            <Image
-              width="38"
-              height="38"
-              src="/home-icons/star.svg"
-              alt=""
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-              }}
-            />
-          </span>
-          <span className="animate-2 absolute left-96 top-20">
-            <Image
-              width="20"
-              height="20"
-              src="/home-icons/green-dot.svg"
-              alt=""
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-              }}
-            />
-          </span>
-          <span className="animate-3 absolute right-96 top-0">
-            <Image
-              width="101"
-              height="75"
-              src="/home-icons/rectangular-pattern-green.svg"
-              alt=""
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-              }}
-            />
-          </span>
-          <span className="animate-1 absolute right-52 top-60">
-            <Image
-              width="38"
-              height="38"
-              src="/home-icons/star.svg"
-              alt=""
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-              }}
-            />
-          </span>
-          <span className="animate-2 absolute right-1/3 bottom-20">
-            <Image
-              width="93"
-              height="75"
-              src="/home-icons/rectangular-pattern-yellow.svg"
-              alt=""
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-              }}
-            />
-          </span>
-          <span className="animate-3 absolute right-16 bottom-32">
-            <Image
-              width="20"
-              height="20"
-              src="/home-icons/green-dot.svg"
-              alt=""
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-              }}
-            />
-          </span>
-        </div>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            {/* <div className="grid items-center grid-cols-1 lg:grid-cols-5 gap-8"> */}
-            <div className="xl:pr-20 lg:col-span-3 mt-0 md:mt-20">
-              <h2 className="font-primary text-3xl lg:text-4xl 2xl:text-6xl leading-tight font-extrabold	 text-gray-900">
-                Znajdź miejsca{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-green-600 inline-block">
-                  które pokochasz
-                </span>
-              </h2>
-              {/* <p className="text-lg md:text-xl leading-tight font-medium text-gray-600 my-6 2xl:my-12">
-                Our collection of more than 1,500 remarkable places will take
-                your trip to the next level. Look for illustrations on our maps
-                and visit unique places!
-              </p> */}
-              <SearchBar categories={categories} provinces={provinces} />
+    <>
+      <section
+        className="relative md:pt-48 md:pb-36 py-36 table w-full items-center bg-center"
+        id="home"
+        style={{
+          transition: "all 500ms ease-in 0s",
+        }}
+      >
+        <Image
+          priority
+          width="1920"
+          height="865"
+          sizes="(max-width: 768px) 70vw, 100vw"
+          src="/images/bg-hero-1.jpg"
+          className="absolute inset-0 w-full h-full object-cover"
+          alt="hero image"
+        />
+        <div className="absolute inset-0 bg-slate-900/40"></div>
+        <div className="absolute bottom-0 w-full h-[1px] bg-white/50 backdrop-blur-md"></div>
+        <div className="container relative mx-auto w-full px-4 sm:px-6 lg:px-8 ">
+          <div className="text-center">
+            <h1 className="font-bold text-white lg:leading-normal leading-normal text-4xl lg:text-6xl mb-6 mt-5">
+              Niech rozpocznie się podróż...
+            </h1>
+            {/* <p className="text-white/70 text-xl max-w-xl mx-auto">
+              Marzysz o niezapomnianym wypadzie? Zorganizujemy Twoją wycieczkę z
+              najlepszymi miejscami, które sprawią, że każdy moment będzie
+              wyjątkowy!
+            </p> */}
 
-              {/* <div className="flex flex-wrap items-center">
-                <Link href="/map">
-                  <Button type="button" className="w-64">
-                    Explore the map
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="ml-3 w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                      />
-                    </svg>
-                  </Button>
-                </Link>
-              </div> */}
-            </div>
-            <div className="lg:col-span-2">
-              <Image
-                width={16}
-                height={9}
-                className="w-full max-w-xl hidden lg:block"
-                src="/hero-image.png"
-                alt=""
-                sizes="100vw"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "cover",
-                }}
-              />
+            <div className="mx-auto mt-6">
+              <SearchBar categories={categories} provinces={provinces} />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="relative bg-green-500 lg:-mt-20 mb-16 pt-10 lg:pt-0">
-        <div
-          className="absolute left-0 top-0 h-full w-full bg-cover bg-no-repeat bg-top-right opacity-20 transition-all duration-300"
-          style={{
-            backgroundImage:
-              "url('https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/08/bg-21.png')",
-            mixBlendMode: "multiply",
-          }}
-        ></div>
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+      <section className="relative bg-green-500 mb-16 py-10 md:pb-0 lg:pt-0">
+        <Image
+          className="hidden md:flex absolute left-0 top-0 h-full w-full object-cover opacity-20"
+          width="1257"
+          height="394"
+          src="/images/bg-21.png"
+        />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20 transition-all">
           <div className="flex flex-col-reverse lg:flex-row space-x-8 items-center">
-            <img
-              className="-mb-24 "
+            <Image
+              className="hidden md:block -mb-20"
               width="510"
               height="440"
-              src="https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/08/image-album.png"
+              src="/images/image-album.png"
             />
             <div className="w-[175px] h-[175px] hidden lg:block">
               <div className="relative mx-auto max-w-[175px]">
@@ -268,10 +108,10 @@ export default async function Home() {
                   </svg>
                 </div>
                 <div className="absolute max-w-[45px] top-1/2 left-1/2 -translate-x-1/2	-translate-y-1/2	">
-                  <img
+                  <Image
                     width="44"
                     height="53"
-                    src="https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/07/logo-white-2.png"
+                    src="/images/logo-white-2.png"
                   />
                 </div>
               </div>
@@ -302,55 +142,9 @@ export default async function Home() {
         provinces={provinces}
       />
 
-      {/* Random places section */}
-      {/* <div class="mx-auto px-4 sm:px-6 lg:px-8 md:w-3/5 mb-10">
-        <h2 class="text-center text-3xl font-bold text-gray-900 dark:text-white md:text-4xl lg:text-5xl">
-          Guide to Enchanting Places
-        </h2>
-        <p class="mt-4 text-center text-gray-600 dark:text-gray-300 max-w-xl mx-auto">
-          Discover extraordinary places that will take your breath away and
-          leave you with unforgettable memories. Our app will take you on a
-          journey through fascinating corners of the world, from mystical
-          ancient ruins to picturesque beaches and surprising natural wonders.
-          Are you ready for amazing adventures? Start your journey now!
-        </p>
-      </div> */}
-      {/* <CardSlider places={randomPlaces} /> */}
       <Suspense>
         <LatestPlaces />
       </Suspense>
-
-      {/* Categories section */}
-      {/* <ExploreCategories /> */}
-
-      {/* On all your devices section */}
-      {/* <div className="bg-green-50 py-16">
-        <div className="container m-auto space-y-8 px-4 md:px-12 lg:px-20">
-          <div className="items-center justify-center gap-16 text-center md:flex md:text-left">
-            <div className="order-last mb-6 space-y-6 md:mb-0 md:w-7/12 lg:w-6/12">
-              <h1 className="text-3xl lg:text-4xl font-bold text-green-900">
-                On all your devices
-              </h1>
-              <p className="text-lg leading-tight text-gray-600">
-                Our app is designed to work perfectly on any device, providing a
-                smooth and responsive experience.
-              </p>
-            </div>
-            <Image
-              src="/cross-device-asset.png"
-              width="832"
-              height="608"
-              className="m-auto md:w-5/12"
-              loading="lazy"
-              alt="Mobility illustration"
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-              }}
-            />
-          </div>
-        </div>
-      </div> */}
 
       {/* Ready to start section */}
       <section className="relative py-24 sm:py-32 mt-20">
@@ -414,13 +208,12 @@ export default async function Home() {
         <div
           className="absolute left-0 top-0 h-full w-full bg-cover bg-repeat-x bg-bottom-left z-[1]"
           style={{
-            backgroundImage:
-              "url('https://gaviaspreview.com/wp/lestin/wp-content/uploads/2023/07/bg-03.png')",
+            backgroundImage: "url('/images/bg-03.webp')",
             mixBlendMode: "multiply",
           }}
         ></div>
       </section>
       <Footer />
-    </Fragment>
+    </>
   );
 }

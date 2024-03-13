@@ -62,6 +62,7 @@ const Card = ({ place, category, province, onOpenLightbox }) => {
           <Button
             variant="secondary"
             className="bg-transparent group-hover:bg-white/10 group-hover:hover:bg-green-500 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-white "
+            aria-label="Pokaż na mapie"
           >
             <ZoomIn strokeWidth={1.75} size={14} />
           </Button>
@@ -69,12 +70,14 @@ const Card = ({ place, category, province, onOpenLightbox }) => {
             onClick={onOpenLightbox}
             variant="secondary"
             className="bg-transparent group-hover:bg-white/10 group-hover:hover:bg-green-500 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-white"
+            aria-label="Galeria zdjęć"
           >
             <Camera strokeWidth={1.75} size={14} />
           </Button>
           <Button
             variant="secondary"
             className={`bg-transparent group-hover:bg-white/10 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-red-500 `}
+            aria-label="Dodaj do ulubionych"
           >
             <Heart strokeWidth={1.75} size={14} />
           </Button>

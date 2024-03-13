@@ -11,8 +11,13 @@ import Provider from "@/components/Provider";
 import Navigation from "@/components/Navigation/Navigation";
 import { Toaster } from "react-hot-toast";
 
-import { Inter } from "next/font/google";
-const inter = Inter({ subsets: ["latin"] });
+import { Manrope } from "next/font/google";
+const manrope = Manrope({
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  style: ["normal"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 import "./globals.css";
 
@@ -24,7 +29,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`font-primary bg-white`}>
+      <body className={`${manrope.className} bg-white`}>
         {/* <body className={`${inter.className} bg-gray-100`}> */}
         {/* <body className={`${inter.className} m-auto min-h-screen flex flex-col`}> */}
         <Provider>

@@ -8,9 +8,6 @@ module.exports = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        primary: ["Manrope"],
-      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

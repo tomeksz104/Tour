@@ -22,6 +22,7 @@ const PlaceDetailsMap = dynamic(() => import("@/components/PlaceDetails/Map"), {
 });
 
 export default async function PlaceDetailsPage({ params }) {
+  // await new Promise((resolve) => setTimeout(resolve, 5000));
   const place = await getPlaceById(params?.id);
   const session = await getServerSession(authOptions);
 
