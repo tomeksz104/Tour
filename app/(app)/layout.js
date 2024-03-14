@@ -1,5 +1,4 @@
 import { Suspense, lazy } from "react";
-import { ToastContextProvider } from "@/contexts/ToastContext";
 import { ConfirmContextProvider } from "@/contexts/ConfirmContext";
 import { PlacesContextProvider } from "@/contexts/PlacesContext";
 import { WatchlistContextProvider } from "@/contexts/WatchlistContext";
@@ -37,20 +36,18 @@ export default function RootLayout({ children }) {
             <LocateContextProvider>
               <PlacesContextProvider>
                 <ConfirmContextProvider>
-                  <ToastContextProvider>
-                    <Suspense fallback={<></>}>
-                      <Toaster />
-                    </Suspense>
+                  <Suspense fallback={<></>}>
+                    <Toaster />
+                  </Suspense>
 
-                    <div className="flex h-screen flex-col">
-                      <Navigation />
-                      {children}
-                    </div>
+                  <div className="flex h-screen flex-col">
+                    <Navigation />
+                    {children}
+                  </div>
 
-                    <Suspense fallback={<></>}>
-                      <ConfirmDialog />
-                    </Suspense>
-                  </ToastContextProvider>
+                  <Suspense fallback={<></>}>
+                    <ConfirmDialog />
+                  </Suspense>
                 </ConfirmContextProvider>
               </PlacesContextProvider>
             </LocateContextProvider>

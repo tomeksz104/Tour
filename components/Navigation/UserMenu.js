@@ -1,8 +1,8 @@
-import { useToast } from "@/hooks/useToast";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 import "./UserMenu.css";
 
@@ -10,12 +10,11 @@ import { Role } from "@prisma/client";
 
 const UserMenu = ({ user }) => {
   const router = useRouter();
-  const toast = useToast();
 
   const handleSignOut = () => {
     signOut({ redirect: false });
     router.replace("/");
-    toast.success("Logged out");
+    toast.success("Wylogowano pomyślnie");
   };
 
   function removeEmailDomain(email) {

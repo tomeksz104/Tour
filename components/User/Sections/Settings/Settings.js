@@ -2,18 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useToast } from "@/hooks/useToast";
+import toast from "react-hot-toast";
 
 import Input from "@/components/Input";
-import Label from "@/components/Label";
-import InputError from "@/components/InputError";
-import Button from "@/components/Button";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 import FacebookIcon from "@/public/facebook.svg";
 import InstagramIcon from "@/public/instagram.svg";
 import TwitterIcon from "@/public/twitter.svg";
 import YoutubeIcon from "@/public/youtube.svg";
 import { updateSocialMediaLinks } from "@/utils/socialMediaHelper";
+import { RotateCw } from "lucide-react";
 
 const icons = {
   Facebook: <FacebookIcon className="w-4 h-4" />,
@@ -21,8 +21,6 @@ const icons = {
   Twitter: <TwitterIcon className="w-4 h-4" />,
   YouTube: <YoutubeIcon className="w-4 h-4" />,
 };
-
-const tabs = ["profile", "socialmedia", "password"];
 
 const Settings = ({ socialMediaPlatforms }) => {
   const {
@@ -32,9 +30,8 @@ const Settings = ({ socialMediaPlatforms }) => {
   } = useSession({
     required: true,
   });
-  const toast = useToast();
   const [error, setError] = useState(false);
-  const [tab, setTab] = useState(tabs[0]);
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
 
   const [firstName, setFirstName] = useState("");
@@ -69,37 +66,25 @@ const Settings = ({ socialMediaPlatforms }) => {
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
 
+    setIsLoading(true);
     setError(false);
 
     try {
-      let requestBody = {};
-
-      if (tab === tabs[0]) {
-        requestBody = {
-          userId: session.user._id,
-          username: username,
-          firstName: firstName,
-          lastName: lastName,
-          aboutme: aboutme,
-        };
-      } else if (tab === tabs[1]) {
-        requestBody = {
-          userId: session.user._id,
-          socialMediaLinks: socialMediaLinks,
-        };
-      } else if (tab === tabs[2]) {
-        requestBody = {
-          userId: session.user._id,
-          oldPassword: oldPassword,
-          newPassword: newPassword,
-          confirmNewPassword: confirmNewPassowrd,
-        };
-      }
+      const requestBody = {
+        userId: session.user._id,
+        username: username,
+        firstName: firstName,
+        lastName: lastName,
+        aboutme: aboutme,
+        socialMediaLinks: socialMediaLinks,
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        confirmNewPassword: confirmNewPassowrd,
+      };
 
       const response = await fetch(`/api/user/update`, {
         method: "PATCH",
         body: JSON.stringify({
-          tab,
           requestBody,
         }),
       });
@@ -119,19 +104,19 @@ const Settings = ({ socialMediaPlatforms }) => {
         });
 
         const message = await response.json();
+        setIsLoading(false);
         toast.success(message);
       } else {
         const { error } = await response.json();
+        setIsLoading(false);
+        toast.error(error);
         setError(error);
       }
     } catch (error) {
+      setIsLoading(false);
+      toast.error(error);
       setError(error);
     }
-  };
-
-  const handleChangeTab = (tab) => {
-    setError(false);
-    setTab(tab);
   };
 
   const handleSocialMediaChange = (platformId, newLink) => {
@@ -157,7 +142,12 @@ const Settings = ({ socialMediaPlatforms }) => {
             </p>
             <div className="px-5 py-4 space-y-5">
               <div className="space-y-1">
-                <Label htmlFor="username">Nazwa użytkownika</Label>
+                <Label
+                  htmlFor="username"
+                  className="text-sm font-semibold text-gray-600"
+                >
+                  Nazwa użytkownika
+                </Label>
                 <Input
                   id="username"
                   type="text"
@@ -167,7 +157,12 @@ const Settings = ({ socialMediaPlatforms }) => {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="email">Email</Label>
+                <Label
+                  htmlFor="email"
+                  className="text-sm font-semibold text-gray-600"
+                >
+                  Email
+                </Label>
                 <Input
                   id="email"
                   type="email"
@@ -176,7 +171,12 @@ const Settings = ({ socialMediaPlatforms }) => {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="firstname">Imię</Label>
+                <Label
+                  htmlFor="firstname"
+                  className="text-sm font-semibold text-gray-600"
+                >
+                  Imię
+                </Label>
                 <Input
                   id="firstname"
                   type="text"
@@ -186,7 +186,12 @@ const Settings = ({ socialMediaPlatforms }) => {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="lastname">Nazwisko</Label>
+                <Label
+                  htmlFor="lastname"
+                  className="text-sm font-semibold text-gray-600"
+                >
+                  Nazwisko
+                </Label>
                 <Input
                   id="lastname"
                   type="text"
@@ -196,7 +201,12 @@ const Settings = ({ socialMediaPlatforms }) => {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="aboutme">O mnie</Label>
+                <Label
+                  htmlFor="aboutme"
+                  className="text-sm font-semibold text-gray-600"
+                >
+                  O mnie
+                </Label>
                 <Input
                   id="aboutme"
                   type="text"
@@ -216,7 +226,12 @@ const Settings = ({ socialMediaPlatforms }) => {
             <div className="px-5 py-4 space-y-5">
               {socialMediaPlatforms.map((platform) => (
                 <div key={platform.id} className="flex flex-col gap-1">
-                  <Label htmlFor={platform.name}>{platform.name}</Label>
+                  <Label
+                    htmlFor={platform.name}
+                    className="text-sm font-semibold text-gray-600"
+                  >
+                    {platform.name}
+                  </Label>
                   <Input
                     id={platform.name}
                     type="text"
@@ -240,7 +255,12 @@ const Settings = ({ socialMediaPlatforms }) => {
             </p>
             <div className="px-5 py-4 space-y-5">
               <div className="space-y-1">
-                <Label htmlFor="oldPassword">Stare hasło</Label>
+                <Label
+                  htmlFor="oldPassword"
+                  className="text-sm font-semibold text-gray-600"
+                >
+                  Stare hasło
+                </Label>
                 <Input
                   id="oldPassword"
                   type="password"
@@ -249,7 +269,12 @@ const Settings = ({ socialMediaPlatforms }) => {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="newPassword">Nowe hasło</Label>
+                <Label
+                  htmlFor="newPassword"
+                  className="text-sm font-semibold text-gray-600"
+                >
+                  Nowe hasło
+                </Label>
                 <Input
                   id="newPassword"
                   type="password"
@@ -258,7 +283,12 @@ const Settings = ({ socialMediaPlatforms }) => {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="confirmNewPassword">Powtórz nowe hasło</Label>
+                <Label
+                  htmlFor="confirmNewPassword"
+                  className="text-sm font-semibold text-gray-600"
+                >
+                  Powtórz nowe hasło
+                </Label>
                 <Input
                   id="confirmNewPassword"
                   type="password"
@@ -271,14 +301,18 @@ const Settings = ({ socialMediaPlatforms }) => {
             </div>
           </div>
 
-          <InputError messages={[error]} className="mt-2" />
+          {error && <p className="text-sm text-red-600">{error}</p>}
 
           <Button
-            type="button"
-            className="w-full"
             onClick={handleUpdateProfile}
+            disabled={isLoading}
+            className="w-full bg-green-600 hover:bg-green-500"
           >
-            Aktualizuj
+            {isLoading ? (
+              <RotateCw className="absolute mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              "Aktualizuj"
+            )}
           </Button>
         </form>
       </div>
@@ -287,12 +321,3 @@ const Settings = ({ socialMediaPlatforms }) => {
 };
 
 export default Settings;
-
-const Dot = () => {
-  return (
-    <div
-      aria-hidden="true"
-      className="absolute inset-x-0 top-[-2.20rem] z-[1] mx-auto h-6 w-6 scale-0 rounded-full border-8 border-white bg-green-500 transition scale-100 sm:inset-y-0 sm:right-[-2.70rem] sm:my-auto sm:mr-0"
-    ></div>
-  );
-};

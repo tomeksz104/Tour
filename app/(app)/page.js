@@ -3,8 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { db } from "@/lib/db";
 
-import Button from "@/components/Button";
-import { Button as ButtonShadcn } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import ExploreProvinces from "@/components/HomePage/ExploreProvinces/ExploreProvinces";
 import SearchBar from "@/components/HomePage/SearchBar";
 const LatestPlaces = lazy(() =>
@@ -125,9 +124,9 @@ export default async function Home() {
                 podróż na wyższy poziom.
               </span>
               <div>
-                <ButtonShadcn asChild className="h-12 px-10">
+                <Button asChild className="h-12 px-10">
                   <Link href={"/map"}>Przeglądaj mapę</Link>
-                </ButtonShadcn>
+                </Button>
               </div>
             </div>
           </div>
@@ -177,25 +176,31 @@ export default async function Home() {
             </span>
           </h2>
           <div className="flex justify-center mt-12 xl:mt-14">
-            <Link href="/map">
-              <Button type="button" className="w-64">
-                Przeglądaj mapę
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="ml-3 w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                  />
-                </svg>
-              </Button>
-            </Link>
+            <Button
+              asChild
+              className="relative rounded-full bg-green-600 hover:bg-green-500 font-semibold h-12 px-10
+              before:absolute before:inset-0 before:rounded-full before:bg-green-600 hover:before:bg-green-500 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95"
+            >
+              <Link href={"/map"}>
+                <span className="relative flex items-center font-semibold text-white">
+                  Przeglądaj mapę
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="ml-3 w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                    />
+                  </svg>
+                </span>
+              </Link>
+            </Button>
           </div>
         </div>
         <div
