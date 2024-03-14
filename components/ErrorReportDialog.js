@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useFormState } from "react-dom";
@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/form";
 
 import { createErrorReport } from "@/actions/menage/reportActions";
+import { RotateCw } from "lucide-react";
 
 const ErrorReportDialog = ({ isOpen, onClose }) => {
   const pathname = usePathname();
@@ -38,20 +39,31 @@ const ErrorReportDialog = ({ isOpen, onClose }) => {
   });
 
   const [state, dispatch] = useFormState(createErrorReport, initialState);
+  const [isLoading, setIsLoading] = useState(false);
 
-  async function handleSubmit(formData) {
+  const handleSubmit = async (data) => {
+    setIsLoading(true);
+
+    const formData = new FormData();
+
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
+    });
+
     formData.append("pageUrl", pathname);
 
     dispatch(formData);
-  }
+  };
 
   useEffect(() => {
     if (state.success === true) {
       form.setValue("content", "");
+      setIsLoading(false);
       toast.success(state.message);
       onClose();
     } else if (state.success === false) {
-      toast.error(state.message);
+      setIsLoading(false);
+      toast.error(state?.message);
     }
   }, [state]);
 
@@ -66,7 +78,10 @@ const ErrorReportDialog = ({ isOpen, onClose }) => {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form action={handleSubmit}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            // action={handleSubmit}
+          >
             <FormField
               control={form.control}
               name="content"
@@ -91,7 +106,17 @@ const ErrorReportDialog = ({ isOpen, onClose }) => {
               ))}
 
             <DialogFooter className="mt-5">
-              <Button type="submit">Wyślij zgłoszenie</Button>
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-green-600 hover:bg-green-500"
+              >
+                {isLoading ? (
+                  <RotateCw className="absolute mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  "Wyślij zgłoszenie"
+                )}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

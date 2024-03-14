@@ -10,10 +10,8 @@ import { ErrorReportStatus, Role } from "@prisma/client";
 
 const FormSchema = z.object({
   content: z
-    .string({
-      required_error: "Pole z opisem błędu jest wymagane",
-      invalid_type_error: "Pole z opisem błędu musi być tekstem",
-    })
+    .string()
+    .min(5, { message: "Pole z opisem błędu jest wymagane" })
     .trim(),
   pageUrl: z.string(),
   status: z.nativeEnum(ErrorReportStatus, {

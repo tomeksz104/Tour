@@ -8,9 +8,10 @@ import { useFormState } from "react-dom";
 import toast from "react-hot-toast";
 import Image from "next/image";
 
-import Button from "../Button";
+import { Button } from "@/components/ui/button";
 import { Ratings } from "@/components/ui/ratings";
 import { Form } from "../ui/form";
+import { RotateCw } from "lucide-react";
 
 import { insertReview, updateReview } from "@/actions/menage/reviewManager";
 
@@ -35,6 +36,7 @@ const ReviewForm = ({
   });
   const commentTextareaRef = useRef(null);
   const [isCommentButtonClicked, setIsCommentButtonClicked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const upsertReview = comment?.id
     ? updateReview.bind(null, comment.id)
@@ -56,8 +58,10 @@ const ReviewForm = ({
       if (comment?.id) onCommentAdd();
       form.setValue("rating", null);
       form.setValue("content", null);
+      setIsLoading(false);
       toast.success(state.message);
     } else if (state.success === false) {
+      setIsLoading(false);
       toast.error(state.message);
     }
   }, [state]);
@@ -70,6 +74,12 @@ const ReviewForm = ({
 
   const handleRatingChange = (rating) => {
     form.setValue("rating", rating);
+  };
+
+  const handleSubmit = async (data) => {
+    setIsLoading(true);
+
+    dispatch(data);
   };
 
   return (
@@ -116,17 +126,6 @@ const ReviewForm = ({
           <div className="flex">
             {!comment?.id && (
               <div className="mr-3 shrink-0 hidden sm:block">
-                {/* <img
-                  className="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100"
-                  src={
-                    session?.user.avatar ? session.user.avatar : "/avatar.svg"
-                  }
-                  alt={
-                    session?.user.username
-                      ? session?.user.username
-                      : session?.user.email
-                  }
-                /> */}
                 <Image
                   src={
                     session?.user.image
@@ -149,7 +148,8 @@ const ReviewForm = ({
             )}
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(dispatch)}
+                onSubmit={form.handleSubmit(handleSubmit)}
+                // onSubmit={form.handleSubmit(dispatch)}
                 className="mb-6 w-full"
               >
                 <div className="mb-4">
@@ -175,19 +175,42 @@ const ReviewForm = ({
                   />
                 </div>
 
-                <div className="flex items-center space-x-3">
-                  <Button className={`text-sm`}>
-                    {comment?.id ? "Zaaktualizuj opinię" : "Prześlij opinię"}
-                  </Button>
+                <div className="grid grid-cols-2 space-x-3">
                   {comment?.id && (
-                    <button
-                      type="button"
+                    <Button
                       onClick={onCancelEdit}
-                      className="text-red-500 font-bold text-xs uppercase"
+                      type="button"
+                      variant="outline"
+                      className="w-full text-red-500 hover:text-red-600 font-semibold"
                     >
                       Anuluj
-                    </button>
+                    </Button>
                   )}
+
+                  <Button
+                    disabled={isLoading}
+                    className={`w-full bg-green-600 hover:bg-green-500 ${
+                      !comment?.id && "col-span-2"
+                    }`}
+                  >
+                    {isLoading ? (
+                      <RotateCw className="absolute mr-2 h-4 w-4 animate-spin" />
+                    ) : comment?.id ? (
+                      "Zaaktualizuj opinię"
+                    ) : (
+                      "Prześlij opinię"
+                    )}
+                  </Button>
+                  {/* <Button
+                    disabled={pending}
+                    className="w-full bg-green-600 hover:bg-green-500"
+                  >
+                    {pending ? (
+                      <RotateCw className="absolute mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      "Zaloguj się"
+                    )}
+                  </Button> */}
                 </div>
               </form>
             </Form>
