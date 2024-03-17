@@ -71,7 +71,7 @@ const Navigation = () => {
               className="flex  z-50 flex-col md:flex-row 
                     items-center gap-y-4 p-6 bg-white md:w-auto
                     md:gap-y-4 md:p-0
-                    md:bg-transparent fixed top-0 -left-full transition-all duration-500 peer-checked:left-0 max-w-sm h-full
+                    md:bg-transparent fixed top-0 -left-full transition-all duration-500 peer-checked:left-0 h-full
                     md:left-0 md:h-auto w-4/5 md:relative lg:first-letter:top-0"
             >
               <div className="flex pb-5 md:pb-0">
