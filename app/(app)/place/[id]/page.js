@@ -138,13 +138,13 @@ export default async function PlaceDetailsPage({ params }) {
             </div>
 
             {(place.website || place.phone || place.email) && (
-              <div className="space-y-3 bg-white rounded-md p-5">
+              <div className="space-y-3 bg-white rounded-md p-5 overflow-hidden">
                 <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
                   Dane kontaktowe
                 </h2>
                 {place.website !== null && (
                   <div className="flex items-center space-x-3">
-                    <LinkIcon size={16} className="text-green-600" />
+                    <LinkIcon size={16} className="shrink-0 text-green-600" />
                     <Link href={place.website} className="hover:underline">
                       {place.website}
                     </Link>
