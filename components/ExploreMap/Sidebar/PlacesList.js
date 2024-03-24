@@ -1,10 +1,14 @@
-import SidebarImageSkeleton from "@/components/Skeletons/SidebarImageSkeleton";
-import { useSearchParams } from "next/navigation";
 import { Suspense, lazy, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Image from "next/image";
+
 import Card from "./Card";
+import { Button } from "@/components/ui/button";
 const Lightbox = lazy(() => import("@/components/FsLightbox/Lightbox"));
+import SidebarImageSkeleton from "@/components/Skeletons/SidebarImageSkeleton";
 
 import createLightboxSources from "@/utils/createLightboxSources";
+import Link from "next/link";
 
 const placesPerPage = 10;
 
@@ -45,9 +49,32 @@ const PlacesList = ({ places, onMarkerHover, isLoading }) => {
 
   if (!isLoading && places.length === 0) {
     return (
-      <h3 className="flex h-full w-full items-center justify-center py-10 font-semibold text-gray-400">
-        No places found
-      </h3>
+      <div className="relative flex flex-col mx-auto w-full">
+        <Image
+          src={"/images/no-results.png"}
+          width="0"
+          height="0"
+          sizes="100vw"
+          alt="Brak wyników"
+          className="mx-auto w-32 rounded-t-md object-cover"
+        />
+
+        <h3 className="mt-10 text-center text-lg font-semibold text-gray-900">
+          Nie znaleziono miejsc
+        </h3>
+        <p className="text-center text-gray-600 mt-3">
+          Nie znaleziono wyników pasujących do wybranych kryteriów.
+          <br /> Spróbuj{" "}
+          <a
+            href={"/map"}
+            className="hover:underline text-green-600"
+            alt="Wyzeruj filtry"
+          >
+            zresetować filtry
+          </a>
+          , aby zobaczyć więcej miejsc.
+        </p>
+      </div>
     );
   }
 
