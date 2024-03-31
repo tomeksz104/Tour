@@ -1,3 +1,5 @@
+"use client";
+
 import { memo, useContext, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useLoadMore from "@/hooks/useLoadMore";

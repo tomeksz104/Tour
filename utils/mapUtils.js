@@ -1,3 +1,5 @@
+import { LngLat } from "mapbox-gl";
+
 export const getIcon = (category) => {
   const icon = new L.icon({
     iconUrl: category.iconPath,
@@ -49,6 +51,19 @@ export const getVisibleMarkers = (map, places) => {
   }
 
   return [];
+};
+
+export const getVisibleMarkersML = (map, places) => {
+  if (!map) return [];
+
+  const bounds = map.getBounds();
+
+  const visiblePlaces = places.filter((place) => {
+    const placeLngLat = new LngLat(place.longitude, place.latitude);
+    return bounds.contains(placeLngLat);
+  });
+
+  return visiblePlaces;
 };
 
 export const haversineDistance = (coords1, coords2) => {

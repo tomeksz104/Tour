@@ -19,6 +19,7 @@ const manrope = Manrope({
 });
 
 import "./globals.css";
+import ReduxProvider from "@/redux/Provider";
 
 export const metadata = {
   title: "Tour",
@@ -32,26 +33,28 @@ export default function RootLayout({ children }) {
         {/* <body className={`${inter.className} bg-gray-100`}> */}
         {/* <body className={`${inter.className} m-auto min-h-screen flex flex-col`}> */}
         <Provider>
-          <WatchlistContextProvider>
-            <LocateContextProvider>
-              <PlacesContextProvider>
-                <ConfirmContextProvider>
-                  <Suspense fallback={<></>}>
-                    <Toaster />
-                  </Suspense>
+          <ReduxProvider>
+            <WatchlistContextProvider>
+              <LocateContextProvider>
+                <PlacesContextProvider>
+                  <ConfirmContextProvider>
+                    <Suspense fallback={<></>}>
+                      <Toaster />
+                    </Suspense>
 
-                  <div className="flex h-screen flex-col">
-                    <Navigation />
-                    {children}
-                  </div>
+                    <div className="flex h-screen flex-col">
+                      <Navigation />
+                      {children}
+                    </div>
 
-                  <Suspense fallback={<></>}>
-                    <ConfirmDialog />
-                  </Suspense>
-                </ConfirmContextProvider>
-              </PlacesContextProvider>
-            </LocateContextProvider>
-          </WatchlistContextProvider>
+                    <Suspense fallback={<></>}>
+                      <ConfirmDialog />
+                    </Suspense>
+                  </ConfirmContextProvider>
+                </PlacesContextProvider>
+              </LocateContextProvider>
+            </WatchlistContextProvider>
+          </ReduxProvider>
         </Provider>
         <div id="fslightbox"></div>
       </body>

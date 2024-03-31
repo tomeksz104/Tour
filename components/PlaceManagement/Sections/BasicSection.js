@@ -98,7 +98,12 @@ const BasicSection = ({ form, state, categories, placeDescription }) => {
                     focus:ring-1 focus:ring-green-500 focus:ring-offset-0"
                   >
                     <SelectValue placeholder="Wybierz kategorię...">
-                      {field.value ? categories[field.value - 1].name : null}
+                      {/* {field.value ? categories[field.value - 1].name : null} */}
+                      {field.value
+                        ? categories.find(
+                            (category) => category.id === Number(field.value)
+                          )?.name
+                        : null}
                     </SelectValue>
                   </SelectTrigger>
                 </FormControl>
