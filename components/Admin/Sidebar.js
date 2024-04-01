@@ -41,6 +41,12 @@ const navigation = [
     icon: Baby,
     current: false,
   },
+  {
+    name: "Udogodnienia",
+    href: "/admin/amenities",
+    icon: Baby,
+    current: false,
+  },
 ];
 
 const Sidebar = () => {

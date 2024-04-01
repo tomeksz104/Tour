@@ -62,6 +62,7 @@ model Place {
   status                 PlaceStatus            @default(IN_MODERATION)
   childFriendly          Boolean?               @default(false)
   childFriendlyAmenities ChildFriendlyAmenity[]
+  amenities              Amenity[]
   topics                 Topic[]
   reviews                Review[]
   openingHours           OpeningHours[]
@@ -89,7 +90,6 @@ model Accommodation {
   id            Int            @id @default(autoincrement())
   placeId       Int            @unique
   place         Place          @relation(fields: [placeId], references: [id])
-  amenities     Amenity[]
   hotelStandard HotelStandard?
 }
 
@@ -183,11 +183,11 @@ model ReviewPhotos {
   reviewId Int?
 }
 
+
 model Amenity {
   id              Int            @id @default(autoincrement())
   name            String
-  Accommodation   Accommodation? @relation(fields: [accommodationId], references: [id])
-  accommodationId Int?
+  places Place[]
 }
 
 enum HotelStandard {

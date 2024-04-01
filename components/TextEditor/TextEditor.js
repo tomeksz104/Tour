@@ -14,6 +14,7 @@ export default function TextEditor({ onContentChange, content, placeholder }) {
   return (
     <>
       <Editor
+        id="12345"
         onInit={(evt, editor) => setEditor(editor)}
         onChange={debouncedOnContentChange}
         apiKey="zpjw02qfk4o30xvip1k7gvmqz1h6h2wwhtbpvco6sbhf1cb1"

@@ -112,6 +112,7 @@ const FormSchema = z.object({
   address: z.string().nullable().optional().or(z.literal("")),
   slogan: z.string().optional().or(z.literal("")),
 
+  amenities: z.array(z.number().int()).nullable().optional(),
   childFriendly: z.coerce.boolean().optional(),
   childAmenites: z.array(z.number().int()).nullable().optional(),
   topics: z.array(z.number().int()).nullable().optional(),
@@ -159,6 +160,7 @@ export async function createPlace(prevState, formData) {
     address: formData.address,
     slogan: formData.slogan,
 
+    amenities: formData.amenities,
     childFriendly: +formData.childFriendly,
     childAmenites: formData.childAmenites,
     topics: formData.topics,
@@ -265,6 +267,12 @@ export async function createPlace(prevState, formData) {
       };
     }
 
+    if (dataFields.amenities && dataFields.amenities.length > 0) {
+      dataToCreate.amenities = {
+        connect: dataFields.amenities.map((id) => ({ id })),
+      };
+    }
+
     if (dataFields.childAmenites && dataFields.childAmenites.length > 0) {
       dataToCreate.childFriendlyAmenities = {
         connect: dataFields.childAmenites.map((id) => ({ id })),
@@ -342,6 +350,7 @@ export async function updatePlace(placeId, state, formData) {
     address: formData.address || undefined,
     slogan: formData.slogan || undefined,
 
+    amenities: formData.amenities,
     childFriendly: +formData.childFriendly,
     childAmenites: formData.childAmenites,
     topics: formData.topics,
@@ -542,6 +551,17 @@ export async function updatePlace(placeId, state, formData) {
         .map((id) => ({ id }));
     }
 
+    if (dataFields.amenities && dataFields.amenities.length > 0) {
+      dataToCreate.amenities = {}; // Initialize the object
+      dataToCreate.amenities.disconnect = existingPlace.amenities
+        .filter((t) => !formData.amenities.includes(t.id))
+        .map((t) => ({ id: t.id }));
+
+      dataToCreate.amenities.connect = formData.amenities
+        .filter((id) => !existingPlace.amenities.map((t) => t.id).includes(id))
+        .map((id) => ({ id }));
+    }
+
     if (dataFields.tags && dataFields.tags.length > 0) {
       dataToCreate.tags = {}; // Initialize the object
       dataToCreate.tags.disconnect = existingPlace.tags
@@ -555,7 +575,6 @@ export async function updatePlace(placeId, state, formData) {
 
     if (dataFields.topics && dataFields.topics.length > 0) {
       dataToCreate.topics = {}; // Initialize the object
-      dataToCreate.topics.connect = dataFields.topics.map((id) => ({ id }));
 
       dataToCreate.topics.disconnect = existingPlace.topics
         .filter((t) => !formData.topics.includes(t.id))

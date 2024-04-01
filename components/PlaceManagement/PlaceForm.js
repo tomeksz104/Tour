@@ -43,9 +43,10 @@ const PlaceForm = ({
   provinces,
   cities,
   childAmenites,
+  amenities,
 }) => {
   const { confirm } = useConfirm();
-  const { session } = useSession({
+  useSession({
     required: true,
   });
   const form = useForm({
@@ -69,6 +70,9 @@ const PlaceForm = ({
         : null,
       childAmenites: place?.childFriendlyAmenities
         ? Object.values(place?.childFriendlyAmenities).map((item) => item.id)
+        : [],
+      amenities: place?.amenities
+        ? Object.values(place?.amenities).map((item) => item.id)
         : [],
       topics: place?.topics
         ? Object.values(place?.topics).map((item) => item.id)
@@ -257,6 +261,7 @@ const PlaceForm = ({
                   topics={topics}
                   tags={tags}
                   childAmenites={childAmenites}
+                  amenities={amenities}
                 />
               </AccordionContent>
             </AccordionItem>

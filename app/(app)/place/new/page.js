@@ -8,6 +8,7 @@ export default async function CreatePlace() {
   const provinces = await db.province.findMany();
   const cities = await db.city.findMany();
   const childAmenites = await db.ChildFriendlyAmenity.findMany();
+  const amenities = await db.amenity.findMany();
 
   return (
     <PlaceForm
@@ -18,6 +19,7 @@ export default async function CreatePlace() {
       provinces={provinces}
       cities={cities}
       childAmenites={childAmenites}
+      amenities={amenities}
     />
   );
 }

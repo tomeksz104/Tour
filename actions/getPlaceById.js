@@ -13,6 +13,7 @@ export async function getPlaceById(id) {
       photos: true,
       user: true,
       category: true,
+      amenities: true,
     },
   });
 }

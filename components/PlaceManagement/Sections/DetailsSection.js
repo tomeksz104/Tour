@@ -11,7 +11,13 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-export function DetailsSection({ form, topics, tags, childAmenites }) {
+export function DetailsSection({
+  form,
+  topics,
+  tags,
+  childAmenites,
+  amenities,
+}) {
   const watchChildFriendlyField = form.watch("childFriendly");
 
   return (
@@ -113,7 +119,59 @@ export function DetailsSection({ form, topics, tags, childAmenites }) {
           />
         </div>
       )}
+      <div className="space-y-2 border-t px-5 py-4">
+        <FormField
+          control={form.control}
+          name="amenities"
+          render={() => (
+            <FormItem className="space-y-2">
+              <FormLabel className="text-sm font-semibold text-gray-600">
+                Udogodnienia
+              </FormLabel>
+              <FormDescription className="block text-xs text-gray-500 italic">
+                Wybierz udogodnienia pasujące do atrakcji.
+              </FormDescription>
 
+              <div className="flex flex-wrap">
+                {amenities.map((amenity) => (
+                  <FormField
+                    key={amenity.id}
+                    control={form.control}
+                    name="amenities"
+                    render={({ field }) => {
+                      return (
+                        <FormItem
+                          key={amenity.id}
+                          className="flex flex-row items-start space-x-3 space-y-0 py-2 w-1/2"
+                        >
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value?.includes(amenity.id)}
+                              onCheckedChange={(checked) => {
+                                return checked
+                                  ? field.onChange([...field.value, amenity.id])
+                                  : field.onChange(
+                                      field.value?.filter(
+                                        (value) => value !== amenity.id
+                                      )
+                                    );
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            {amenity.name}
+                          </FormLabel>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                ))}
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
       <div className="space-y-2 border-t px-5 py-4">
         <FormField
           control={form.control}
