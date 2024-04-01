@@ -1,19 +1,27 @@
 import { Suspense, lazy, useState } from "react";
 import { useSelector } from "react-redux";
+import Image from "next/image";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+import createLightboxSources from "@/utils/createLightboxSources";
 
 import SidebarImageSkeleton from "@/components/Skeletons/SidebarImageSkeleton";
 import Card from "./Card";
-const Lightbox = lazy(() => import("@/components/FsLightbox/Lightbox"));
 
-import createLightboxSources from "@/utils/createLightboxSources";
-import Image from "next/image";
+// bundle splitting
+const Lightbox = lazy(() => import("@/components/FsLightbox/Lightbox"));
 
 const placesPerPage = 10;
 
-const PlacesList = ({ places }) => {
+const PlacesList = () => {
   const { isLoading } = useSelector((state) => state.map);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxSources, setLightboxSources] = useState([]);
+
+  const { visiblePlaces } = useSelector((state) => state.map);
+  const { itemsList: places, observerRef } = useInfiniteScroll(
+    visiblePlaces,
+    placesPerPage
+  );
 
   const handleOpenLightbox = (place) => {
     const sources = createLightboxSources(place.mainPhotoPath, place.photos);
@@ -70,6 +78,7 @@ const PlacesList = ({ places }) => {
           onOpenLightbox={() => handleOpenLightbox(place)}
         />
       ))}
+      <div ref={observerRef} />
     </>
   );
 };

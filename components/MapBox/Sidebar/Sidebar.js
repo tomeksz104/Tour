@@ -1,12 +1,18 @@
 "use client";
 
-import { memo, useContext, useEffect, useState } from "react";
+import {
+  Suspense,
+  lazy,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import useLoadMore from "@/hooks/useLoadMore";
 
 import PlacesList from "./PlacesList";
 import { Button } from "@/components/ui/button";
-import FiltersDialog from "../FiltersDialog";
 import {
   Select,
   SelectContent,
@@ -15,6 +21,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+// bundle splitting
+const FiltersDialog = lazy(() => import("../FiltersDialog"));
 
 import { Clock3, Heart, MapPin } from "lucide-react";
 import { LocateContext } from "@/contexts/LocateContext";
@@ -29,11 +38,8 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { visiblePlaces: places, isSidebarOpen } = useSelector(
-    (state) => state.map
-  );
+  const { visiblePlaces, isSidebarOpen } = useSelector((state) => state.map);
 
-  const { data: visiblePlaces, handleScroll } = useLoadMore(places, 10);
   const locateCtx = useContext(LocateContext);
   const [isFiltersDialogOpen, setFiltersDialogOpen] = useState(false);
 
@@ -41,7 +47,6 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
   const isOpenParamsValue = searchParams.get("open");
 
   const handleToggleSidebar = () => {
-    // setShowSidebar((current) => !current);
     dispatch(toggleSidebar());
   };
 
@@ -49,7 +54,6 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
     const query = window.matchMedia(mobileMediaQuery);
 
     function handleQueryChange(queryEvent) {
-      // setShowSidebar(queryEvent.matches);
       dispatch(setIsSidebarOpen(queryEvent.matches));
     }
 
@@ -62,7 +66,7 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
 
   const toggleFiltersDialog = () => setFiltersDialogOpen((current) => !current);
 
-  const handleNearMeClick = () => {
+  const handleNearMeClick = useCallback(() => {
     const currentParams = new URLSearchParams(searchParams);
 
     if (nearMeParamsValue === "true") {
@@ -82,9 +86,9 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
     router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
       shallow: true,
     });
-  };
+  }, [searchParams, locateCtx.coordinates, router, pathname]);
 
-  const handleOpenClick = () => {
+  const handleOpenClick = useCallback(() => {
     const currentParams = new URLSearchParams(searchParams);
 
     if (isOpenParamsValue === "true") {
@@ -96,21 +100,24 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
     router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
       shallow: true,
     });
-  };
+  }, [searchParams, router, pathname]);
 
-  const handleSortChange = (selectedValue) => {
-    const currentParams = new URLSearchParams(searchParams);
+  const handleSortChange = useCallback(
+    (selectedValue) => {
+      const currentParams = new URLSearchParams(searchParams);
 
-    if (selectedValue === "default") {
-      currentParams.delete("sortBy");
-    } else {
-      currentParams.set("sortBy", selectedValue);
-    }
+      if (selectedValue === "default") {
+        currentParams.delete("sortBy");
+      } else {
+        currentParams.set("sortBy", selectedValue);
+      }
 
-    router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
-      shallow: true,
-    });
-  };
+      router.replace(`${pathname}?${currentParams.toString()}`, undefined, {
+        shallow: true,
+      });
+    },
+    [searchParams, router, pathname]
+  );
 
   return (
     <>
@@ -144,7 +151,7 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
       >
         <div className="flex items-center justify-between px-5 py-3">
           <div className="flex text-slate-500 text-xs gap-1">
-            <span className="font-semibold">{places.length}</span>
+            <span className="font-semibold">{visiblePlaces.length}</span>
             <span className="hidden sm:inline-block"> widocznych </span>
             <span>miejsc</span>
           </div>
@@ -231,19 +238,17 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
           </Button>
         </div>
 
-        <div
-          onScroll={handleScroll}
-          onTouchMove={handleScroll}
-          className="flex flex-wrap p-1 overflow-y-auto overflow-x-hidden"
-        >
-          <PlacesList places={visiblePlaces} />
+        <div className="flex flex-wrap p-1 overflow-y-auto overflow-x-hidden">
+          <PlacesList />
         </div>
       </section>
 
-      <FiltersDialog
-        isOpen={isFiltersDialogOpen}
-        onClose={toggleFiltersDialog}
-      />
+      <Suspense>
+        <FiltersDialog
+          isOpen={isFiltersDialogOpen}
+          onClose={toggleFiltersDialog}
+        />
+      </Suspense>
     </>
   );
 });

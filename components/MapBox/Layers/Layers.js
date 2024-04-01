@@ -4,7 +4,6 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 
@@ -248,7 +247,7 @@ const Layers = ({ isShowWatchlist, categories }) => {
     if (isLoading === true) return;
 
     dispatch(setIsLoading(true));
-  }, 300);
+  }, 100);
 
   useEffect(() => {
     if (!map) return;

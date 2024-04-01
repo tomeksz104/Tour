@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+
 import SearchResult from "./SearchResult";
-import useLoadMore from "@/hooks/useLoadMore";
 
 const SeatchResultList = ({ results, hideSuggestions, searchWordLength }) => {
-  const { data: visiblePlaces, handleScroll } = useLoadMore(results, 10);
+  const { itemsList: visiblePlaces, observerRef } = useInfiniteScroll(
+    results,
+    10
+  );
 
   return (
     <div
-      onScroll={handleScroll}
-      onTouchMove={handleScroll}
       className={`absolute z-50 mt-2 w-full overflow-auto max-h-96 rounded-md bg-white shadow-md ${
         hideSuggestions && "hidden"
       }`}
@@ -27,6 +28,7 @@ const SeatchResultList = ({ results, hideSuggestions, searchWordLength }) => {
         visiblePlaces.map((place, id) => {
           return <SearchResult place={place} key={id} />;
         })}
+      <div ref={observerRef} />
     </div>
   );
 };
