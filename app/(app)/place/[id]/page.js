@@ -19,12 +19,14 @@ const PlaceDetailsMap = dynamic(() => import("@/components/PlaceDetails/Map"), {
   ssr: false,
 });
 
+import { Role } from "@prisma/client";
+
 export default async function PlaceDetailsPage({ params }) {
   // await new Promise((resolve) => setTimeout(resolve, 5000));
   const place = await getPlaceById(params?.id);
   const session = await getServerSession(authOptions);
 
-  const isUserAdmin = session?.user?.role === "admin";
+  const isUserAdmin = session?.user?.role === Role.ADMIN;
   const isCreator = session?.user?.id === place.userId;
   const hasPermission = isUserAdmin || isCreator;
 
