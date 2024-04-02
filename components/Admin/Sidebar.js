@@ -12,6 +12,8 @@ import {
   Files,
   PieChart,
   GanttChartSquare,
+  AlarmSmoke,
+  MapPinned,
 } from "lucide-react";
 
 import Logo from "@/components/Logo";
@@ -44,7 +46,13 @@ const navigation = [
   {
     name: "Udogodnienia",
     href: "/admin/amenities",
-    icon: Baby,
+    icon: AlarmSmoke,
+    current: false,
+  },
+  {
+    name: "Miasta",
+    href: "/admin/cities",
+    icon: MapPinned,
     current: false,
   },
 ];
@@ -221,7 +229,7 @@ const Sidebar = () => {
               </li>
               <li>
                 <div className="text-xs font-semibold leading-6 text-gray-400">
-                  Your teams ZARZĄDZAJ
+                  Your teams
                 </div>
                 <ul role="list" className="-mx-2 mt-2 space-y-1">
                   <li>
