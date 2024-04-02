@@ -30,7 +30,7 @@ const Loading = () => {
       </div>
 
       <div className="w-full mx-auto mt-12">
-        <div class="flex items-center space-x-3 justify-center">
+        <div className="flex items-center space-x-3 justify-center">
           <div className="h-8 w-24 bg-gray-200 rounded-full"></div>
           <div className="h-8 w-24 bg-gray-200 rounded-full"></div>
           <div className="h-8 w-24 bg-gray-200 rounded-full"></div>
@@ -41,9 +41,9 @@ const Loading = () => {
 
       <div className="relative mx-auto max-w-7xl w-full px-3 xl:px-0 mb-10">
         <div className="mt-8 grid grid-cols-1 gap-y-6 lg:gap-x-6 lg:w-full lg:grid-cols-6">
-          <div class="col-span-4 space-y-5">
-            <div class="space-y-3 bg-white rounded-md p-5">
-              <h2 class="text-xl font-semibold text-gray-700 md:text-2xl">
+          <div className="col-span-4 space-y-5">
+            <div className="space-y-3 bg-white rounded-md p-5">
+              <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
                 Opis
               </h2>
               <div className="animate-pulse">
@@ -52,11 +52,11 @@ const Loading = () => {
                 <p className="w-[60%] h-4 bg-gray-200 rounded-full mt-2"></p>
               </div>
             </div>
-            <div class="space-y-3 bg-white rounded-md p-5">
-              <h2 class="text-xl font-semibold text-gray-700 md:text-2xl">
+            <div className="space-y-3 bg-white rounded-md p-5">
+              <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
                 Tematyka
               </h2>
-              <div class="grid grid-cols-2 gap-y-3">
+              <div className="grid grid-cols-2 gap-y-3">
                 <div className="h-4 bg-gray-200 rounded-full w-[50%] animate-pulse"></div>
                 <div className="h-4 bg-gray-200 rounded-full w-[50%] animate-pulse"></div>
                 <div className="h-4 bg-gray-200 rounded-full w-[50%] animate-pulse"></div>
@@ -64,11 +64,11 @@ const Loading = () => {
                 <div className="h-4 bg-gray-200 rounded-full w-[50%] animate-pulse"></div>
               </div>
             </div>
-            <div class="space-y-3 bg-white rounded-md p-5">
-              <h2 class="text-xl font-semibold text-gray-700 md:text-2xl">
+            <div className="space-y-3 bg-white rounded-md p-5">
+              <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
                 Tagi
               </h2>
-              <div class="grid grid-cols-2 gap-y-3">
+              <div className="grid grid-cols-2 gap-y-3">
                 <div className="h-4 bg-gray-200 rounded-full w-[50%] animate-pulse"></div>
                 <div className="h-4 bg-gray-200 rounded-full w-[50%] animate-pulse"></div>
                 <div className="h-4 bg-gray-200 rounded-full w-[50%] animate-pulse"></div>
@@ -78,7 +78,7 @@ const Loading = () => {
             </div>
           </div>
           <div className="col-span-2 space-y-3">
-            <div class="w-full flex justify-between items-center bg-white rounded-md px-5 py-4">
+            <div className="w-full flex justify-between items-center bg-white rounded-md px-5 py-4">
               <div className="h-5 bg-gray-200 rounded-full w-[30%] animate-pulse"></div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +87,7 @@ const Loading = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="lucide lucide-chevron-down h-4 w-4 text-gray-300 shrink-0"
@@ -95,8 +95,8 @@ const Loading = () => {
                 <path d="m6 9 6 6 6-6"></path>
               </svg>
             </div>
-            <div class="space-y-3 bg-white rounded-md px-5 py-4">
-              <h2 class="text-xl font-semibold text-gray-700 md:text-2xl">
+            <div className="space-y-3 bg-white rounded-md px-5 py-4">
+              <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
                 Dojazd
               </h2>
               <div className="w-full h-48 bg-gray-300 rounded-md animate-pulse flex flex-col items-center justify-center">
@@ -116,11 +116,11 @@ const Loading = () => {
                 <div className="h-5 bg-gray-200 rounded-full w-24 animate-pulse"></div>
               </div>
             </div>
-            <div class="space-y-3 bg-white rounded-md p-5">
-              <h2 class="text-xl font-semibold text-gray-700 md:text-2xl">
+            <div className="space-y-3 bg-white rounded-md p-5">
+              <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
                 Dane kontaktowe
               </h2>
-              <div class="flex items-center space-x-3">
+              <div className="flex items-center space-x-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -128,17 +128,17 @@ const Loading = () => {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-link text-gray-300"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-link text-gray-300"
                 >
                   <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
                   <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                 </svg>
                 <div className="h-5 bg-gray-200 rounded-full w-[60%] animate-pulse"></div>
               </div>
-              <div class="flex items-center space-x-3">
+              <div className="flex items-center space-x-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -146,16 +146,16 @@ const Loading = () => {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-phone text-gray-300"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-phone text-gray-300"
                 >
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                 </svg>
                 <div className="h-5 bg-gray-200 rounded-full w-[30%] animate-pulse"></div>
               </div>
-              <div class="flex items-center space-x-3">
+              <div className="flex items-center space-x-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -163,10 +163,10 @@ const Loading = () => {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-at-sign text-gray-300"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-at-sign text-gray-300"
                 >
                   <circle cx="12" cy="12" r="4"></circle>
                   <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"></path>
