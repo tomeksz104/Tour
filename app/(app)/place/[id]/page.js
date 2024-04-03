@@ -57,7 +57,7 @@ export default async function PlaceDetailsPage({ params }) {
               </div>
             </div>
             {/* <div className="absolute w-full content-[''] bg-gradient-to-b from-[rgba(0,0,0,0.75)] to-transparent h-[200px] pointer-events-none"></div> */}
-            <div className="absolute flex justify-between items-start sm:items-center top-2 inset-x-4 sm:inset-x-5 pointer-events-none">
+            <div className="absolute flex justify-between items-start sm:items-center top-2 inset-x-4 sm:inset-x-5 pointer-events-none hidden sm:block">
               <h3 className="block text-xl sm:text-2xl font-semibold text-white line-clamp-2">
                 {place.title}
               </h3>
@@ -65,8 +65,10 @@ export default async function PlaceDetailsPage({ params }) {
           </div>
         </div>
       </div>
-
-      <div className="w-full mx-auto mt-12">
+      <h1 className="mt-3 px-5 text-xl text-center font-semibold text-gray-700 block sm:hidden">
+        {place.title}
+      </h1>
+      <div className="w-full mx-auto mt-3 sm:mt-12">
         <QuickListingActions
           phone={place.phone || null}
           googleMapUrl={place.googleMapUrl || null}

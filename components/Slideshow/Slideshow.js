@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, lazy, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -19,9 +19,18 @@ export default function ManualSlideshow({
   placeTitle,
 }) {
   const [imgIndex, setImgIndex] = useState(0);
+  const [translateX, setTranslateX] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   const sourceUrls = images.map((item) => item.url);
+
+  useEffect(() => {
+    if (imgIndex - 3 >= 0 && sourceUrls.length - imgIndex >= 3) {
+      setTranslateX(imgIndex - 2);
+    } else if (imgIndex <= 3) {
+      setTranslateX(0);
+    }
+  }, [imgIndex]);
 
   return (
     <>
@@ -79,20 +88,20 @@ export default function ManualSlideshow({
             />
           ))}
         </div>
-        <div className="max-w-sm md:max-w-2xl mt-8 absolute -translate-x-2/4 -translate-y-full left-2/4 top-full">
-          <div
-            className="relative flex gap-x-3 whitespace-nowrap z-[1] bg-gray-100 p-2 rounded-md
-          before:content-[' '] before:bg-[radial-gradient(circle_at_left_top,transparent_70%,rgb(243,246,248)_69%)] before:absolute before:z-10 before:w-[10px] before:h-[10px] before:-left-[10px] before:bottom-8
-          after:content-[' '] after:bg-[radial-gradient(circle_at_right_top,transparent_70%,rgb(243,246,248)_69%)] after:absolute after:z-10 after:w-[10px] after:h-[10px] after:-right-[10px] after:bottom-8
-          "
-          >
+        <div
+          className="md:w-2xl mt-8 absolute -translate-x-2/4 -translate-y-full left-2/4 top-full hidden sm:block
+         before:content-[' '] before:bg-[radial-gradient(circle_at_left_top,transparent_70%,rgb(243,246,248)_69%)] before:absolute before:z-10 before:w-[10px] before:h-[10px] before:-left-[10px] before:bottom-8
+         after:content-[' '] after:bg-[radial-gradient(circle_at_right_top,transparent_70%,rgb(243,246,248)_69%)] after:absolute after:z-10 after:w-[10px] after:h-[10px] after:-right-[10px] after:bottom-8
+        "
+        >
+          <div className="relative flex gap-x-3 whitespace-nowrap z-[1] bg-gray-100 p-2 rounded-md overflow-hidden w-[624px]">
             {images.map((image, index) => (
               <div
                 key={index}
                 onClick={() => {
                   setImgIndex(index);
                 }}
-                className="relative w-32 h-16	cursor-pointer"
+                className="relative w-28 h-16	cursor-pointer shrink-0	"
               >
                 <Image
                   src={image.url ? image.url : "/images/noImage.jpg"}
@@ -103,7 +112,25 @@ export default function ManualSlideshow({
                   className={`w-full h-full object-cover rounded-md ${
                     imgIndex === index ? "" : "opacity-70"
                   }`}
+                  style={{
+                    transform: `translateX(${-translateX * 124}px)`,
+                    transition: "0.8s",
+                  }}
                 />
+                {/* <img
+                  src={image.url ? image.url : "/images/noImage.jpg"}
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  alt={`The photo shows ${placeTitle}`}
+                  className={`w-full h-full object-cover rounded-md ${
+                    imgIndex === index ? "" : "opacity-70"
+                  }`}
+                  style={{
+                    transform: `translateX(${-translateX * 124}px)`,
+                    transition: "0.8s",
+                  }}
+                /> */}
               </div>
             ))}
           </div>
