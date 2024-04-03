@@ -25,12 +25,12 @@ export default function ManualSlideshow({
   const sourceUrls = images.map((item) => item.url);
 
   useEffect(() => {
-    if (imgIndex - 3 >= 0 && sourceUrls.length - imgIndex >= 3) {
-      setTranslateX(imgIndex - 2);
-    } else if (imgIndex <= 3) {
-      setTranslateX(0);
-    }
-  }, [imgIndex]);
+    const newTranslateX = Math.max(0, imgIndex - 2);
+
+    const maxTranslateX = Math.max(0, sourceUrls.length - 5);
+
+    setTranslateX(Math.min(newTranslateX, maxTranslateX));
+  }, [imgIndex, sourceUrls.length]);
 
   return (
     <>
