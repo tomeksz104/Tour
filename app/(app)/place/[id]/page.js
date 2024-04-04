@@ -1,18 +1,15 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { getPlaceById } from "@/actions/getPlaceById";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
 
 import ReviewCard from "@/components/Review/ReviewCard";
 import Slideshow from "@/components/Slideshow/Slideshow";
-
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/authOptions";
-import { Button } from "@/components/ui/button";
-
-import { AtSign, Check, Phone, Link as LinkIcon } from "lucide-react";
-
 import OpeningHours from "@/components/PlaceDetails/OpeningHours";
 import QuickListingActions from "@/components/PlaceDetails/QuickListingActions";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const PlaceDetailsMap = dynamic(() => import("@/components/PlaceDetails/Map"), {
   loading: () => <p>loading...</p>,
@@ -20,6 +17,8 @@ const PlaceDetailsMap = dynamic(() => import("@/components/PlaceDetails/Map"), {
 });
 
 import { Role } from "@prisma/client";
+
+import { AtSign, Check, Phone, Link as LinkIcon } from "lucide-react";
 
 export default async function PlaceDetailsPage({ params }) {
   // await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -104,13 +103,13 @@ export default async function PlaceDetailsPage({ params }) {
               </div>
             )}
 
-            {place.tags.length > 0 && (
+            {place.amenities.length > 0 && (
               <div className="space-y-3 bg-white rounded-md p-5">
                 <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
-                  Tagi
+                  Udogodnienia
                 </h2>
                 <div className="grid grid-cols-2 gap-y-3">
-                  {place.tags.map((tag) => (
+                  {place.amenities.map((tag) => (
                     <div key={tag.id} className="flex items-center space-x-3">
                       <Check size={16} />
                       <div>{tag.name}</div>
@@ -119,9 +118,26 @@ export default async function PlaceDetailsPage({ params }) {
                 </div>
               </div>
             )}
+
+            {place.childFriendlyAmenities.length > 0 && (
+              <div className="space-y-3 bg-white rounded-md p-5">
+                <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
+                  Udogodnienia dla dzieci
+                </h2>
+                <div className="grid grid-cols-2 gap-y-3">
+                  {place.childFriendlyAmenities.map((tag) => (
+                    <div key={tag.id} className="flex items-center space-x-3">
+                      <Check size={16} />
+                      <div>{tag.name}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <ReviewCard place={place} />
           </div>
-          <div className="col-span-2 space-y-3">
+          <div className="col-span-2 space-y-3 mb-5">
             <OpeningHours openingHours={place.openingHours} />
 
             <div className=" space-y-3 bg-white rounded-md p-5">
@@ -166,6 +182,25 @@ export default async function PlaceDetailsPage({ params }) {
                     <p>{place.email}</p>
                   </div>
                 )}
+              </div>
+            )}
+
+            {place.tags.length > 0 && (
+              <div className="space-y-3 bg-white rounded-md p-5">
+                <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
+                  Tagi
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {place.tags.map((tag) => (
+                    <Badge key={tag.id} variant="outline">
+                      {tag.name}
+                    </Badge>
+                    // <div key={tag.id} className="flex items-center space-x-3">
+                    //   <Check size={16} />
+                    //   <div>{tag.name}</div>
+                    // </div>
+                  ))}
+                </div>
               </div>
             )}
             <div className="flex flex-col items-end text-xs text-gray-600 space-y-2">
