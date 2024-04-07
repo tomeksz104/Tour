@@ -51,6 +51,12 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
   };
 
   useEffect(() => {
+    if (window) {
+      dispatch(setIsSidebarOpen(window.matchMedia(mobileMediaQuery).matches));
+    }
+  }, []);
+
+  useEffect(() => {
     const query = window.matchMedia(mobileMediaQuery);
 
     function handleQueryChange(queryEvent) {
