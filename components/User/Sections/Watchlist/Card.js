@@ -4,15 +4,14 @@ import { useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { WatchlistContext } from "@/contexts/WatchlistContext";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ReviewRating } from "@/components/Review/ReviewRating";
-
-import { WatchlistContext } from "@/contexts/WatchlistContext";
-
 import { Camera, Heart, MapPin, Phone, ZoomIn } from "lucide-react";
 
+import { getPlaceUrl } from "@/utils/apiPaths";
 import formatReviewWord from "@/utils/formatWord";
 
 const Card = ({ place, onOpenLightbox }) => {
@@ -35,37 +34,6 @@ const Card = ({ place, onOpenLightbox }) => {
     day: "numeric",
   });
 
-  // return (
-  //   <div className="h-full group p-4 relative bg-white border border-gray-300 rounded-lg shadow-outline hover:shadow-hover hover:outline hover:outline-1 hover:outline-green-500">
-  //     <div className="absolute top-7 right-7  z-[1]">
-  //       <WatchlistButton id={place.id} />
-  //     </div>
-
-  //     <Link
-  //       href={`/place/${place.id}`}
-  //       className="relative block w-full h-56 mb-4"
-  //       aria-label={`Go to "${place.title}" details`}
-  //     >
-  //       {place.mainPhotoPath && (
-  //         <Image
-  //           src={place.mainPhotoPath}
-  //           className="w-full h-56 rounded-lg object-cover"
-  //           alt={place.title}
-  //           fill
-  //         />
-  //       )}
-  //     </Link>
-
-  //     <Link
-  //       href={`/place/${place.id}`}
-  //       aria-label={`Go to "${place.title}" details`}
-  //       className="text-xl font-medium text-gray-900 group-hover:text-green-500"
-  //     >
-  //       {place.title}
-  //     </Link>
-  //     <p className="text-gray-700 my-2 line-clamp-2">{place.description}</p>
-  //   </div>
-  // );
   return (
     <article
       key={place.id}
@@ -116,7 +84,7 @@ const Card = ({ place, onOpenLightbox }) => {
         </div>
         <div className="group relative w-full">
           <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-green-600">
-            <Link href={`place/${place.id}`}>
+            <Link href={getPlaceUrl(place.slug)}>
               <span className="absolute inset-0" />
               {place.title}
             </Link>

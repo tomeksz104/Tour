@@ -3,6 +3,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import CircleButton from "../CircleButton";
 
+import { getPlaceUrl } from "@/utils/apiPaths";
+
 const SearchResult = ({ place }) => {
   const router = useRouter();
 
@@ -28,7 +30,7 @@ const SearchResult = ({ place }) => {
           />
         </div>
         <Link
-          href={`/place/${place.id}`}
+          href={getPlaceUrl(place.slug)}
           className="text-sm font-semibold text-heading ml-3"
         >
           {place.title}

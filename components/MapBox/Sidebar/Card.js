@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { ReviewRating } from "@/components/Review/ReviewRating";
 import { Camera, Heart, MapPin, Phone, ZoomIn } from "lucide-react";
 
+import { getPlaceUrl } from "@/utils/apiPaths";
+
 function formatReviewWord(count) {
   if (count === 1) {
     return "opinia";
@@ -92,7 +94,7 @@ const Card = ({ place, onOpenLightbox }) => {
         </div>
         <div className="group relative w-full">
           <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-green-600">
-            <Link href={`place/${place.id}`}>
+            <Link href={getPlaceUrl(place.slug)}>
               <span className="absolute inset-0" />
               {place.title}
             </Link>

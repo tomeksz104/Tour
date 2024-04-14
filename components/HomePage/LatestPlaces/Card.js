@@ -13,6 +13,7 @@ import { WatchlistContext } from "@/contexts/WatchlistContext";
 
 import { Camera, Heart, MapPin, Phone, ZoomIn } from "lucide-react";
 
+import { getPlaceUrl } from "@/utils/apiPaths";
 import formatReviewWord from "@/utils/formatWord";
 
 const Card = ({ place, onOpenLightbox }) => {
@@ -116,7 +117,7 @@ const Card = ({ place, onOpenLightbox }) => {
         </div>
         <div className="group relative w-full">
           <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-green-600">
-            <Link href={`place/${place.id}`}>
+            <Link href={getPlaceUrl(place.slug)}>
               <span className="absolute inset-0" />
               {place.title}
             </Link>

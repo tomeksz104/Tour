@@ -1,10 +1,13 @@
+import Image from "next/image";
+import Link from "next/link";
+
 import { ReviewRating } from "@/components/Review/ReviewRating";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import formatReviewWord from "@/utils/formatWord";
 import { Camera, Heart, ZoomIn } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+
+import { getPlaceUrl } from "@/utils/apiPaths";
+import formatReviewWord from "@/utils/formatWord";
 
 const Card = ({ place, category, province, onOpenLightbox }) => {
   return (
@@ -51,7 +54,10 @@ const Card = ({ place, category, province, onOpenLightbox }) => {
         )}
       </div>
       <h3 className="mt-3 text-lg font-semibold leading-6 text-white">
-        <Link href={`place/${place.id}`} className="group-hover:text-green-500">
+        <Link
+          href={getPlaceUrl(place.slug)}
+          className="group-hover:text-green-500"
+        >
           {place.title}
         </Link>
       </h3>

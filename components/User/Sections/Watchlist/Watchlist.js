@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense, lazy, useContext, useState } from "react";
-import { PlacesContext } from "@/contexts/PlacesContext";
+import { Suspense, lazy, useState } from "react";
+import { useSelector } from "react-redux";
 
 import Card from "./Card";
 const Lightbox = lazy(() => import("@/components/FsLightbox/Lightbox"));
@@ -9,11 +9,11 @@ const Lightbox = lazy(() => import("@/components/FsLightbox/Lightbox"));
 import createLightboxSources from "@/utils/createLightboxSources";
 
 const Watchlist = ({ placesIds }) => {
-  const placesCtx = useContext(PlacesContext);
+  const { places } = useSelector((state) => state.map);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxSources, setLightboxSources] = useState([]);
 
-  const watchlistPlaces = placesCtx.places.filter((place) =>
+  const watchlistPlaces = places.filter((place) =>
     placesIds.includes(place.id)
   );
 

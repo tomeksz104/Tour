@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -7,13 +8,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Circle, MoreHorizontal, Trash2, FilePenLine } from "lucide-react";
-import Link from "next/link";
+import { Circle, MoreHorizontal, Trash2 } from "lucide-react";
+
+import { getPlaceUrl } from "@/utils/apiPaths";
 
 export const statusEnglishToPolish = {
   PUBLISHED: "Opublikowane",
@@ -50,7 +50,7 @@ export const columns = [
           />
         </div>
         <Link
-          href={`/place/${row.original.id}`}
+          href={getPlaceUrl(row.original.slug)}
           className="flex items-center gap-x-2 hover:underline"
         >
           {row.original.title}

@@ -5,6 +5,8 @@ import { Popup, useMap } from "react-map-gl";
 import Image from "next/image";
 import Link from "next/link";
 
+import { getPlaceUrl } from "@/utils/apiPaths";
+
 import "./map.css";
 
 const MapPopup = memo(() => {
@@ -86,7 +88,7 @@ const MapPopup = memo(() => {
             </div>
             <div className="py-2 px-3 relative">
               <Link
-                href={`/place/${selectedPlace.id}`}
+                href={getPlaceUrl(selectedPlace.slug)}
                 className="text-md font-semibold hover:underline"
                 style={{ color: "#000000" }}
               >

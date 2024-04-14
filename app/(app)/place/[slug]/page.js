@@ -1,6 +1,6 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { getPlaceById } from "@/actions/getPlaceById";
+import { getPlaceBySlug } from "@/actions/getPlaceBySlug";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 
@@ -22,7 +22,7 @@ import { AtSign, Check, Phone, Link as LinkIcon } from "lucide-react";
 
 export default async function PlaceDetailsPage({ params }) {
   // await new Promise((resolve) => setTimeout(resolve, 5000));
-  const place = await getPlaceById(params?.id);
+  const place = await getPlaceBySlug(params?.slug);
   const session = await getServerSession(authOptions);
 
   const isUserAdmin = session?.user?.role === Role.ADMIN;

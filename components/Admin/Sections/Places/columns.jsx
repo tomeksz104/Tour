@@ -23,6 +23,7 @@ import {
 import { Circle, MoreHorizontal, Trash2, FilePenLine } from "lucide-react";
 import Link from "next/link";
 
+import { getPlaceUrl } from "@/utils/apiPaths";
 import { PlaceStatus } from "@prisma/client";
 
 export const statusEnglishToPolish = {
@@ -60,7 +61,7 @@ export const columns = (handleChangePlaceStatus, handleDeletePlace) => [
           />
         </div>
         <Link
-          href={`/place/${row.original.id}`}
+          href={getPlaceUrl(row.original.slug)}
           className="flex items-center gap-x-2 hover:underline"
         >
           {row.original.title}
