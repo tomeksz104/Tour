@@ -1,6 +1,8 @@
 import Places from "@/components/Admin/Sections/Places/Places";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 const PlacesPage = async () => {
   const places = await db.place.findMany({
     include: {

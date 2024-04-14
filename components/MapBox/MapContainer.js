@@ -1,20 +1,24 @@
 "use client";
 
-import { Suspense, lazy, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import Map from "react-map-gl";
+
 import { useDispatch } from "react-redux";
 
 import { fetchPlaces } from "@/redux/slices/mapSlice";
 
-import Sidebar from "@/components/MapBox/Sidebar/Sidebar";
-
 import "mapbox-gl/dist/mapbox-gl.css";
 
 // bundle splitting
-const Layers = lazy(() => import("./Layers/Layers"));
+const Sidebar = dynamic(() => import("@/components/MapBox/Sidebar/Sidebar"));
+const Layers = dynamic(() => import("./Layers/Layers"));
 const MapControls = dynamic(() => import("./MapControls"));
 const MapPopup = dynamic(() => import("./MapPopup"));
+// const MapTrailPopup = dynamic(() => import("./MapTrailPopup"));
+
+const Map = dynamic(() => import("react-map-gl").then((mod) => mod.Map), {
+  ssr: false, // Disable server-side rendering for this component
+});
 
 const MapContainer = ({ categories }) => {
   const dispatch = useDispatch();
@@ -34,6 +38,7 @@ const MapContainer = ({ categories }) => {
         isShowWatchlist={isShowWatchlist}
         onToggleWatchlist={handleToggleWatchlist}
       />
+
       <Map
         mapboxAccessToken="pk.eyJ1IjoidG9tZWtzejEwNCIsImEiOiJjbHR2NWdlYnQxbjAxMm9vYXcwa2RmeDRtIn0.PWIPIEDj06tzxHRRPqBJMw"
         initialViewState={{
@@ -53,9 +58,9 @@ const MapContainer = ({ categories }) => {
       >
         <MapControls />
         <MapPopup />
-        <Suspense>
-          <Layers isShowWatchlist={isShowWatchlist} categories={categories} />
-        </Suspense>
+        {/* <MapTrailPopup /> */}
+
+        <Layers isShowWatchlist={isShowWatchlist} categories={categories} />
       </Map>
     </>
   );

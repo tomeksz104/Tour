@@ -1,10 +1,15 @@
-import { db } from "@/lib/db";
-import dynamic from "next/dynamic";
-
-const MapContainer = dynamic(() => import("@/components/MapBox/MapContainer"), {
-  ssr: false,
-});
 import React from "react";
+import { db } from "@/lib/db";
+import { default as dynamicImport } from "next/dynamic";
+
+const MapContainer = dynamicImport(
+  () => import("@/components/MapBox/MapContainer"),
+  {
+    ssr: false,
+  }
+);
+
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const categories = await db.category.findMany({

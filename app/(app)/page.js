@@ -1,16 +1,23 @@
 import { Suspense, lazy } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { db } from "@/lib/db";
 
 import { Button } from "@/components/ui/button";
-import ExploreProvinces from "@/components/HomePage/ExploreProvinces/ExploreProvinces";
-import SearchBar from "@/components/HomePage/SearchBar";
+
 const LatestPlaces = lazy(() =>
   import("@/components/HomePage/LatestPlaces/LatestPlaces")
 );
-import ExploreCategory from "@/components/HomePage/ExploreCategories/ExploreCategory";
-import Footer from "@/components/Footer";
+
+const SearchBar = dynamic(() => import("@/components/HomePage/SearchBar"));
+const ExploreProvinces = dynamic(() =>
+  import("@/components/HomePage/ExploreProvinces/ExploreProvinces")
+);
+const ExploreCategory = dynamic(() =>
+  import("@/components/HomePage/ExploreCategories/ExploreCategory")
+);
+const Footer = dynamic(() => import("@/components/Footer"));
 
 import { getPlacesForCategories } from "@/actions/getPlacesForCategories";
 
