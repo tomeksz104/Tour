@@ -4,6 +4,8 @@ import { isOpenNow } from "@/utils/openingHours";
 
 import { PlaceStatus } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 const getWeekDay = () => {
   const currentDay = new Date().getDay();
   const days = [

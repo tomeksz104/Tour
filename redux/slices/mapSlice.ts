@@ -28,7 +28,7 @@ export const fetchPlaces = createAsyncThunk<
   }
 
   try {
-    const response = await fetch("/api/place", { method: "GET" });
+    const response = await fetch("/api/places", { method: "GET" });
     if (!response.ok) throw new Error("Network response was not ok");
     const data = await response.json();
     return data;
