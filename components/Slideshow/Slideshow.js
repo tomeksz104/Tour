@@ -32,6 +32,23 @@ export default function ManualSlideshow({
     setTranslateX(Math.min(newTranslateX, maxTranslateX));
   }, [imgIndex, sourceUrls.length]);
 
+  const getContainerWidth = () => {
+    switch (images.length) {
+      case 1:
+        return "w-[128px]";
+      case 2:
+        return "w-[252px]";
+      case 3:
+        return "w-[376px]";
+      case 4:
+        return "w-[500px]";
+      case 5:
+        return "w-[624px]";
+      default:
+        return "w-[624px]";
+    }
+  };
+
   return (
     <>
       <Suspense>
@@ -94,7 +111,23 @@ export default function ManualSlideshow({
          after:content-[' '] after:bg-[radial-gradient(circle_at_right_top,transparent_70%,rgb(243,246,248)_69%)] after:absolute after:z-10 after:w-[10px] after:h-[10px] after:-right-[10px] after:bottom-8
         "
         >
-          <div className="relative flex gap-x-3 whitespace-nowrap z-[1] bg-gray-100 p-2 rounded-md overflow-hidden w-[624px]">
+          <div
+            className={`relative flex gap-x-3 whitespace-nowrap z-[1] bg-gray-100 p-2 rounded-md overflow-hidden ${getContainerWidth()}`}
+          >
+            {images.length > 5 && (
+              <div
+                className={`absolute top-0 left-0 w-[120px] z-10 h-full bg-gradient-to-r from-gray-100 pointer-events-none ${
+                  imgIndex > 2 ? "opacity-100" : "opacity-0"
+                } transition-all duration-500`}
+              ></div>
+            )}
+            {images.length > 5 && (
+              <div
+                className={`absolute top-0 right-0 w-[120px] z-10 h-full bg-gradient-to-l from-gray-100 pointer-events-none ${
+                  imgIndex < images.length - 3 ? "opacity-100" : "opacity-0"
+                } transition-all duration-500`}
+              ></div>
+            )}
             {images.map((image, index) => (
               <div
                 key={index}
@@ -103,21 +136,7 @@ export default function ManualSlideshow({
                 }}
                 className="relative w-28 h-16	cursor-pointer shrink-0	"
               >
-                <Image
-                  src={image.url ? image.url : "/images/noImage.jpg"}
-                  width="0"
-                  height="0"
-                  sizes="100vw"
-                  alt={`The photo shows ${placeTitle}`}
-                  className={`w-full h-full object-cover rounded-md ${
-                    imgIndex === index ? "" : "opacity-70"
-                  }`}
-                  style={{
-                    transform: `translateX(${-translateX * 124}px)`,
-                    transition: "0.8s",
-                  }}
-                />
-                {/* <img
+                {/* <Image
                   src={image.url ? image.url : "/images/noImage.jpg"}
                   width="0"
                   height="0"
@@ -131,6 +150,20 @@ export default function ManualSlideshow({
                     transition: "0.8s",
                   }}
                 /> */}
+                <img
+                  src={image.url ? image.url : "/images/noImage.jpg"}
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  alt={`The photo shows ${placeTitle}`}
+                  className={`w-full h-full object-cover rounded-md ${
+                    imgIndex === index ? "" : "opacity-70"
+                  }`}
+                  style={{
+                    transform: `translateX(${-translateX * 124}px)`,
+                    transition: "0.8s",
+                  }}
+                />
               </div>
             ))}
           </div>
