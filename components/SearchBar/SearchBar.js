@@ -1,12 +1,13 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
-import { PlacesContext } from "@/contexts/PlacesContext";
 import SearchResultList from "./SearchResultsList";
 import useMediaQuery from "@/hooks/useMediaQuery";
 
 const SearchBar = ({ onHideLogo }) => {
   const isMobile = useMediaQuery();
-  const placesCtx = useContext(PlacesContext);
+
+  const { places } = useSelector((state) => state.map);
   const searchInputRef = useRef(null);
   const [searchWord, setSearchWord] = useState("");
   const [filteredPlaces, setFilteredPlaces] = useState([]);
@@ -19,7 +20,7 @@ const SearchBar = ({ onHideLogo }) => {
 
   useEffect(() => {
     if (searchWord.length >= 3) {
-      const newFilter = placesCtx.places.filter((place) =>
+      const newFilter = places.filter((place) =>
         place.title.toLowerCase().includes(searchWord.toLowerCase())
       );
 
