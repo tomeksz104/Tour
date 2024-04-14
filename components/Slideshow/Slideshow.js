@@ -1,9 +1,17 @@
 "use client";
 
-import { Suspense, lazy, useEffect, useState } from "react";
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { WatchlistContext } from "@/contexts/WatchlistContext";
 import CardImage from "./CardImage";
 import { Button } from "../ui/button";
 const Lightbox = lazy(() => import("@/components/FsLightbox/Lightbox"));
@@ -18,11 +26,18 @@ export default function ManualSlideshow({
   images,
   placeTitle,
 }) {
+  const watchlistCtx = useContext(WatchlistContext);
   const [imgIndex, setImgIndex] = useState(0);
   const [translateX, setTranslateX] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
+  const isOnWatchlist = watchlistCtx.isOnWatchlist(placeId);
+
   const sourceUrls = images.map((item) => item.url);
+
+  const handleToggleWatchlistItem = useCallback(() => {
+    watchlistCtx.toggleWatchlistItem(placeId);
+  }, [placeId, watchlistCtx]);
 
   useEffect(() => {
     const newTranslateX = Math.max(0, imgIndex - 2);
@@ -70,10 +85,20 @@ export default function ManualSlideshow({
           )}
 
           <Button
+            onClick={handleToggleWatchlistItem}
             variant="secondary"
-            className={`bg-white/10 hover:bg-white/10 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-red-500`}
+            className={`bg-white/10 hover:bg-white/10 backdrop-blur-md rounded-full h-8 w-8 p-1
+            ${
+              isOnWatchlist
+                ? "text-red-500"
+                : "text-gray-300  hover:text-red-500"
+            }`}
           >
-            <Heart strokeWidth={1.75} size={14} />
+            <Heart
+              strokeWidth={1.75}
+              size={14}
+              className={`${isOnWatchlist && "fill-red-500"}`}
+            />
           </Button>
           <Button
             variant="secondary"
