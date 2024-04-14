@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 
 import { isOpenNow } from "@/utils/openingHours";
 
+import { PlaceStatus } from "@prisma/client";
+
 const getWeekDay = () => {
   const currentDay = new Date().getDay();
   const days = [
@@ -21,6 +23,9 @@ export const GET = async (request) => {
     const currentWeekDay = getWeekDay();
 
     const places = await db.place.findMany({
+      where: {
+        status: PlaceStatus.PUBLISHED,
+      },
       select: {
         id: true,
         title: true,
