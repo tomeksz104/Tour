@@ -21,14 +21,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { Checkbox } from "@/components/ui/checkbox";
 // bundle splitting
 const FiltersDialog = lazy(() => import("../FiltersDialog"));
 
 import { Clock3, Heart, MapPin } from "lucide-react";
 import { LocateContext } from "@/contexts/LocateContext";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleSidebar, setIsSidebarOpen } from "@/redux/slices/mapSlice";
+import {
+  toggleSidebar,
+  setIsSidebarOpen,
+  toggleSearchWhenMapMoving,
+} from "@/redux/slices/mapSlice";
 
 const mobileMediaQuery = "(min-width: 768px)";
 
@@ -38,7 +42,9 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { visiblePlaces, isSidebarOpen } = useSelector((state) => state.map);
+  const { visiblePlaces, isSidebarOpen, isSearchWhenMapMoving } = useSelector(
+    (state) => state.map
+  );
 
   const locateCtx = useContext(LocateContext);
   const [isFiltersDialogOpen, setFiltersDialogOpen] = useState(false);
@@ -48,6 +54,10 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
 
   const handleToggleSidebar = () => {
     dispatch(toggleSidebar());
+  };
+
+  const handleToggleSearchWhenMapMoving = () => {
+    dispatch(toggleSearchWhenMapMoving());
   };
 
   useEffect(() => {
@@ -132,7 +142,7 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
         onClick={handleToggleSidebar}
         className={` ${
           isSidebarOpen ? "hidden" : "fixed"
-        } z-10 focus:outline-none p-2 ml-5 mt-5 bg-white rounded-full shadow-md border border-gray-200
+        } z-10 focus:outline-none p-2 ml-3 mt-3 bg-white rounded-full shadow-md border border-gray-200
        `}
       >
         <svg
@@ -155,6 +165,27 @@ const Sidebar = memo(({ isShowWatchlist, onToggleWatchlist }) => {
         className={`flex flex-col z-20 w-full max-w-2xl bg-gray-100 focus:outline-none ease-in-out duration-300
             ${isSidebarOpen ? "translate-x-0 " : "-translate-x-full"}`}
       >
+        <div
+          className={`bg-white absolute top-0 -mr-5 mt-3 rounded-full border border-slate-200
+        ${isSidebarOpen ? "-right-[201px]" : "-right-[247px]"}
+        transition-[right] duration-300
+        `}
+        >
+          <div className="p-2 px-5 flex items-center space-x-2">
+            <Checkbox
+              onClick={handleToggleSearchWhenMapMoving}
+              checked={isSearchWhenMapMoving}
+              id="searchWhenMoving"
+            />
+            <label
+              htmlFor="searchWhenMoving"
+              className="py-1 text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Szukaj gdy ruszam mapą
+            </label>
+          </div>
+        </div>
+
         <div className="flex items-center justify-between px-5 py-3">
           <div className="flex text-slate-500 text-xs gap-1">
             <span className="font-semibold">{visiblePlaces.length}</span>

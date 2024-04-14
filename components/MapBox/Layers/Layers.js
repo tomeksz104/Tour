@@ -18,6 +18,8 @@ import { WatchlistContext } from "@/contexts/WatchlistContext";
 
 import { setVisiblePlaces } from "@/redux/slices/mapSlice";
 
+import { trailData } from "./layerUtils";
+
 const layerStyle = {
   id: "places",
   type: "symbol",
@@ -42,6 +44,8 @@ const layerStyle = {
       0.6,
       9,
       0.7,
+      10,
+      0.8,
     ],
     "icon-allow-overlap": true,
   },
@@ -71,9 +75,8 @@ const Layers = ({ isShowWatchlist, categories }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const { places, isLoading, isSidebarOpen } = useSelector(
-    (state) => state.map
-  );
+  const { places, isLoading, isSidebarOpen, isSearchWhenMapMoving } =
+    useSelector((state) => state.map);
   const dispatch = useDispatch();
 
   const locateCtx = useContext(LocateContext);
@@ -198,7 +201,7 @@ const Layers = ({ isShowWatchlist, categories }) => {
 
       dispatch(setVisiblePlaces(newVisiblePlaces));
     }
-  }, [filteredPlaces, dispatch, isSidebarOpen]);
+  }, [filteredPlaces, dispatch, isSidebarOpen, isSearchWhenMapMoving]);
 
   useEffect(() => {
     const loadIcons = async () => {
@@ -236,23 +239,27 @@ const Layers = ({ isShowWatchlist, categories }) => {
 
   // Using useDebouncedCallback to delay handleMoveEnd function
   const handleMoveEnd = useDebouncedCallback(() => {
-    const newVisiblePlaces = getVisibleMarkersML(map, filteredPlaces);
+    if (isSearchWhenMapMoving === true && isSidebarOpen === true) {
+      const newVisiblePlaces = getVisibleMarkersML(map, filteredPlaces);
 
-    dispatch(setVisiblePlaces(newVisiblePlaces));
+      dispatch(setVisiblePlaces(newVisiblePlaces));
 
-    dispatch(setIsLoading(false));
+      dispatch(setIsLoading(false));
+    }
   }, 1000);
 
   const handleMoveStart = useDebouncedCallback(() => {
     if (isLoading === true) return;
 
-    dispatch(setIsLoading(true));
+    if (isSearchWhenMapMoving === true && isSidebarOpen === true) {
+      dispatch(setIsLoading(true));
+    }
   }, 100);
 
   useEffect(() => {
     if (!map) return;
 
-    if (isSidebarOpen === true) {
+    if (isSearchWhenMapMoving === true && isSidebarOpen === true) {
       map.on("moveend", handleMoveEnd);
       map.on("movestart", handleMoveStart);
     }
@@ -301,10 +308,28 @@ const Layers = ({ isShowWatchlist, categories }) => {
   if (iconsLoaded === false) return;
 
   return (
-    <Source id="places-source" type="geojson" data={placesLayer}>
-      <Layer {...layerStyle} />
-      <Layer {...labelLayerStyle} />
-    </Source>
+    <>
+      {/* <Source id="trail-source" type="geojson" data={trailData}>
+        <Layer
+          id="trail-line"
+          type="line"
+          source="trail-source"
+          layout={{
+            "line-join": "round",
+            "line-cap": "round",
+          }}
+          paint={{
+            "line-color": "#1A202C", // Kolor linii
+            "line-width": 3, // Szerokość linii
+            "line-dasharray": [2, 2], // Definiowanie przerywanej linii
+          }}
+        />
+      </Source> */}
+      <Source id="places-source" type="geojson" data={placesLayer}>
+        <Layer {...layerStyle} />
+        <Layer {...labelLayerStyle} />
+      </Source>
+    </>
   );
 };
 

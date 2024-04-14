@@ -17,9 +17,17 @@ const PlacesList = () => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxSources, setLightboxSources] = useState([]);
 
-  const { visiblePlaces } = useSelector((state) => state.map);
-  const { itemsList: places, observerRef } = useInfiniteScroll(
+  const {
+    places: allPlaces,
     visiblePlaces,
+    isSearchWhenMapMoving,
+  } = useSelector((state) => state.map);
+
+  // Conditionally choosing the dataset based on isSearchWhenMapMoving
+  const dataset = isSearchWhenMapMoving ? visiblePlaces : allPlaces;
+
+  const { itemsList: places, observerRef } = useInfiniteScroll(
+    dataset,
     placesPerPage
   );
 

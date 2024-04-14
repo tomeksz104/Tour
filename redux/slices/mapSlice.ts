@@ -9,6 +9,7 @@ interface MapState {
   places: Place[];
   isLoading: boolean;
   error: string | null;
+  isSearchWhenMapMoving: boolean;
 }
 
 interface RootState {
@@ -43,6 +44,7 @@ const mapSlice = createSlice({
     visiblePlaces: [],
     isLoading: false,
     isSidebarOpen: true,
+    isSearchWhenMapMoving: true,
     error: null,
   },
   reducers: {
@@ -54,6 +56,9 @@ const mapSlice = createSlice({
     },
     setIsSidebarOpen: (state, action: PayloadAction<any>) => {
       state.isSidebarOpen = action.payload;
+    },
+    toggleSearchWhenMapMoving: (state) => {
+      state.isSearchWhenMapMoving = !state.isSearchWhenMapMoving;
     },
     setVisiblePlaces: (state, action: PayloadAction<any[]>) => {
       state.visiblePlaces = action.payload;
@@ -84,6 +89,7 @@ export const {
   setIsLoading,
   toggleSidebar,
   setIsSidebarOpen,
+  toggleSearchWhenMapMoving,
   setVisiblePlaces,
 } = mapSlice.actions;
 export default mapSlice.reducer;
