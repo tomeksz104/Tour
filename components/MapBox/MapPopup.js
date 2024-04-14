@@ -1,35 +1,27 @@
-import {
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { PlacesContext } from "@/contexts/PlacesContext";
+import { memo, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-import { Source, Layer, Popup, useMap } from "react-map-gl";
+import { Popup, useMap } from "react-map-gl";
 import Image from "next/image";
 import Link from "next/link";
 
 import "./map.css";
 
 const MapPopup = memo(() => {
-  const { places } = useContext(PlacesContext);
+  const { places } = useSelector((state) => state.map);
   const { current: map } = useMap();
   const [popupInfo, setPopupInfo] = useState(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
 
   useEffect(() => {
-    // Event listener dla kliknięcia na warstwę
+    // Event listener for clicking on a layer
     if (map) {
       map.on("click", "places", (e) => {
-        const clickedId = e.features[0].properties.id; // Pobranie ID klikniętego miejsca
-        const placeData = places.find((place) => +place.id === +clickedId); // Znalezienie miejsca w kontekście PlacesContext
+        const clickedId = e.features[0].properties.id; // Retrieving the ID of the clicked location
+        const placeData = places.find((place) => +place.id === +clickedId); // Finding a place in the "places"
 
         if (placeData) {
-          setSelectedPlace(placeData); // Ustawienie wybranego miejsca
+          setSelectedPlace(placeData);
           setPopupInfo({
             ...e.features[0].properties,
             coordinates: e.lngLat,
@@ -37,7 +29,7 @@ const MapPopup = memo(() => {
         }
       });
 
-      // Usuń event listener przy odmontowywaniu
+      //  Remove event listener when unmounting
       return () => {
         if (map) {
           map.off("click", "places");
@@ -54,7 +46,7 @@ const MapPopup = memo(() => {
       map.on("mouseenter", "places", setPointerCursor);
       map.on("mouseleave", "places", setDefaultCursor);
 
-      // Oczyść zdarzenia przy czyszczeniu komponentu
+      // Clear events when cleaning a component
       return () => {
         map.off("mouseenter", "places", setPointerCursor);
         map.off("mouseleave", "places", setDefaultCursor);
