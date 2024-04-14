@@ -105,321 +105,72 @@ const Footer = () => {
               </a>
             </div>
           </div>
-          <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-sm font-semibold leading-6 text-white">
-                  Przeglądaj
-                </h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  <li>
-                    <Link
-                      href="/map"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                      aria-label="map"
-                    >
-                      🌍 Mapa atrakcji
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/place/new"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                      aria-label="Add place"
-                    >
-                      📌 Dodaj miejsce
-                    </Link>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Kontakt
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Regulamin
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      O nas
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Polityka prywatności
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="mt-10 md:mt-0">
-                <h3 className="text-sm font-semibold leading-6 text-white">
-                  Województwa
-                </h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  <li>
-                    <Link
-                      href="/map?province=1"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Dolnośląskie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=2"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Kujawsko-Pomorskie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=3"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Lubelskie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=4"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Lubuskie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=5"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Łódzkie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=6"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Małopolskie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=7"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Mazowieckie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=8"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Opolskie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=9"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Podkarpackie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=10"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Podlaskie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=11"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Pomorskie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=12"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Śląskie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=13"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Świętokrzyskie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=14"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Warmińsko-Mazurskie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=15"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Wielkopolskie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=16"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Zachodniopomorskie
-                    </Link>
-                  </li>
-                </ul>
-              </div>
+          <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0 justify-items-end">
+            <div>
+              <h3 className="text-sm font-semibold leading-6 text-white">
+                Szybki dostęp
+              </h3>
+              <ul role="list" className="mt-6 space-y-4">
+                <li>
+                  <Link
+                    href="/map"
+                    className="text-sm leading-6 text-gray-300 hover:text-white"
+                    aria-label="map"
+                  >
+                    🌍 Mapa atrakcji
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/place/new"
+                    className="text-sm leading-6 text-gray-300 hover:text-white"
+                    aria-label="Add place"
+                  >
+                    📌 Dodaj miejsce
+                  </Link>
+                </li>
+              </ul>
             </div>
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-sm font-semibold leading-6 text-white">
-                  Miasta
-                </h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  <li>
-                    <Link
-                      href="/map?province=6&city=1611"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Kraków
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=7&city=2068"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Warszawa
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=1&city=284"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Wrocław
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=5&city=1431"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Łódź
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=11&city=3154"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Gdańsk
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=15&city=4394"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Poznań
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=16&city=4775"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Szczecin
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=2&city=410"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Bydgoszcz
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=3&city=798"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Lublin
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?province=12&city=3391"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Katowice
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <div className="mt-10 md:mt-0">
-                <h3 className="text-sm font-semibold leading-6 text-white">
-                  Inne
-                </h3>
 
-                <ul role="list" className="mt-6 space-y-4">
-                  <li>
-                    <Link
-                      href="/map?placeType=Atrakcja"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Atrakcje
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?placeType=Nocleg"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Noclegi
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/map?placeType=Jedzenie"
-                      className="text-sm leading-6 text-gray-300 hover:text-white"
-                    >
-                      Jedzenie
-                    </Link>
-                  </li>
-                </ul>
-              </div>
+            <div className="mt-10 md:mt-0">
+              <h3 className="text-sm font-semibold leading-6 text-white">
+                Informacje
+              </h3>
+
+              <ul role="list" className="mt-6 space-y-4">
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm leading-6 text-gray-300 hover:text-white"
+                  >
+                    Kontakt
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm leading-6 text-gray-300 hover:text-white"
+                  >
+                    Regulamin
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm leading-6 text-gray-300 hover:text-white"
+                  >
+                    O nas
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm leading-6 text-gray-300 hover:text-white"
+                  >
+                    Polityka prywatności
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
