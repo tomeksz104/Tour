@@ -109,7 +109,7 @@ const SearchBar = ({ categories, provinces }) => {
             </Button>
           </div>
         </div>
-        <div className="flex flex-wrap items-center mt-5 gap-2">
+        {/* <div className="flex flex-wrap items-center mt-5 gap-2">
           <span className="relative font-semibold text-white">
             Lub wybierz typ miejsca:
             <div
@@ -134,7 +134,7 @@ const SearchBar = ({ categories, provinces }) => {
               </Link>
             </Button>
           ))}
-        </div>
+        </div> */}
       </div>
     </>
   );
