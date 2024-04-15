@@ -7,6 +7,8 @@ import { authOptions } from "@/lib/authOptions";
 import { getServerSession } from "next-auth";
 import { getPlacesByUserId } from "@/actions/getPlacesByUserId";
 
+export const dynamic = "force-dynamic";
+
 export default async function DemoPage() {
   const session = await getServerSession(authOptions);
   const places = await getPlacesByUserId(session.user.id);

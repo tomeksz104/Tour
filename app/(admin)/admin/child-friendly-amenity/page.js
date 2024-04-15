@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 
 import ChildFriendlyAmenities from "@/components/Admin/Sections/ChildFriendlyAmenities/ChildFriendlyAmenities";
 
+export const dynamic = "force-dynamic";
+
 const ChildFriendlyAmenitiesPage = async () => {
   const childFriendlyAmenities = await db.ChildFriendlyAmenity.findMany({
     orderBy: {

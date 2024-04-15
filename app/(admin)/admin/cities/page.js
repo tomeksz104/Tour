@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 
 import Cities from "@/components/Admin/Sections/Cities/Cities";
 
+export const dynamic = "force-dynamic";
+
 const CitiesPage = async () => {
   const cities = await db.city.findMany({
     orderBy: {

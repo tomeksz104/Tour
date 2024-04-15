@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 
 import Amenities from "@/components/Admin/Sections/Amenities/Amenities";
 
+export const dynamic = "force-dynamic";
+
 const AmenitiesPage = async () => {
   const amenities = await db.amenity.findMany({
     orderBy: {

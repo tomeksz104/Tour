@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 
 import Users from "@/components/Admin/Sections/Users/Users";
 
+export const dynamic = "force-dynamic";
+
 const UsersPage = async () => {
   const users = await db.user.findMany({
     orderBy: {

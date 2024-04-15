@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 
 import Topics from "@/components/Admin/Sections/Topics/Topics";
 
+export const dynamic = "force-dynamic";
+
 const TopicsPage = async () => {
   const topics = await db.topic.findMany({
     orderBy: {

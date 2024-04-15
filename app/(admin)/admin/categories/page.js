@@ -1,6 +1,8 @@
 import Categories from "@/components/Admin/Sections/Categories/Categories";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 const CategoriesPage = async () => {
   const categories = await db.category.findMany({
     orderBy: {

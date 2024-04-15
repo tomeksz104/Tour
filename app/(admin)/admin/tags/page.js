@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 
 import Tags from "@/components/Admin/Sections/Tags/Tags";
 
+export const dynamic = "force-dynamic";
+
 const TagsPage = async () => {
   const tags = await db.tag.findMany({
     orderBy: {

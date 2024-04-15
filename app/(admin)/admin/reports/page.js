@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 
 import Reports from "@/components/Admin/Sections/Reports/Reports";
 
+export const dynamic = "force-dynamic";
+
 const ReportsPage = async () => {
   const reports = await db.ErrorReport.findMany({
     orderBy: {
