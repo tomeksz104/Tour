@@ -1,21 +1,24 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { getSession, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-
 import LoginForm from "@/components/Auth/LoginForm";
 
-function Login() {
-  const router = useRouter();
+export const metadata = {
+  title: "Logowanie - WeekendowaWycieczka",
+  description: "Zaloguj się do swojego konta w WeekendowaWycieczka.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
-  useEffect(() => {
-    getSession().then((session) => {
-      if (session?.user?.email) {
-        router.push("/");
-      }
-    });
-  }, [router]);
+function Login() {
+  // const router = useRouter();
+
+  // useEffect(() => {
+  //   getSession().then((session) => {
+  //     if (session?.user?.email) {
+  //       router.push("/");
+  //     }
+  //   });
+  // }, [router]);
 
   return <LoginForm />;
 }

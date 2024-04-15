@@ -1,21 +1,24 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { getSession, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-
 import RegisterForm from "@/components/Auth/RegisterForm";
 
-function Register() {
-  const router = useRouter();
+export const metadata = {
+  title: "Rejestracja - WeekendowaWycieczka",
+  description: "Zarejestruj swoje konto w WeekendowaWycieczka.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
-  useEffect(() => {
-    getSession().then((session) => {
-      if (session?.user?.email) {
-        router.push("/");
-      }
-    });
-  }, [router]);
+function Register() {
+  // const router = useRouter();
+
+  // useEffect(() => {
+  //   getSession().then((session) => {
+  //     if (session?.user?.email) {
+  //       router.push("/");
+  //     }
+  //   });
+  // }, [router]);
 
   return <RegisterForm />;
 }

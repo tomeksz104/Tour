@@ -20,6 +20,38 @@ import { Role } from "@prisma/client";
 
 import { AtSign, Check, Phone, Link as LinkIcon } from "lucide-react";
 
+export async function generateMetadata({ params }, parent) {
+  const place = await getPlaceBySlug(params?.slug);
+
+  return {
+    title: place.title,
+    description: place.slug,
+    keywords: place.tags.map((tag) => tag.name).join(", "),
+    type: "article",
+    authors: place.user.firstName ? place.user.firstName : place.user.email,
+    robots: {
+      index: true,
+      follow: true,
+      nocache: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
+    openGraph: {
+      title: place.title,
+      images: [place.mainPhotoPath],
+      siteName: "Weekendowa Wycieczka",
+      images: [
+        {
+          url: place.mainPhotoPath,
+        },
+      ],
+      type: "article",
+      authors: place.user.firstName ? place.user.firstName : place.user.email,
+    },
+  };
+}
 export default async function PlaceDetailsPage({ params }) {
   // await new Promise((resolve) => setTimeout(resolve, 5000));
   const place = await getPlaceBySlug(params?.slug);

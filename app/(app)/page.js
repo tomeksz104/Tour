@@ -21,6 +21,34 @@ const Footer = dynamic(() => import("@/components/Footer"));
 
 import { getPlacesForCategories } from "@/actions/getPlacesForCategories";
 
+export const metadata = {
+  title: "WeekendowaWycieczka - Odkrywaj i planuj swoje podróże",
+  description:
+    "WeekendowaWycieczka to aplikacja turystyczna, która pomoże Ci odkrywać nowe miejsca, planować podróże i dzielić się wrażeniami z innymi podróżnikami.",
+  keywords:
+    "turystyka, podróże, przewodnik turystyczny, planowanie podróży, odkrywanie nowych miejsc, aplikacja do podróży, atrakcje turystyczne, atrakcje polski",
+  type: "website",
+  authors: "Tomasz Szamocki",
+  robots: {
+    index: true,
+    follow: true,
+    noarchive: false,
+  },
+  openGraph: {
+    title: "WeekendowaWycieczka - Odkrywaj i planuj swoje podróże",
+    description:
+      "WeekendowaWycieczka to aplikacja, która ułatwia odkrywanie nowych miejsc i planowanie podróży. Dołącz do naszej społeczności podróżników już dziś!",
+    images: [
+      {
+        url: "https://tour-tomeksz104.vercel.app/map-view.webp",
+      },
+    ],
+    type: "website",
+    url: "https://tour-tomeksz104.vercel.app",
+    siteName: "WeekendowaWycieczka",
+  },
+};
+
 export default async function Home() {
   const categories = await db.category.findMany();
   const categoriesWithPlaces = await getPlacesForCategories(categories);
@@ -59,7 +87,7 @@ export default async function Home() {
         <div className="container relative mx-auto w-full px-4 sm:px-6 lg:px-8 ">
           <div className="text-center">
             <h1 className="font-bold text-white lg:leading-normal leading-normal text-4xl lg:text-6xl mb-6 mt-5">
-              Niech rozpocznie się podróż...
+              Każde miejsce to nowa przygoda...
             </h1>
             {/* <p className="text-white/70 text-xl max-w-xl mx-auto">
               Marzysz o niezapomnianym wypadzie? Zorganizujemy Twoją wycieczkę z
@@ -74,7 +102,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="relative bg-green-500 mb-16 py-10 md:pb-0 lg:pt-0">
+      <section className="relative bg-green-600 mb-16 py-10 md:pb-0 lg:pt-0">
         <Image
           className="hidden md:flex absolute left-0 top-0 h-full w-full object-cover opacity-20"
           width="1257"
@@ -185,8 +213,8 @@ export default async function Home() {
           <div className="flex justify-center mt-12 xl:mt-14">
             <Button
               asChild
-              className="relative rounded-full bg-green-600 hover:bg-green-500 font-semibold h-12 px-10
-              before:absolute before:inset-0 before:rounded-full before:bg-green-600 hover:before:bg-green-500 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95"
+              className="relative rounded-full bg-green-600 hover:bg-green-600 font-semibold h-12 px-10
+              before:absolute before:inset-0 before:rounded-full before:bg-green-600 hover:before:bg-green-600 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95"
             >
               <Link href={"/map"}>
                 <span className="relative flex items-center font-semibold text-white">
