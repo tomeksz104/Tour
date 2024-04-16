@@ -2,6 +2,7 @@ import { writeFile, unlink } from "fs/promises";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import mime from "mime";
+import { put, del } from "@vercel/blob";
 
 export async function uploadFile(data: any, formField: any, savePath: string) {
   const file = data.get(formField);
@@ -25,17 +26,26 @@ export async function uploadFile(data: any, formField: any, savePath: string) {
 
   const generatedFileName = `${uuidv4()}.${fileExtension}`;
 
-  const path = `${savePath}${generatedFileName}`;
+  // const path = `${savePath}${generatedFileName}`;
 
-  await writeFile(path, buffer);
+  // await writeFile(path, buffer);
 
-  const filePathWithoutPublic = path.replace("public/", "");
+  // const filePathWithoutPublic = path.replace("public/", "");
+
+  const { url } = await put(file.name, file, {
+    access: "public",
+  });
+
+  return {
+    success: false,
+    filePath: url,
+  };
 
   // Return the path of the saved file
-  return {
-    success: true,
-    filePath: `/${filePathWithoutPublic}`,
-  };
+  // return {
+  //   success: true,
+  //   filePath: `/${filePathWithoutPublic}`,
+  // };
 }
 
 export async function deleteFile(fileUrl: any) {
@@ -43,7 +53,8 @@ export async function deleteFile(fileUrl: any) {
 
   try {
     // Delete file
-    await unlink(fullPath);
+    await del(fileUrl);
+    // await unlink(fullPath);
     console.log(`Deleted file at: ${fullPath}`);
 
     return { success: true };

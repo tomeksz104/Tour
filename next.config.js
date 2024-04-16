@@ -32,11 +32,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
-      },
-      {
-        protocol: "http",
-        hostname: "**",
+        hostname: "hwupdikt7zplxxtb.public.blob.vercel-storage.com",
+        port: "",
       },
     ],
   },

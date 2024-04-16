@@ -7,7 +7,8 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/seed.js",
+    "build-export": "next build && next export"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -33,6 +34,8 @@
     "@tinymce/tinymce-react": "^4.3.2",
     "@types/mapbox-gl": "^3.1.0",
     "@uploadthing/react": "^6.1.0",
+    "@vercel/blob": "^0.22.1",
+    "@vercel/speed-insights": "^1.0.10",
     "autoprefixer": "10.4.14",
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",

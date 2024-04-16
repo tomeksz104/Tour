@@ -1,6 +1,8 @@
 import { Suspense, lazy } from "react";
-import { ConfirmContextProvider } from "@/contexts/ConfirmContext";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 import { PlacesContextProvider } from "@/contexts/PlacesContext";
+import { ConfirmContextProvider } from "@/contexts/ConfirmContext";
 import { WatchlistContextProvider } from "@/contexts/WatchlistContext";
 import { LocateContextProvider } from "@/contexts/LocateContext";
 
@@ -36,26 +38,25 @@ export default function RootLayout({ children }) {
           <ReduxProvider>
             <WatchlistContextProvider>
               <LocateContextProvider>
-                <PlacesContextProvider>
-                  <ConfirmContextProvider>
-                    <Suspense fallback={<></>}>
-                      <Toaster />
-                    </Suspense>
+                <ConfirmContextProvider>
+                  <Suspense fallback={<></>}>
+                    <Toaster />
+                  </Suspense>
 
-                    <div className="flex h-screen flex-col">
-                      <Navigation />
-                      {children}
-                    </div>
+                  <div className="flex h-screen flex-col">
+                    <Navigation />
+                    {children}
+                  </div>
 
-                    <Suspense fallback={<></>}>
-                      <ConfirmDialog />
-                    </Suspense>
-                  </ConfirmContextProvider>
-                </PlacesContextProvider>
+                  <Suspense fallback={<></>}>
+                    <ConfirmDialog />
+                  </Suspense>
+                </ConfirmContextProvider>
               </LocateContextProvider>
             </WatchlistContextProvider>
           </ReduxProvider>
         </Provider>
+        <SpeedInsights />
         <div id="fslightbox"></div>
       </body>
     </html>
