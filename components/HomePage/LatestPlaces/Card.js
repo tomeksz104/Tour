@@ -148,7 +148,7 @@ const Card = ({ place, onOpenLightbox }) => {
               <Button
                 onClick={handleFlyToPlace}
                 variant="secondary"
-                className="rounded-full h-8 w-8 p-1 hover:bg-green-500 hover:text-white"
+                className="rounded-full h-8 w-8 p-1 hover:bg-green-600 hover:text-white"
                 aria-label="Pokaż na mapie"
               >
                 <ZoomIn strokeWidth={2.5} size={16} />
@@ -156,7 +156,7 @@ const Card = ({ place, onOpenLightbox }) => {
               <Button
                 onClick={onOpenLightbox}
                 variant="secondary"
-                className="rounded-full h-8 w-8 p-1 hover:bg-green-500 hover:text-white"
+                className="rounded-full h-8 w-8 p-1 hover:bg-green-600 hover:text-white"
                 aria-label="Galeria zdjęć"
               >
                 <Camera strokeWidth={2.5} size={16} />

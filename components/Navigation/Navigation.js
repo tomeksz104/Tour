@@ -87,14 +87,14 @@ const Navigation = () => {
                         <div
                           className={`relative before:absolute before:-bottom-2 md:before:-bottom-5 before:w-full before:mt-auto ${
                             currentRoute === menuItem.url
-                              ? "text-green-600 before:h-0.5 before:mx-auto before:rounded-full before:bg-green-500"
-                              : "text-gray-600 before:h-0.5 before:origin-left before:rounded-full before:bg-green-500 before:transition before:scale-x-0 group-hover:before:scale-x-100"
+                              ? "text-green-600 before:h-0.5 before:mx-auto before:rounded-full before:bg-green-600"
+                              : "text-gray-600 before:h-0.5 before:origin-left before:rounded-full before:bg-green-600 before:transition before:scale-x-0 group-hover:before:scale-x-100"
                           }`}
                         >
                           <span
                             className={`${
                               currentRoute !== menuItem.url &&
-                              "group-hover:text-green-500"
+                              "group-hover:text-green-600"
                             }`}
                           >
                             {menuItem.name}
@@ -111,7 +111,7 @@ const Navigation = () => {
 
             {!session?.user && (
               <div className="relative inline-block text-left dropdown z-10">
-                <button className="inline-flex items-center rounded-full hover:ring-green-500 focus:ring-green-500 focus:ring-offset-4 ring-1 ring-transparent transition-all duration-300 hover:ring-offset-4">
+                <button className="inline-flex items-center rounded-full hover:ring-green-600 focus:ring-green-600 focus:ring-offset-4 ring-1 ring-transparent transition-all duration-300 hover:ring-offset-4">
                   <span className="h-9 w-9 rounded-full overflow-hidden">
                     <Image
                       src="/images/user-avatar.png"

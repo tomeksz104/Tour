@@ -16,7 +16,7 @@ const ExploreCategory = ({ categories, categoriesWithPlaces, provinces }) => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20 my-20">
         <div className="flex flex-col md:flex-row mb-5 md:mb-0">
           <div className="basis-2/3">
-            <p className="text-center md:text-left tracking-widest text-sm text-green-500 font-bold">
+            <p className="text-center md:text-left tracking-widest text-sm text-green-600 font-bold">
               ODKRYJ KATEGORIE
             </p>
             <h3 className="text-center md:text-left text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl font-extrabold leading-tight md:leading-tight lg:leading-tight 2xl:leading-tight pt-5 mb-10">

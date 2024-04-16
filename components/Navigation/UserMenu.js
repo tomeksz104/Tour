@@ -27,7 +27,7 @@ const UserMenu = ({ user }) => {
 
   return (
     <div className="relative inline-block text-left dropdown z-10">
-      <button className="inline-flex items-center rounded-full hover:ring-green-500 focus:ring-green-500 focus:ring-offset-4 ring-1 ring-transparent transition-all duration-300 hover:ring-offset-4">
+      <button className="inline-flex items-center rounded-full hover:ring-green-600 focus:ring-green-600 focus:ring-offset-4 ring-1 ring-transparent transition-all duration-300 hover:ring-offset-4">
         <span className="h-9 w-9 bg-gray-100 rounded-full overflow-hidden">
           <Image
             src={user.image ? user.image : "/images/user-avatar.png"}

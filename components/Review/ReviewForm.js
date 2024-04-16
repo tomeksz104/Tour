@@ -101,7 +101,10 @@ const ReviewForm = ({
               </p>
             </div>
 
-            <Button onClick={handleCommentButtonCliked} className={`text-sm`}>
+            <Button
+              onClick={handleCommentButtonCliked}
+              className={`bg-green-600 hover:bg-green-500 text-sm`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

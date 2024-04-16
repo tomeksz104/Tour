@@ -56,7 +56,7 @@ const Card = ({ place, category, province, onOpenLightbox }) => {
       <h3 className="mt-3 text-lg font-semibold leading-6 text-white">
         <Link
           href={getPlaceUrl(place.slug)}
-          className="group-hover:text-green-500"
+          className="group-hover:text-green-600"
         >
           {place.title}
         </Link>
@@ -67,7 +67,7 @@ const Card = ({ place, category, province, onOpenLightbox }) => {
         <div className="space-x-2 mt-2">
           <Button
             variant="secondary"
-            className="bg-transparent group-hover:bg-white/10 group-hover:hover:bg-green-500 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-white "
+            className="bg-transparent group-hover:bg-white/10 group-hover:hover:bg-green-600 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-white "
             aria-label="Pokaż na mapie"
           >
             <ZoomIn strokeWidth={1.75} size={14} />
@@ -75,7 +75,7 @@ const Card = ({ place, category, province, onOpenLightbox }) => {
           <Button
             onClick={onOpenLightbox}
             variant="secondary"
-            className="bg-transparent group-hover:bg-white/10 group-hover:hover:bg-green-500 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-white"
+            className="bg-transparent group-hover:bg-white/10 group-hover:hover:bg-green-600 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-white"
             aria-label="Galeria zdjęć"
           >
             <Camera strokeWidth={1.75} size={14} />

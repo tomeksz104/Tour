@@ -102,7 +102,7 @@ const SearchBar = ({ categories, provinces }) => {
             </Select>
             <Button
               onClick={handleRedirectToMapWithParams}
-              className="w-full mt-3 lg:mt-0 ml-3 bg-green-500 hover:bg-green-600 font-bold text-md h-12 px-10"
+              className="w-full mt-3 lg:mt-0 ml-3 bg-green-600 hover:bg-green-600 font-bold text-md h-12 px-10"
             >
               <Search size={18} className="mr-3" />
               Szukaj
