@@ -1,8 +1,8 @@
 import LoginForm from "@/components/Auth/LoginForm";
 
 export const metadata = {
-  title: "Logowanie - WeekendowaWycieczka",
-  description: "Zaloguj się do swojego konta w WeekendowaWycieczka.",
+  title: "Logowanie - ZnajdźAtrakcje",
+  description: "Zaloguj się do swojego konta w ZnajdźAtrakcje",
   robots: {
     index: false,
     follow: false,

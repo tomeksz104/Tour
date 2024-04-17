@@ -12,7 +12,7 @@ const MapContainer = dynamicImport(
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Przeglądaj Mapę Atrakcji - WeekendowaWycieczka",
+  title: "Przeglądaj Mapę Atrakcji - ZnajdźAtrakcje",
   description:
     "Odkrywaj i planuj swoje wizyty w najciekawszych miejscach dzięki naszej interaktywnej mapie atrakcji. Znajdź lokalizacje, godziny otwarcia i wiele więcej.",
   keywords:
@@ -22,7 +22,7 @@ export const metadata = {
     follow: true,
   },
   openGraph: {
-    title: "Przeglądaj Mapę Atrakcji - WeekendowaWycieczka",
+    title: "Przeglądaj Mapę Atrakcji - ZnajdźAtrakcje",
     description:
       "Odkrywaj i planuj swoje wizyty w najciekawszych miejscach dzięki naszej interaktywnej mapie atrakcji. Znajdź lokalizacje, godziny otwarcia i wiele więcej.",
     images: [
@@ -32,7 +32,7 @@ export const metadata = {
     ],
     type: "website",
     url: "https://tour-tomeksz104.vercel.app/map",
-    siteName: "WeekendowaWycieczka",
+    siteName: "ZnajdźAtrakcje",
   },
 };
 

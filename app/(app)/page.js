@@ -22,9 +22,9 @@ const Footer = dynamic(() => import("@/components/Footer"));
 import { getPlacesForCategories } from "@/actions/getPlacesForCategories";
 
 export const metadata = {
-  title: "WeekendowaWycieczka - Odkrywaj i planuj swoje podróże",
+  title: "ZnajdźAtrakcje - Odkrywaj i planuj swoje podróże",
   description:
-    "WeekendowaWycieczka to aplikacja turystyczna, która pomoże Ci odkrywać nowe miejsca, planować podróże i dzielić się wrażeniami z innymi podróżnikami.",
+    "ZnajdźAtrakcje to aplikacja turystyczna, która pomoże Ci odkrywać nowe miejsca, planować podróże i dzielić się wrażeniami z innymi podróżnikami.",
   keywords:
     "turystyka, podróże, przewodnik turystyczny, planowanie podróży, odkrywanie nowych miejsc, aplikacja do podróży, atrakcje turystyczne, atrakcje polski",
   type: "website",
@@ -35,9 +35,9 @@ export const metadata = {
     noarchive: false,
   },
   openGraph: {
-    title: "WeekendowaWycieczka - Odkrywaj i planuj swoje podróże",
+    title: "ZnajdźAtrakcje - Odkrywaj i planuj swoje podróże",
     description:
-      "WeekendowaWycieczka to aplikacja, która ułatwia odkrywanie nowych miejsc i planowanie podróży. Dołącz do naszej społeczności podróżników już dziś!",
+      "ZnajdźAtrakcje to aplikacja, która ułatwia odkrywanie nowych miejsc i planowanie podróży. Dołącz do naszej społeczności podróżników już dziś!",
     images: [
       {
         url: "https://tour-tomeksz104.vercel.app/map-view.webp",
@@ -45,7 +45,7 @@ export const metadata = {
     ],
     type: "website",
     url: "https://tour-tomeksz104.vercel.app",
-    siteName: "WeekendowaWycieczka",
+    siteName: "ZnajdźAtrakcje",
   },
 };
 
@@ -78,7 +78,7 @@ export default async function Home() {
           width="1920"
           height="865"
           sizes="(max-width: 768px) 70vw, 100vw"
-          src="/images/bg-hero-1.jpg"
+          src="/images/bg-hero.png"
           className="absolute inset-0 w-full h-full object-cover"
           alt="hero image"
         />
@@ -117,7 +117,7 @@ export default async function Home() {
               height="440"
               src="/images/image-album.png"
             />
-            <div className="w-[175px] h-[175px] hidden lg:block">
+            {/* <div className="w-[175px] h-[175px] hidden lg:block">
               <div className="relative mx-auto max-w-[175px]">
                 <div className="box-border	">
                   <svg
@@ -149,7 +149,7 @@ export default async function Home() {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="flex flex-col font-primary space-y-3">
               <h2 className="text-3xl lg:text-4xl font-bold text-white">
                 Znajdź coś w pobliżu

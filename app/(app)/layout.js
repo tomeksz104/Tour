@@ -24,8 +24,9 @@ import "./globals.css";
 import ReduxProvider from "@/redux/Provider";
 
 export const metadata = {
-  title: "Tour",
-  description: "Find unique places to visit.",
+  title: "ZnajdźAtrakcje - Odkrywaj i planuj swoje podróże",
+  description:
+    "ZnajdźAtrakcje to aplikacja turystyczna, która pomoże Ci odkrywać nowe miejsca, planować podróże i dzielić się wrażeniami z innymi podróżnikami.",
 };
 
 export default function RootLayout({ children }) {

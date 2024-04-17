@@ -1,8 +1,8 @@
 import RegisterForm from "@/components/Auth/RegisterForm";
 
 export const metadata = {
-  title: "Rejestracja - WeekendowaWycieczka",
-  description: "Zarejestruj swoje konto w WeekendowaWycieczka.",
+  title: "Rejestracja - ZnajdźAtrakcje",
+  description: "Zarejestruj swoje konto w ZnajdźAtrakcje",
   robots: {
     index: false,
     follow: false,

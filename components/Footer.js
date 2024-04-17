@@ -31,7 +31,7 @@ const Footer = () => {
               nowy sposób. Z nami każdy weekend może stać się niezapomnianą
               przygodą. Zacznij odkrywać już dziś!
             </p>
-            <div className="flex space-x-6">
+            {/* <div className="flex space-x-6">
               <a href="#" className="text-gray-500 hover:text-gray-400">
                 <span className="sr-only">Facebook</span>
                 <svg
@@ -103,7 +103,7 @@ const Footer = () => {
                   />
                 </svg>
               </a>
-            </div>
+            </div> */}
           </div>
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0 justify-items-end">
             <div>
@@ -176,7 +176,7 @@ const Footer = () => {
         </div>
         <div className="mt-12 border-t border-white/10 pt-8 ">
           <p className="text-xs leading-5 text-gray-400">
-            &copy; 2024 Tour - All rights reserved.
+            &copy; 2024 ZnajdzAtrakcje.pl - All rights reserved.
           </p>
         </div>
       </div>
