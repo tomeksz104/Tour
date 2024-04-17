@@ -2,6 +2,8 @@ import { getPlaceById } from "@/actions/getPlaceById";
 import PlaceForm from "@/components/PlaceManagement/PlaceForm";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export default async function UpdatePlace({ params }) {
   const place = await getPlaceById(params?.id);
 

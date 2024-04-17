@@ -1,6 +1,8 @@
 import PlaceForm from "@/components/PlaceManagement/PlaceForm";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export default async function CreatePlace() {
   const categories = await db.category.findMany();
   const tags = await db.tag.findMany();
