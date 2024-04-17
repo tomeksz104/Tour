@@ -33,7 +33,7 @@ export const statusEnglishToPolish = {
   PENDING_PAYMENT: "Oczekiwanie na płatność",
 };
 
-const statusToColor = {
+export const statusToColor = {
   PUBLISHED: "#17d33d", // Green
   IN_MODERATION: "#f7b731", // Yellow
   REJECTED: "#eb3b5a", // Red

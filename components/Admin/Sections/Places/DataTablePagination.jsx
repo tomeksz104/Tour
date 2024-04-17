@@ -1,6 +1,7 @@
 import { Table } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 import {
   ChevronLeft,
@@ -15,6 +16,7 @@ export function DataTablePagination({ table }) {
       <div className="flex text-sm text-muted-foreground">
         {table.getFilteredRowModel().rows.length} wierszy
       </div>
+
       <div className="flex items-center space-x-2">
         <Button
           variant="outline"
@@ -36,6 +38,18 @@ export function DataTablePagination({ table }) {
           {/* <ChevronLeftIcon className="h-4 w-4" /> */}
           <ChevronLeft className="h-4 w-4" />
         </Button>
+
+        <Input
+          type="number"
+          placeholder="0"
+          defaultValue={table.getState().pagination.pageIndex + 1}
+          onChange={(e) => {
+            const page = e.target.value ? Number(e.target.value) - 1 : 0;
+            table.setPageIndex(page);
+          }}
+          className="h-8 w-16"
+        />
+
         <Button
           variant="outline"
           className="h-8 w-8 p-0"

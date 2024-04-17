@@ -34,6 +34,7 @@ export function DataTable({ columns, data, filterColumn }) {
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+
     state: {
       columnFilters,
     },
