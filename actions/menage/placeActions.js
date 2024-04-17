@@ -188,7 +188,7 @@ export async function createPlace(prevState, formData) {
     if (mainPhotoPath.error) {
       return {
         success: false,
-        message: "Przesłane zdjęcie główne nie jest obrazem.",
+        message: mainPhotoPath.error,
       };
     }
   }
@@ -205,7 +205,7 @@ export async function createPlace(prevState, formData) {
     if (galleryImagePath.error) {
       return {
         success: false,
-        message: "Przesłane zdjęcia w galerii nie są obrazami.",
+        message: galleryImagePath.error,
       };
     }
 
@@ -383,7 +383,7 @@ export async function updatePlace(placeId, state, formData) {
     if (mainPhotoPath.error) {
       return {
         success: false,
-        message: "Przesłane zdjęcie główne nie jest obrazem.",
+        message: mainPhotoPath.error,
       };
     }
   } else if (formFileData.get(`file`) === null && existingPlace.mainPhotoPath) {
@@ -405,7 +405,7 @@ export async function updatePlace(placeId, state, formData) {
       if (galleryImagePath.error) {
         return {
           success: false,
-          message: "Przesłane zdjęcia w galerii nie są obrazami.",
+          message: galleryImagePath.error,
         };
       }
 
