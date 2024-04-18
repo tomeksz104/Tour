@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 
 import { PlacesContextProvider } from "@/contexts/PlacesContext";
 import { ConfirmContextProvider } from "@/contexts/ConfirmContext";
@@ -47,6 +48,7 @@ export default function RootLayout({ children }) {
                   <div className="flex h-screen flex-col">
                     <Navigation />
                     {children}
+                    <Analytics />
                   </div>
 
                   <Suspense fallback={<></>}>
