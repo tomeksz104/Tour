@@ -14,14 +14,14 @@ const Card = ({ selectedCategory, category, onChange }) => {
     <div
       onClick={() => onChange(category.id)}
       className={`h-full flex items-center bg-white rounded-md p-5 gap-3 border ${
-        selectedCategory === category.id - 1
+        selectedCategory === category.id
           ? "border-green-600"
           : "border-gray-300"
       } group cursor-pointer`}
     >
       <div
         className={`bg-gray-200 rounded-full p-5  ${
-          selectedCategory === category.id - 1
+          selectedCategory === category.id
             ? "bg-green-600 text-white "
             : "group-hover:bg-green-600  group-hover:text-white"
         } transition duration-300 transition duration-300`}

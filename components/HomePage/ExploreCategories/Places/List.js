@@ -68,7 +68,7 @@ const PlacesList = ({ selectedCategory, categoriesWithPlaces, provinces }) => {
               <Card
                 place={place}
                 category={categoriesWithPlaces[selectedCategory].category}
-                province={provinces[place.categoryId].name}
+                province={provinces[place.provinceId - 1].name}
                 onOpenLightbox={() => handleOpenLightbox(place)}
               />
             </SwiperSlide>
