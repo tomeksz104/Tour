@@ -182,7 +182,7 @@ const Layers = ({ isShowWatchlist, categories }) => {
         coordinates: [place.longitude, place.latitude],
       },
     }));
-  }, [places, searchParams, isShowWatchlist, dispatch]);
+  }, [places, searchParams, isShowWatchlist, dispatch, locateCtx.coordinates]);
 
   const placesLayer = useMemo(() => {
     const features = generateFeatures();
@@ -193,7 +193,7 @@ const Layers = ({ isShowWatchlist, categories }) => {
     };
 
     return collection;
-  }, [places, map, searchParams, isShowWatchlist]);
+  }, [places, map, searchParams, isShowWatchlist, locateCtx.coordinates]);
 
   useEffect(() => {
     if (filteredPlaces.length > 0 && isSidebarOpen === true) {
