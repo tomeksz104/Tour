@@ -21,6 +21,7 @@ import ContactSection from "./Sections/ContactSection";
 import LocationSection from "./Sections/LocationSection";
 import OpeningHours from "./Sections/OpeningHours";
 import ImagesSection from "./Sections/ImagesSection";
+import SocialMediaSection from "./Sections/SocialMediaSection";
 
 import { transformOpeningHoursToObject } from "@/utils/transformOpeningHoursToObject";
 import { initializeWeekDays } from "@/utils/openingHours";
@@ -44,6 +45,7 @@ const PlaceForm = ({
   cities,
   childAmenites,
   amenities,
+  socialMediaPlatforms,
 }) => {
   const { confirm } = useConfirm();
   useSession({
@@ -83,6 +85,11 @@ const PlaceForm = ({
       openingHours: place?.openingHours
         ? transformOpeningHoursToObject(place.openingHours)
         : initializeWeekDays(),
+      socialMediaLinks:
+        place?.socialMedia?.map((social) => ({
+          link: social.link,
+          platformId: social.platformId,
+        })) || [],
     },
   });
 
@@ -145,6 +152,7 @@ const PlaceForm = ({
         );
       });
     }
+    console.log(data);
 
     dispatch({ ...data, fileData });
   }
@@ -308,6 +316,30 @@ const PlaceForm = ({
                   galleryImages={galleryImages}
                   handleGalleryImageChange={handleGalleryImageChange}
                   handleRemoveGalleryImage={handleRemoveGalleryImage}
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue="item-6"
+            className="my-5"
+          >
+            <AccordionItem value="item-1" className="bg-white rounded-md">
+              <AccordionTrigger className="px-5 hover:no-underline group">
+                <div className="flex items-center space-x-2">
+                  <div className="group-hover:underline">Social Media</div>
+                  <span className="text-gray-500 text-xs italic font-normal hover:no-underline">
+                    (Opcjonalne)
+                  </span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="border-t">
+                <SocialMediaSection
+                  form={form}
+                  socialMediaPlatforms={socialMediaPlatforms}
                 />
               </AccordionContent>
             </AccordionItem>

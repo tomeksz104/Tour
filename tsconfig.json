@@ -47,6 +47,13 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "components/User/Sections/UserPlaces/DataTablePerPage.jsx",
+    "components/User/Sections/UserPlaces/DataTablePagination.jsx"
+  ],
   "exclude": ["node_modules"]
 }

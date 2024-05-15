@@ -153,8 +153,10 @@ model PlaceSocialMedia {
   link       String
   placeId    Int
   platformId Int
-  place      Place               @relation(fields: [placeId], references: [id])
-  platform   SocialMediaPlatform @relation(fields: [platformId], references: [id])
+  place      Place               @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  platform   SocialMediaPlatform @relation(fields: [platformId], references: [id], onDelete: Cascade)
+
+  @@unique([placeId, platformId], name: "placeId_platformId")
 }
 
 model UserSocialMedia {

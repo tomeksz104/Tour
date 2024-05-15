@@ -15,11 +15,16 @@ export async function uploadFile(data: any, formField: any, savePath: string) {
 
   // Check if the file is an image (MIME type starts with "image/")
   if (!fileType || !fileType.startsWith("image/")) {
-    return { error: "Uploaded file is not an image" };
+    return { error: "Przesłany plik nie jest obrazem" };
   }
 
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
+  const MAX_FILE_SIZE = 4.5 * 1024 * 1024; // 4.5 MB in bytes
+  if (file.size > MAX_FILE_SIZE) {
+    return { error: "Rozmiar pliku przekracza maksymalny limit 4,5 MB" };
+  }
+
+  // const bytes = await file.arrayBuffer();
+  // const buffer = Buffer.from(bytes);
 
   const originalFileName = file.name;
   const fileExtension = originalFileName.split(".").pop();
@@ -37,7 +42,7 @@ export async function uploadFile(data: any, formField: any, savePath: string) {
   });
 
   return {
-    success: false,
+    success: true,
     filePath: url,
   };
 

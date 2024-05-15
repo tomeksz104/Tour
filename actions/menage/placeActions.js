@@ -38,6 +38,19 @@ const openingHoursSchema = z
   })
   .optional();
 
+const socialMediaLinkSchema = z.object({
+  platformId: z.coerce.number().int().min(1, {
+    message:
+      "Identyfikator platformy musi być poprawnym numerem całkowitym większym od 0.",
+  }),
+  link: z
+    .string()
+    .url({ message: "Link musi być prawidłowym adresem URL." })
+    .nullable()
+    .optional()
+    .or(z.literal("")),
+});
+
 const FormSchema = z.object({
   type: z.nativeEnum(PlaceType, {
     errorMap: () => {
@@ -111,7 +124,8 @@ const FormSchema = z.object({
   website: z.string().url().nullable().optional().or(z.literal("")),
   address: z.string().nullable().optional().or(z.literal("")),
   slogan: z.string().optional().or(z.literal("")),
-
+  //socialMediaLinks: z.array(z.string()).nullable().optional(),
+  socialMediaLinks: z.array(socialMediaLinkSchema).optional(),
   amenities: z.array(z.number().int()).nullable().optional(),
   childFriendly: z.coerce.boolean().optional(),
   childAmenites: z.array(z.number().int()).nullable().optional(),
@@ -159,7 +173,7 @@ export async function createPlace(prevState, formData) {
     website: formData.website,
     address: formData.address,
     slogan: formData.slogan,
-
+    socialMediaLinks: formData.socialMediaLinks,
     amenities: formData.amenities,
     childFriendly: +formData.childFriendly,
     childAmenites: formData.childAmenites,
@@ -291,7 +305,55 @@ export async function createPlace(prevState, formData) {
       };
     }
 
-    await db.place.create({ data: dataToCreate });
+    const createdPlace = await db.place.create({ data: dataToCreate });
+
+    if (dataFields.socialMediaLinks) {
+      for (const linkData of dataFields.socialMediaLinks) {
+        const { link, platformId } = linkData;
+
+        if (link && !isNaN(platformId)) {
+          await db.placeSocialMedia
+            .upsert({
+              where: {
+                placeId_platformId: {
+                  placeId: createdPlace.id,
+                  platformId: platformId,
+                },
+              },
+              update: {
+                link: link,
+              },
+              create: {
+                placeId: createdPlace.id,
+                platformId: platformId,
+                link: link,
+              },
+            })
+            .catch((error) => {
+              console.error(
+                "Wystąpił błąd podczas dodawania social mediów:",
+                error
+              );
+            });
+        } else if (!link) {
+          await db.placeSocialMedia
+            .delete({
+              where: {
+                placeId_platformId: {
+                  placeId: createdPlace.id,
+                  platformId: platformId,
+                },
+              },
+            })
+            .catch((error) => {
+              console.error(
+                "Wystąpił błąd podczas usuwania social mediów:",
+                error
+              );
+            });
+        }
+      }
+    }
 
     return {
       success: true,
@@ -349,7 +411,7 @@ export async function updatePlace(placeId, state, formData) {
     website: formData.website || undefined,
     address: formData.address || undefined,
     slogan: formData.slogan || undefined,
-
+    socialMediaLinks: formData.socialMediaLinks,
     amenities: formData.amenities,
     childFriendly: +formData.childFriendly,
     childAmenites: formData.childAmenites,
@@ -360,6 +422,7 @@ export async function updatePlace(placeId, state, formData) {
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
     return {
       success: false,
       errors: validatedFields.error.flatten().fieldErrors,
@@ -589,6 +652,53 @@ export async function updatePlace(placeId, state, formData) {
       where: { id: placeId },
       data: dataToCreate,
     });
+
+    if (dataFields.socialMediaLinks) {
+      for (const linkData of dataFields.socialMediaLinks) {
+        const { link, platformId } = linkData;
+        console.log("AKTUALIZACJA SOCIAL MEDO");
+
+        if (link && !isNaN(platformId)) {
+          const result = await db.placeSocialMedia
+            .upsert({
+              where: {
+                placeId_platformId: {
+                  placeId: placeId,
+                  platformId: platformId,
+                },
+              },
+              update: {
+                link: link,
+              },
+              create: {
+                placeId: placeId,
+                platformId: platformId,
+                link: link,
+              },
+            })
+            .catch((error) => {
+              console.error(
+                "Wystąpił błąd podczas aktualizacji social mediów:",
+                error
+              );
+            });
+        } else if (!link) {
+          console.log("USUWANIE");
+          await db.placeSocialMedia
+            .delete({
+              where: {
+                placeId_platformId: {
+                  placeId: placeId,
+                  platformId: platformId,
+                },
+              },
+            })
+            .catch((error) => {
+              console.error("Wystąpił błąd usuwania social mediów", error);
+            });
+        }
+      }
+    }
 
     return {
       success: true,

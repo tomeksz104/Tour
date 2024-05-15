@@ -64,6 +64,8 @@ export default async function PlaceDetailsPage({ params }) {
   let gallery = [{ url: place.mainPhotoPath, accepted: true }, ...place.photos];
   gallery = gallery.filter((item) => item.accepted !== false);
 
+  console.log(place.description);
+
   return (
     <>
       <div className="w-full h-56 sm:h-[480px]">
@@ -115,7 +117,7 @@ export default async function PlaceDetailsPage({ params }) {
               </h2>
 
               <div
-                className="prose text-gray-700"
+                className="editorJs prose text-gray-700"
                 dangerouslySetInnerHTML={{ __html: place.description }}
               ></div>
             </div>

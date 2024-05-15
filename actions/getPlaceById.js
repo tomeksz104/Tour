@@ -14,6 +14,7 @@ export async function getPlaceById(id) {
       user: true,
       category: true,
       amenities: true,
+      socialMedia: true,
     },
   });
 }

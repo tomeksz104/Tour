@@ -15,7 +15,7 @@ import YoutubeIcon from "@/public/youtube.svg";
 import { updateSocialMediaLinks } from "@/utils/socialMediaHelper";
 import { RotateCw } from "lucide-react";
 
-const icons = {
+export const icons = {
   Facebook: <FacebookIcon className="w-4 h-4" />,
   Instagram: <InstagramIcon className="w-4 h-4" />,
   Twitter: <TwitterIcon className="w-4 h-4" />,

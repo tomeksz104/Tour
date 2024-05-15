@@ -11,6 +11,7 @@ export default async function CreatePlace() {
   const cities = await db.city.findMany();
   const childAmenites = await db.ChildFriendlyAmenity.findMany();
   const amenities = await db.amenity.findMany();
+  const socialMediaPlatforms = await db.SocialMediaPlatform.findMany();
 
   return (
     <PlaceForm
@@ -22,6 +23,7 @@ export default async function CreatePlace() {
       cities={cities}
       childAmenites={childAmenites}
       amenities={amenities}
+      socialMediaPlatforms={socialMediaPlatforms}
     />
   );
 }
