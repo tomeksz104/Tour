@@ -8,6 +8,8 @@ import MapWrapper from "../../MapWrapper/MapWrapper";
 // import Places from "./Places";
 import UserLocate from "./UserLocate";
 
+import "./map.css";
+
 const Places = lazy(() => import("./Places"));
 const MobilePlacePopup = lazy(() => import("./MobilePlacePopup"));
 
@@ -52,7 +54,7 @@ const Map = () => {
         className="absolute top-0 right-0 left-auto h-full "
       >
         <ZoomControl position="topright" />
-        <UserLocate />
+        {/* <UserLocate /> */}
 
         <Suspense>
           <Places

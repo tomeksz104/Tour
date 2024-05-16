@@ -6,7 +6,9 @@ const PlacePopup = ({ place }) => {
     <div className="group rounded-3xl">
       <div className="relative overflow-hidden rounded-t-xl">
         <Image
-          src={place.image}
+          src={
+            place.mainPhotoPath ? place.mainPhotoPath : "/images/noImage.jpg"
+          }
           alt={place.title}
           width={16}
           height={9}
@@ -19,14 +21,14 @@ const PlacePopup = ({ place }) => {
       </div>
       <div className="py-2 px-3 relative">
         <Link
-          href={`/place/${place._id}`}
+          href={`/place/${place.id}`}
           className="text-md font-semibold hover:underline"
           style={{ color: "#000000" }}
         >
           {place.title}
         </Link>
         <p className="pt-1 text-gray-600 hidden md:line-clamp-2">
-          {place.description}
+          {place.slogan}
         </p>
       </div>
     </div>

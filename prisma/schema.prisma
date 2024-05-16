@@ -1,0 +1,348 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// generator zod {
+//   provider = "prisma-zod-generator"
+// }
+
+model User {
+  id            Int       @id @default(autoincrement())
+  username      String?   @unique
+  firstName     String?
+  lastName      String?
+  aboutme       String?   @db.Text
+  email         String    @unique
+  emailVerified DateTime?
+  password      String
+  image         String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  socialMedia UserSocialMedia[]
+  accounts    Account[]
+  sessions    Session[]
+  places      Place[]
+  Comment     Comment[]
+  Review      Review[]
+  Post        Post[]
+  ErrorReport ErrorReport[]
+}
+
+model Place {
+  id                     Int                    @id @default(autoincrement())
+  title                  String
+  slug                   String                 @unique
+  slogan                 String?
+  description            String?                @db.Text
+  mainPhotoPath          String?
+  categoryId             Int?
+  phone                  String?
+  email                  String?
+  website                String?
+  googleMapUrl           String?
+  verified               Boolean?               @default(false)
+  latitude               Float
+  longitude              Float
+  type                   PlaceType
+  userId                 Int
+  provinceId             Int?
+  address                String?
+  cityId                 Int?
+  countryId              Int?
+  status                 PlaceStatus            @default(IN_MODERATION)
+  childFriendly          Boolean?               @default(false)
+  childFriendlyAmenities ChildFriendlyAmenity[]
+  amenities              Amenity[]
+  topics                 Topic[]
+  reviews                Review[]
+  openingHours           OpeningHours[]
+  category               Category?              @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  tags                   Tag[]
+  socialMedia            PlaceSocialMedia[]
+  photos                 Photo[]
+  user                   User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  province               Province?              @relation(fields: [provinceId], references: [id], onDelete: Cascade)
+  city                   City?                  @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  country                Country?               @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  accommodation          Accommodation?
+  restaurant             Food?
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
+}
+
+model ChildFriendlyAmenity {
+  id     Int     @id @default(autoincrement())
+  name   String
+  places Place[]
+}
+
+model Accommodation {
+  id            Int            @id @default(autoincrement())
+  placeId       Int            @unique
+  place         Place          @relation(fields: [placeId], references: [id])
+  hotelStandard HotelStandard?
+}
+
+model Food {
+  id          Int           @id @default(autoincrement())
+  placeId     Int           @unique
+  place       Place         @relation(fields: [placeId], references: [id])
+  cuisineType CuisineType[]
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  title     String
+  slug      String    @unique
+  content   String    @db.Text
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  userId    Int
+  author    User      @relation(fields: [userId], references: [id])
+  tags      Tag[]
+  comments  Comment[]
+  mainImage String?
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  postId    Int
+  userId    Int
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Post Post? @relation(fields: [postId], references: [id])
+}
+
+model Review {
+  id        Int            @id @default(autoincrement())
+  userId    Int
+  rating    Float?
+  content   String         @db.Text
+  photos    ReviewPhotos[]
+  placeId   Int
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  place  Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  author User  @relation(fields: [userId], references: [id])
+}
+
+model SocialMediaPlatform {
+  id               Int                @id @default(autoincrement())
+  name             String             @unique
+  placeholder      String?
+  users            UserSocialMedia[]
+  PlaceSocialMedia PlaceSocialMedia[]
+}
+
+model PlaceSocialMedia {
+  id         Int                 @id @default(autoincrement())
+  link       String
+  placeId    Int
+  platformId Int
+  place      Place               @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  platform   SocialMediaPlatform @relation(fields: [platformId], references: [id], onDelete: Cascade)
+
+  @@unique([placeId, platformId], name: "placeId_platformId")
+}
+
+model UserSocialMedia {
+  id         Int                 @id @default(autoincrement())
+  link       String
+  userId     Int
+  platformId Int
+  user       User                @relation(fields: [userId], references: [id])
+  platform   SocialMediaPlatform @relation(fields: [platformId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, platformId], name: "userId_platformId")
+}
+
+model Photo {
+  id       Int     @id @default(autoincrement())
+  url      String
+  verified Boolean @default(false)
+  placeId  Int
+  place    Place   @relation(fields: [placeId], references: [id], onDelete: Cascade)
+}
+
+model ReviewPhotos {
+  id       Int     @id @default(autoincrement())
+  url      String
+  Review   Review? @relation(fields: [reviewId], references: [id])
+  reviewId Int?
+}
+
+
+model Amenity {
+  id              Int            @id @default(autoincrement())
+  name            String
+  places Place[]
+}
+
+enum HotelStandard {
+  ONE_STAR
+  TWO_STAR
+  THREE_STAR
+  FOUR_STAR
+  FIVE_STAR
+  LUXURY
+}
+
+model CuisineType {
+  id     Int    @id @default(autoincrement())
+  type   String
+  Food   Food?  @relation(fields: [foodId], references: [id])
+  foodId Int?
+}
+
+model Country {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  places Place[]
+}
+
+model City {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(30)
+  provinceId Int
+  places     Place[]
+  province   Province @relation(fields: [provinceId], references: [id])
+}
+
+model Province {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  cities City[]
+  places Place[]
+}
+
+model Topic {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  places Place[]
+}
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  iconPath    String?
+  svgIconPath String? @db.Text
+  places      Place[]
+}
+
+model Tag {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  places Place[]
+  posts  Post[]
+}
+
+model OpeningHours {
+  id        Int     @id @default(autoincrement())
+  day       WeekDay
+  isOpen    Boolean? @default(false)  @db.TinyInt
+  openTime  String?
+  closeTime String?
+  placeId   Int
+  place     Place   @relation(fields: [placeId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                 String    @id @default(cuid())
+  userId             Int
+  providerType       String
+  providerId         String
+  providerAccountId  String
+  refreshToken       String?
+  accessToken        String?
+  accessTokenExpires DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  user               User      @relation(fields: [userId], references: [id])
+
+  @@unique([providerId, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       Int
+  expires      DateTime
+  sessionToken String   @unique
+  accessToken  String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model VerificationRequest {
+  id         String   @id @default(cuid())
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([identifier, token])
+}
+
+
+model ErrorReport {
+  id        Int               @id @default(autoincrement())
+  userId    Int
+  content   String            @db.Text
+  pageUrl   String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  status    ErrorReportStatus @default(NEW) 
+
+  user      User              @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  USER
+}
+
+enum PlaceType {
+  Atrakcja
+  Nocleg
+  Jedzenie
+}
+
+enum WeekDay {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum PlaceStatus {
+  PUBLISHED
+  IN_MODERATION
+  REJECTED
+  PENDING_PAYMENT
+}
+
+enum ErrorReportStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+}

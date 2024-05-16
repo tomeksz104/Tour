@@ -1,9 +1,11 @@
-import User from "@/models/user";
-import dbConnect from "@/libs/dbConnect";
 import { NextResponse } from "next/server";
 
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
+
+import { db } from "@/lib/db";
+
+import { hash, compare } from "bcryptjs";
 
 const tabs = ["profile", "socialmedia", "password"];
 
@@ -23,96 +25,110 @@ export const PATCH = async (request, response) => {
     );
   }
 
+  const userId = session.user.id;
+
   try {
-    await dbConnect();
-
-    const existingUser = await User.findById(requestBody.userId);
-
-    if (!existingUser) {
-      return new Response("User not found", { status: 404 });
+    if (
+      requestBody.username ||
+      requestBody.firstName ||
+      requestBody.lastName ||
+      requestBody.aboutme
+    ) {
+      await db.user.update({
+        where: { id: session.user.id },
+        data: {
+          username: requestBody.username,
+          firstName: requestBody.firstName,
+          lastName: requestBody.lastName,
+          aboutme: requestBody.aboutme,
+        },
+      });
     }
 
-    switch (tab) {
-      case tabs[0]:
-        existingUser.username = requestBody.username;
-        break;
-      case tabs[1]:
-        existingUser.facebook = requestBody.facebook;
-        existingUser.instagram = requestBody.instagram;
-        existingUser.twitter = requestBody.twitter;
-        existingUser.youtube = requestBody.youtube;
-        break;
-      case tabs[2]:
-        const oldPassword = requestBody.oldPassword;
-        const newPassword = requestBody.newPassword;
-        const confirmNewPassword = requestBody.confirmNewPassword;
+    const socialMediaLinks = requestBody.socialMediaLinks;
+    if (socialMediaLinks) {
+      for (const platformId in socialMediaLinks) {
+        const link = socialMediaLinks[platformId];
+        const platformIdNumber = parseInt(platformId);
 
-        const isPasswordCorrect = await existingUser.comparePassword(
-          oldPassword
-        );
-
-        if (!isPasswordCorrect) {
-          // return new Response("Incorrect old password", { status: 400 });
-          return new NextResponse(
-            JSON.stringify({
-              error: "Incorrect old password",
-            }),
-            {
-              status: 400,
-            }
-          );
-        }
-
-        if (newPassword !== confirmNewPassword) {
-          return new Response("Password and confirm password do not match", {
-            status: 400,
+        if (link) {
+          await db.userSocialMedia.upsert({
+            where: {
+              userId_platformId: {
+                userId: session.user.id,
+                platformId: platformIdNumber,
+              },
+            },
+            update: {
+              link: link,
+            },
+            create: {
+              userId: session.user.id,
+              platformId: platformIdNumber,
+              link: link,
+            },
           });
+        } else {
+          await db.userSocialMedia
+            .delete({
+              where: {
+                userId_platformId: {
+                  userId: session.user.id,
+                  platformId: platformIdNumber,
+                },
+              },
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         }
-
-        existingUser.password = newPassword;
-        break;
+      }
     }
 
-    await existingUser.save();
+    if (
+      requestBody.oldPassword &&
+      requestBody.newPassword &&
+      requestBody.confirmNewPassword
+    ) {
+      if (requestBody.newPassword !== requestBody.confirmNewPassword) {
+        return new NextResponse(
+          JSON.stringify({
+            error: "Nowe hasła nie są takie same",
+          }),
+          { status: 400 }
+        );
+      }
 
-    return new Response(JSON.stringify("Successfully updated the user"), {
+      const user = await db.user.findUnique({
+        where: { id: userId },
+      });
+
+      const isPasswordCorrect = await compare(
+        requestBody.oldPassword,
+        user.password
+      );
+      if (!isPasswordCorrect) {
+        return new NextResponse(
+          JSON.stringify({
+            error: "Niepoprawne stare hasło",
+          }),
+          { status: 400 }
+        );
+      }
+
+      const hashedPassword = await hash(requestBody.newPassword, 12);
+      await db.user.update({
+        where: { id: userId },
+        data: { password: hashedPassword },
+      });
+    }
+
+    return new Response(JSON.stringify("Konto zostało zaaktualizowane"), {
       status: 201,
     });
-    // return response
-    //   .status(200)
-    //   .json({ message: "Successfully updated the user" });
   } catch (error) {
-    return new Response("Error Updating Prompt", { status: 500 });
+    return new Response("Błąd podczas aktualizacji użytkownika", {
+      status: 500,
+    });
   }
 };
-
-// import User from "@/models/user";
-// import dbConnect from "@/utils/dbConnect";
-
-// export default async (req, res) => {
-//   const { userId, email, name } = req.body;
-
-//   await dbConnect();
-
-//   try {
-//     const updatedUser = await User.findByIdAndUpdate(
-//       { _id: userId },
-//       { email, name, name },
-//       { new: true }
-//     );
-
-//     if (!updatedUser) {
-//       return res.status(404).json({
-//         error: { global: "User not found" },
-//       });
-//     } else {
-//       console.log("SIEMA");
-//     }
-
-//     return res.status(200).json(updatedUser);
-//   } catch (error) {
-//     return res.status(500).json({
-//       error: { global: "Failed to update user" },
-//     });
-//   }
-// };

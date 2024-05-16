@@ -1,98 +1,199 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import Image from "next/image";
+import Link from "next/link";
+
+import { WatchlistContext } from "@/contexts/WatchlistContext";
 import CardImage from "./CardImage";
+import { Button } from "../ui/button";
+const Lightbox = lazy(() => import("@/components/FsLightbox/Lightbox"));
+
+import { Heart, Maximize2, Pencil } from "lucide-react";
+
 import "./Slideshow.css";
 
-export default function ManualSlideshow({ images, placeTitle }) {
+export default function ManualSlideshow({
+  placeId,
+  hasPermission,
+  images,
+  placeTitle,
+}) {
+  const watchlistCtx = useContext(WatchlistContext);
   const [imgIndex, setImgIndex] = useState(0);
-  const [dotsStyling, setDotsStyling] = useState({
-    transform: "translateX(0px)",
-    transition: "0.8s",
-  });
+  const [translateX, setTranslateX] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
+  const isOnWatchlist = watchlistCtx.isOnWatchlist(placeId);
+
+  const sourceUrls = images.map((item) => item.url);
+
+  const handleToggleWatchlistItem = useCallback(() => {
+    watchlistCtx.toggleWatchlistItem(placeId);
+  }, [placeId, watchlistCtx]);
 
   useEffect(() => {
-    if (images.length > 4) {
-      if (imgIndex > 1 && imgIndex < images.length - 2) {
-        setDotsStyling({
-          transform: `translateX(calc(${-imgIndex * 22}px + 44px))`,
-          transition: "0.8s",
-        });
-      } else if (imgIndex === 0) {
-        setDotsStyling({ transform: "translateX(0px)", transition: "0.8s" });
-      } else if (imgIndex === images.length - 1) {
-        setDotsStyling({
-          transform: `translateX(calc(${-imgIndex * 22}px + 88px))`,
-          transition: "0.8s",
-        });
-      }
+    const newTranslateX = Math.max(0, imgIndex - 2);
+
+    const maxTranslateX = Math.max(0, sourceUrls.length - 5);
+
+    setTranslateX(Math.min(newTranslateX, maxTranslateX));
+  }, [imgIndex, sourceUrls.length]);
+
+  const getContainerWidth = () => {
+    switch (images.length) {
+      case 1:
+        return "w-[128px]";
+      case 2:
+        return "w-[252px]";
+      case 3:
+        return "w-[376px]";
+      case 4:
+        return "w-[500px]";
+      case 5:
+        return "w-[624px]";
+      default:
+        return "w-[624px]";
     }
-  }, [imgIndex, images.length]);
+  };
 
   return (
-    <div className="slideshow">
-      <div className="slideshow-btns">
-        {imgIndex !== 0 && (
-          <svg
-            className="slideshow-left h-6 w-6 fill-neutral-200 hover:fill-white cursor-pointer"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-            onClick={(e) => {
-              imgIndex === 0
-                ? setImgIndex(images.length - 1)
-                : setImgIndex(imgIndex - 1);
-              e.preventDefault();
-            }}
-          >
-            <path d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM384 288H205.3l49.38 49.38c12.5 12.5 12.5 32.75 0 45.25s-32.75 12.5-45.25 0L105.4 278.6C97.4 270.7 96 260.9 96 256c0-4.883 1.391-14.66 9.398-22.65l103.1-103.1c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L205.3 224H384c17.69 0 32 14.33 32 32S401.7 288 384 288z" />
-          </svg>
-        )}
+    <>
+      <Suspense>
+        <Lightbox images={sourceUrls} isOpen={isLightboxOpen} />
+      </Suspense>
+      <div className="slideshow">
+        <div className="absolute w-full content-[''] bg-gradient-to-b from-[rgba(0,0,0,0.75)] to-transparent h-[200px] pointer-events-none z-[1]"></div>
+        <div className="absolute top-0 right-0 z-10 flex items-center gap-x-2 p-3">
+          {hasPermission && (
+            <Button
+              asChild
+              variant="secondary"
+              className="bg-white/10 hover:bg-green-500 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-white"
+            >
+              <Link href={`/place/update/${placeId}`}>
+                <Pencil strokeWidth={1.75} size={14} />
+              </Link>
+            </Button>
+          )}
 
-        {imgIndex !== images.length - 1 && (
-          <svg
-            className="slideshow-right h-6 w-6 fill-neutral-200 hover:fill-white cursor-pointer"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-            onClick={(e) => {
-              imgIndex === images.length - 1
-                ? setImgIndex(0)
-                : setImgIndex(imgIndex + 1);
-              e.preventDefault();
-            }}
+          <Button
+            onClick={handleToggleWatchlistItem}
+            variant="secondary"
+            className={`bg-white/10 hover:bg-white/10 backdrop-blur-md rounded-full h-8 w-8 p-1
+            ${
+              isOnWatchlist
+                ? "text-red-500"
+                : "text-gray-300  hover:text-red-500"
+            }`}
           >
-            <path d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM406.6 278.6l-103.1 103.1c-12.5 12.5-32.75 12.5-45.25 0s-12.5-32.75 0-45.25L306.8 288H128C110.3 288 96 273.7 96 256s14.31-32 32-32h178.8l-49.38-49.38c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l103.1 103.1C414.6 241.3 416 251.1 416 256C416 260.9 414.6 270.7 406.6 278.6z" />
-          </svg>
-        )}
-      </div>
-      <div className="slides">
-        {images.map((image, index) => (
-          <CardImage
-            fill
-            className="slide"
-            key={index}
-            src={image.url}
-            alt={`The photo shows ${placeTitle}`}
-            style={{
-              transform: `translateX(${-imgIndex * 100}%)`,
-              transition: "0.8s",
-            }}
-            loading="lazy"
-          />
-        ))}
-      </div>
-      <div className="slideshow-dots-container">
-        <div className="slideshow-dots" style={dotsStyling}>
-          {images.map((_, index) => (
-            <div
+            <Heart
+              strokeWidth={1.75}
+              size={14}
+              className={`${isOnWatchlist && "fill-red-500"}`}
+            />
+          </Button>
+          <Button
+            variant="secondary"
+            className="bg-white/10 hover:bg-white/10 backdrop-blur-md rounded-full h-8 px-3 py-1 text-gray-300 font-bold text-xs"
+          >
+            {imgIndex + 1} / {images.length}
+          </Button>
+          <Button
+            onClick={() => setIsLightboxOpen((prevState) => !prevState)}
+            variant="secondary"
+            className="bg-white/10 hover:bg-green-500 backdrop-blur-md rounded-full h-8 w-8 p-1 text-gray-300 hover:text-white"
+          >
+            <Maximize2 strokeWidth={1.75} size={14} />
+          </Button>
+        </div>
+        <div className="slides overflow-hidden">
+          {images.map((image, index) => (
+            <CardImage
+              fill
+              className="slide"
               key={index}
-              className={`slideshow-dot${imgIndex === index ? " active" : ""}`}
-              onClick={() => {
-                setImgIndex(index);
+              src={image.url ? image.url : "/images/noImage.jpg"}
+              alt={`The photo shows ${placeTitle}`}
+              style={{
+                transform: `translateX(${-imgIndex * 100}%)`,
+                transition: "0.8s",
               }}
-            ></div>
+              loading="lazy"
+            />
           ))}
         </div>
+        <div
+          className="md:w-2xl mt-8 absolute -translate-x-2/4 -translate-y-full left-2/4 top-full hidden sm:block
+         before:content-[' '] before:bg-[radial-gradient(circle_at_left_top,transparent_70%,rgb(243,246,248)_69%)] before:absolute before:z-10 before:w-[10px] before:h-[10px] before:-left-[10px] before:bottom-8
+         after:content-[' '] after:bg-[radial-gradient(circle_at_right_top,transparent_70%,rgb(243,246,248)_69%)] after:absolute after:z-10 after:w-[10px] after:h-[10px] after:-right-[10px] after:bottom-8
+        "
+        >
+          <div
+            className={`relative flex gap-x-3 whitespace-nowrap z-[1] bg-gray-100 p-2 rounded-md overflow-hidden ${getContainerWidth()}`}
+          >
+            {images.length > 5 && (
+              <div
+                className={`absolute top-0 left-0 w-[120px] z-10 h-full bg-gradient-to-r from-gray-100 pointer-events-none ${
+                  imgIndex > 2 ? "opacity-100" : "opacity-0"
+                } transition-all duration-500`}
+              ></div>
+            )}
+            {images.length > 5 && (
+              <div
+                className={`absolute top-0 right-0 w-[120px] z-10 h-full bg-gradient-to-l from-gray-100 pointer-events-none ${
+                  imgIndex < images.length - 3 ? "opacity-100" : "opacity-0"
+                } transition-all duration-500`}
+              ></div>
+            )}
+            {images.map((image, index) => (
+              <div
+                key={index}
+                onClick={() => {
+                  setImgIndex(index);
+                }}
+                className="relative w-28 h-16	cursor-pointer shrink-0	"
+              >
+                {/* <Image
+                  src={image.url ? image.url : "/images/noImage.jpg"}
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  alt={`The photo shows ${placeTitle}`}
+                  className={`w-full h-full object-cover rounded-md ${
+                    imgIndex === index ? "" : "opacity-70"
+                  }`}
+                  style={{
+                    transform: `translateX(${-translateX * 124}px)`,
+                    transition: "0.8s",
+                  }}
+                /> */}
+                <img
+                  src={image.url ? image.url : "/images/noImage.jpg"}
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  alt={`The photo shows ${placeTitle}`}
+                  className={`w-full h-full object-cover rounded-md ${
+                    imgIndex === index ? "" : "opacity-70"
+                  }`}
+                  style={{
+                    transform: `translateX(${-translateX * 124}px)`,
+                    transition: "0.8s",
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

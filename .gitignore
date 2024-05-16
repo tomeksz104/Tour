@@ -42,3 +42,13 @@ next-env.d.ts
 
 .unlighthouse
 /components/ExploreMap/Map/Places-copy.js
+/public/upload
+/public/uploads
+
+#TESTS
+components/MapBox/MapTrailPopup.js
+components/MapBox/layers/layerUtils.js
+app/(app)/map/page copy.js
+
+# DEV SCRIPT
+findUnusedFiles.js

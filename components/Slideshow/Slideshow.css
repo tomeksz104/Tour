@@ -1,5 +1,5 @@
 .slideshow {
-  overflow: hidden;
+  /* overflow: hidden; */
   position: relative;
   height: 100%;
   width: 100%;
@@ -68,20 +68,20 @@
 }
 
 /* Slideshow dots */
-.slideshow-dots-container {
+/* .slideshow-dots-container {
   width: 110px;
   overflow-x: hidden;
   position: absolute;
   top: 100%;
   left: 50%;
   transform: translate(-50%, -100%);
-}
+} */
 
-.slideshow-dots {
+/* .slideshow-dots {
   white-space: nowrap;
   text-align: center;
   z-index: 1;
-}
+} */
 
 .slideshow-dot {
   display: inline-block;

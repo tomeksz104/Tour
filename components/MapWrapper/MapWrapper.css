@@ -66,13 +66,89 @@
   margin: 0;
 }
 
-.marker-cluster-custom {
-  background: #9370db;
-  border: 3px solid #ededed;
-  border-radius: 50%;
-  color: #ededed;
-  height: 40px;
-  line-height: 37px;
-  text-align: center;
-  width: 40px;
+/* Marker pulsating */
+@-webkit-keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes circlePulse {
+  0% {
+    -moz-transform: scale(0.32);
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  85% {
+    -moz-transform: scale(1);
+  }
+  100% {
+    -moz-transform: scale(1);
+    opacity: 0;
+  }
+}
+@-moz-keyframes reset {
+  0% {
+    top: -5px;
+    opacity: 0;
+  }
+  100% {
+    top: 0;
+    opacity: 1;
+  }
+}
+@keyframes circlePulse {
+  0% {
+    transform: scale(0.32);
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  85% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+@keyframes reset {
+  0% {
+    top: -5px;
+    opacity: 0;
+  }
+  100% {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+.dot .pulse {
+  background: transparent;
+  border: 3px solid #172554;
+  display: block;
+  height: 64px;
+  left: -27px;
+  position: absolute;
+  top: -28px;
+  width: 64px;
+  z-index: -1;
+  -webkit-animation: circlePulse 1.5s ease-in-out infinite;
+  -moz-animation: circlePulse 1.5s ease-in-out infinite;
+  animation: circlePulse 1.5s ease-in-out infinite;
+  -moz-border-radius: 32px;
+  -webkit-border-radius: 32px;
+  border-radius: 32px;
+  /* -moz-box-shadow: #172554 2px 2px 40px 0px;
+  -webkit-box-shadow: #172554 2px 2px 40px 0px;
+  box-shadow: #172554 2px 2px 40px 0px; */
 }

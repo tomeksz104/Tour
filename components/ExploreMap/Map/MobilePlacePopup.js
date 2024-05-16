@@ -20,7 +20,9 @@ const MobilePlacePopup = ({ place }) => {
       <div className="relative flex flex-row items-center space-x-5 rounded-x">
         <div className="w-1/4 bg-white grid place-items-center">
           <Image
-            src={place.image}
+            src={
+              place.mainPhotoPath ? place.mainPhotoPath : "/images/noImage.jpg"
+            }
             alt={place.title}
             width={16}
             height={9}
@@ -34,14 +36,12 @@ const MobilePlacePopup = ({ place }) => {
         </div>
         <div className="w-3/4 bg-white flex flex-col space-y-2 ">
           <Link
-            href={`/place/${place._id}`}
+            href={`/place/${place.id}`}
             className="font-black text-gray-800 line-clamp-1"
           >
             {place.title}
           </Link>
-          <p className="text-xs text-gray-500 line-clamp-2">
-            {place.description}
-          </p>
+          <p className="text-xs text-gray-500 line-clamp-2">{place.slogan}</p>
         </div>
       </div>
     </div>,
