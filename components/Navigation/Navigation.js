@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
+import { Popover, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -11,16 +12,56 @@ import SearchBar from "../SearchBar/SearchBar";
 import UserMenu from "./UserMenu";
 
 import "./Navigation.css";
+import { ChevronUp } from "lucide-react";
 
 const navigationMenuItems = [
   { name: "Strona Główna", url: "/" },
   { name: "Mapa", url: "/map" },
 ];
 
+const solutions = [
+  {
+    name: "Przyroda i Krajobrazy",
+    description:
+      "Odkryj piękno natury i różnorodność krajobrazów. Od spokojnych jezior, przez tajemnicze jaskinie, po majestatyczne góry - przyroda zachwyca na każdym kroku.",
+    href: "/map?category=2&category=3&category=5&category=6&category=9&category=29&category=35&category=30",
+    icon: "/images/przyroda.jpg",
+  },
+  {
+    name: "Atrakcje dla Rodzin",
+    description:
+      "Spędź niezapomniane chwile z rodziną. Czekają na Was parki rozrywki, wodne atrakcje, plaże oraz malownicze szlaki i parki miejskie.",
+    href: "/map?category=4&category=7&category=34&category=32&category=33",
+    icon: "/images/dla-rodzin.jpg",
+  },
+  {
+    name: "Kultura i Historia",
+    description:
+      "Przenieś się w czasie i poznaj bogactwo kultury i historii. Zwiedzaj zamki, pałace, muzea, galerie sztuki oraz inne historyczne miejsca.",
+    href: "/map?category=1&category=8&category=10&category=37&category=36",
+    icon: "/images/kultura.jpg",
+  },
+  {
+    name: "Miejskie Przestrzenie Kultury",
+    description:
+      "Poznaj dynamiczne życie miejskie. Odkryj ciekawe miejsca, które tętnią życiem, oferują rozrywkę, zakupy oraz kulinarne doznania.",
+    href: "/map?category=31",
+    icon: "/images/atrakcje-miejskie.jpg",
+  },
+  {
+    name: "Aktywny Wypoczynek",
+    description:
+      "Zadbaj o zdrowie i dobrą formę poprzez aktywny wypoczynek. Przemierzaj szlaki turystyczne, korzystaj z miejskich parków i ciesz się sportem na świeżym powietrzu.",
+    href: "/map?category=33&category=32",
+    icon: "/images/aktywny-wypoczynek.jpg",
+  },
+];
+
 const Navigation = () => {
   const { data: session } = useSession();
   const currentRoute = usePathname();
   const [hideLogo, setHideLogo] = useState(false);
+  const [isShowingPopover, setIsShowingPopover] = useState(false);
 
   const handleHideLogo = (value) => {
     setHideLogo(value);
@@ -81,28 +122,131 @@ const Navigation = () => {
               {/* MENU ORG */}
               <div className="md:ml-5 block w-full md:w-auto h-full md:h-auto">
                 <ul className="space-y-8 tracking-wide font-medium md:flex md:space-y-0">
-                  {navigationMenuItems.map((menuItem, index) => (
-                    <li key={index} className="text-white">
-                      <Link href={menuItem.url} className="block md:px-4 group">
+                  <li className="text-white">
+                    <Link href="/" className="block md:px-4 group">
+                      <div
+                        className={`relative before:absolute before:-bottom-2 md:before:-bottom-5 before:w-full before:mt-auto ${
+                          currentRoute === "/"
+                            ? "text-green-600 before:h-0.5 before:mx-auto before:rounded-full before:bg-green-600"
+                            : "text-gray-900 before:h-0.5 before:origin-left before:rounded-full before:bg-green-600 before:transition before:scale-x-0 group-hover:before:scale-x-100"
+                        }`}
+                      >
+                        <span
+                          className={`${
+                            currentRoute !== "/" &&
+                            "group-hover:text-green-600 gap-x-1 text-sm font-semibold leading-6"
+                          }`}
+                        >
+                          Strona Główna
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+
+                  <Popover className="relative hidden md:block">
+                    <Popover.Button
+                      onMouseEnter={() => setIsShowingPopover(true)}
+                      onMouseLeave={() => setIsShowingPopover(false)}
+                      className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900"
+                    >
+                      {/* <Link href="/map">Mapa</Link> */}
+                      <Link href="/map" className="block md:px-4 group">
                         <div
-                          className={`relative before:absolute before:-bottom-2 md:before:-bottom-5 before:w-full before:mt-auto ${
-                            currentRoute === menuItem.url
+                          className={`relative before:absolute before:-bottom-2 md:before:-bottom-5 before:w-full before:mt-auto flex items-center justify-between ${
+                            currentRoute === "/map"
                               ? "text-green-600 before:h-0.5 before:mx-auto before:rounded-full before:bg-green-600"
-                              : "text-gray-600 before:h-0.5 before:origin-left before:rounded-full before:bg-green-600 before:transition before:scale-x-0 group-hover:before:scale-x-100"
+                              : "text-gray-900 before:h-0.5 before:origin-left before:rounded-full before:bg-green-600 before:transition before:scale-x-0 group-hover:before:scale-x-100"
                           }`}
                         >
                           <span
                             className={`${
-                              currentRoute !== menuItem.url &&
-                              "group-hover:text-green-600"
+                              currentRoute !== "/map" &&
+                              "group-hover:text-green-600 inline-flex items-center gap-x-1 text-sm font-semibold leading-6"
                             }`}
                           >
-                            {menuItem.name}
+                            Mapa
                           </span>
+
+                          <ChevronUp
+                            className={`ml-2 h-4 w-4 transition-all ${
+                              isShowingPopover ? " " : "rotate-180"
+                            }`}
+                          />
                         </div>
                       </Link>
-                    </li>
-                  ))}
+                    </Popover.Button>
+
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-200"
+                      enterFrom="opacity-0 translate-y-1"
+                      enterTo="opacity-100 translate-y-0"
+                      leave="transition ease-in duration-150"
+                      leaveFrom="opacity-100 translate-y-0"
+                      leaveTo="opacity-0 translate-y-1"
+                      show={isShowingPopover}
+                      onMouseEnter={() => setIsShowingPopover(true)}
+                      onMouseLeave={() => setIsShowingPopover(false)}
+                    >
+                      <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/3 px-4">
+                        <div className="w-screen max-w-xl flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 lg:max-w-4xl">
+                          <div className="grid grid-cols-1 gap-x-6 gap-y-1 p-4 lg:grid-cols-2">
+                            {solutions.map((item) => (
+                              <div
+                                key={item.name}
+                                className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50 group"
+                              >
+                                <div className="mt-1 flex h-16 w-16 flex-none items-center justify-center rounded-lg group-hover:bg-white">
+                                  <img
+                                    src={item.icon}
+                                    className="w-full h-full object-cover rounded-full"
+                                  />
+                                  {/* <item.icon
+                                  className="h-6 w-6 text-gray-600 group-hover:text-indigo-600"
+                                  aria-hidden="true"
+                                /> */}
+                                </div>
+                                <div>
+                                  <Link
+                                    href={item.href}
+                                    className="font-semibold text-gray-900 group-hover:text-green-600"
+                                  >
+                                    {item.name}
+                                    <span className="absolute inset-0" />
+                                  </Link>
+
+                                  <p className="mt-1 text-xs text-gray-600">
+                                    {item.description}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </Popover.Panel>
+                    </Transition>
+                  </Popover>
+
+                  <li className="text-white block md:hidden">
+                    <Link href="/map" className="block md:px-4 group">
+                      <div
+                        className={`relative before:absolute before:-bottom-2 md:before:-bottom-5 before:w-full before:mt-auto ${
+                          currentRoute === "/map"
+                            ? "text-green-600 before:h-0.5 before:mx-auto before:rounded-full before:bg-green-600"
+                            : "text-gray-900 before:h-0.5 before:origin-left before:rounded-full before:bg-green-600 before:transition before:scale-x-0 group-hover:before:scale-x-100"
+                        }`}
+                      >
+                        <span
+                          className={`${
+                            currentRoute !== "/map" &&
+                            "group-hover:text-green-600 inline-flex items-center gap-x-1 text-sm font-semibold leading-6"
+                          }`}
+                        >
+                          Mapa
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>
